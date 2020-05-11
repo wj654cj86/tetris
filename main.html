@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Tetris</title>
+	<link rel="icon">
+	<script type="text/javascript" src="mylibrary.js"></script>
+	<script type="text/javascript" src="color-conversion-algorithms.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+	<link rel="stylesheet" type="text/css" href="main.css" />
+</head>
+
+<body>
+	<div id="hold"></div>
+	<svg id="senttext" width="150" height="90" viewBox="0 0 50 30">
+		<text x="4" y="22" fill="#fff" stroke="#000" stroke-width="4">Sent</text>
+		<text x="4" y="22" fill="#ff0" stroke="#ff0" stroke-width="1">Sent</text>
+	</svg>
+	<svg id="sent" width="150" height="90" viewBox="0 0 50 30">
+		<text x="19" y="22" fill="#fff" stroke="#000" stroke-width="4">0</text>
+		<text x="19" y="22" fill="#fff" stroke="#fff" stroke-width="1">0</text>
+	</svg>
+	<svg id="b2btext" width="125" height="200" viewBox="0 0 50 80">
+		<text x="3" y="22" fill="#fff" stroke="#000" stroke-width="4">Back</text>
+		<text x="3" y="22" fill="#0cf" stroke="#0cf" stroke-width="1">Back</text>
+		<text x="15" y="36" fill="#fff" stroke="#000" stroke-width="4">to</text>
+		<text x="15" y="36" fill="#fff" stroke="#fff" stroke-width="1">to</text>
+		<text x="3" y="50" fill="#fff" stroke="#000" stroke-width="4">Back</text>
+		<text x="3" y="50" fill="#0cf" stroke="#0cf" stroke-width="1">Back</text>
+	</svg>
+	<svg id="spintext" width="154" height="66" viewBox="0 0 70 30">
+		<text x="5" y="22" fill="#fff" stroke="#000" stroke-width="4">T-spin</text>
+		<text x="5" y="22" fill="#f0f" stroke="#f0f" stroke-width="1">T-spin</text>
+	</svg>
+	<svg id="linetext" width="154" height="66" viewBox="0 0 70 30">
+		<text x="5" y="22" fill="#fff" stroke="#000" stroke-width="4">Single</text>
+		<text x="5" y="22" fill="#f0f" stroke="#f0f" stroke-width="1">Single</text>
+	</svg>
+	<svg id="combonumtext" width="90" height="90" viewBox="0 0 30 30">
+		<text x="9" y="22" fill="#fff" stroke="#000" stroke-width="4">1</text>
+		<text x="9" y="22" fill="#0cf" stroke="#0cf" stroke-width="1">1</text>
+	</svg>
+	<svg id="combotext" width="160" height="60" viewBox="0 0 80 30">
+		<text x="5" y="22" fill="#fff" stroke="#000" stroke-width="4">Combo</text>
+		<text x="5" y="22" fill="#0cf" stroke="#0cf" stroke-width="1">Combo</text>
+	</svg>
+	<div id="board"></div>
+	<svg id="gameover" width="350" height="250" viewBox="0 0 70 50">
+		<text x="7" y="22" fill="#fff" stroke="#000" stroke-width="4">Game</text>
+		<text x="7" y="22" fill="#fff" stroke="#fff" stroke-width="1">Game</text>
+		<text x="11" y="42" fill="#fff" stroke="#000" stroke-width="4">Over</text>
+		<text x="11" y="42" fill="#fff" stroke="#fff" stroke-width="1">Over</text>
+	</svg>
+	<svg id="starttext" width="364" height="42" viewBox="0 0 260 30">
+		<rect x="2" y="2" rx="10" ry="10" width="256" height="26" stroke="#bbb" stroke-width="3" fill="#eee" />
+		<text x="5" y="22" fill="#fff" stroke="#000" stroke-width="4">Press Enter to start Tetris...</text>
+		<text x="5" y="22" fill="#fff" stroke="#fff" stroke-width="1">Press Enter to start Tetris...</text>
+	</svg>
+	<svg id="gameset" width="380" height="380" viewBox="0 0 300 300">
+		<rect x="2" y="2" rx="10" ry="10" width="296" height="296" stroke="#bbb" stroke-width="3" fill="#eee" />
+		<defs>
+			<g id="subbt">
+				<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<text x="7" y="56" fill="#fff" stroke="#fff" stroke-width="1">«</text>
+			</g>
+			<g id="decbt">
+				<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<text x="9" y="56" fill="#fff" stroke="#fff" stroke-width="1">‹</text>
+			</g>
+			<g id="incbt">
+				<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<text x="9" y="56" fill="#fff" stroke="#fff" stroke-width="1">›</text>
+			</g>
+			<g id="addbt">
+				<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<text x="7" y="56" fill="#fff" stroke="#fff" stroke-width="1">»</text>
+			</g>
+		</defs>
+		<g id="openghosttag">
+			<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
+			<path id="openghostcheck" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
+			<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">Open Ghost</text>
+		</g>
+	</svg>
+
+	<div id="next"></div>
+</body>
+
+</html>
