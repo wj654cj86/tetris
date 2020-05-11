@@ -1265,7 +1265,7 @@ window.onload = function () {
 			gameset.appendChild(value);
 			let valuename = timename[ii] + '_' + timename[jj] + '_value';
 			let cv = getCookie(valuename);
-			if (typeof (cv * 1) != 'number' || cv + '' == 'NaN') cv = time[ii][jj];
+			if (cv == '' || isNaN(cv)) cv = time[ii][jj];
 			time[ii][jj] = cv * 1;
 			value.innerHTML = time[ii][jj] + ' ms';
 			newx = (width - value.getBBox().width) / 2;
@@ -1325,7 +1325,7 @@ window.onload = function () {
 	let newx = (width - openghosttag.getBBox().width) / 2;
 	openghosttag.setAttribute('transform', 'translate(' + newx + ',' + 250 + ')');
 	let og = getCookie('openghost');
-	if (typeof (og * 1) != 'number' || og + '' == 'NaN') og = openghost;
+	if (og == '' || isNaN(og)) og = openghost;
 	openghost = og;
 	openghostcheck.setAttribute('fill-opacity', openghost);
 	openghosttag.onclick = function () {
