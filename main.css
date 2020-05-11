@@ -1,5 +1,9 @@
 body {
-	opacity: 0;
+	opacity            : 0;
+	user-select        : none;
+	-moz-user-select   : none;
+	-webkit-user-select: none;
+	-ms-user-select    : none;
 }
 
 #hold {
@@ -73,8 +77,8 @@ body {
 }
 
 #gameover {
-	top : 40px;
-	left: 205px;
+	top    : 40px;
+	left   : 205px;
 	opacity: 0;
 }
 
@@ -84,12 +88,8 @@ body {
 }
 
 #gameset {
-	top                : 340px;
-	left               : 190px;
-	user-select        : none;
-	-moz-user-select   : none;
-	-webkit-user-select: none;
-	-ms-user-select    : none;
+	top : 340px;
+	left: 190px;
 }
 
 #senttext,
@@ -114,5 +114,5 @@ body {
 #board img,
 #next .next div,
 #next .next img {
-	position    : absolute;
+	position: absolute;
 }
