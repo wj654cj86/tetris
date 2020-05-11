@@ -9,6 +9,10 @@
 	<title>Tetris</title>
 	<link rel="icon">
 	<style>
+		body {
+			opacity: 0;
+		}
+
 		iframe {
 			position: absolute;
 			top: 50%;
@@ -28,6 +32,7 @@
 		window.onload = function () {
 			document.body.onresize = setfoundation;
 			setfoundation();
+			document.body.style.opacity = 1;
 		};
 	</script>
 </head>
