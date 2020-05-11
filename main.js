@@ -1150,57 +1150,57 @@ class mino {
 	}
 }
 window.onload = function () {
-	board.style.width = w * sl - 1 + 'px';
-	board.style.height = h * sl - 1 + 'px';
+	board.style.width = w * sl + 'px';
+	board.style.height = h * sl + 'px';
 	for (let i = 0; i < hall; i++) {
 		boardarr[i] = [];
 		for (let j = 0; j < w; j++) {
 			let tag = document.createElement('div');
-			tag.style.width = sl - 1 + 'px';
-			tag.style.height = sl - 1 + 'px';
-			tag.style.left = sl * j - 1 + 'px';
+			tag.style.width = sl + 'px';
+			tag.style.height = sl + 'px';
+			tag.style.left = sl * j + 'px';
 			tag.style.top = sl * (h - 1 - i) + 'px';
 			tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
 			board.appendChild(tag);
 
 			tag = document.createElement('div');
-			tag.style.width = sl - 1 + 'px';
-			tag.style.height = sl - 1 + 'px';
-			tag.style.left = sl * j - 1 + 'px';
+			tag.style.width = sl + 'px';
+			tag.style.height = sl + 'px';
+			tag.style.left = sl * j + 'px';
 			tag.style.top = sl * (h - 1 - i) + 'px';
 			board.appendChild(tag);
 			boardarr[i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 		}
 	}
-	hold.style.width = 4 * slmin - 1 + 'px';
-	hold.style.height = 4 * slmin - 1 + 'px';
+	hold.style.width = 4 * slmin + 'px';
+	hold.style.height = 4 * slmin + 'px';
 	for (let i = 0; i < 6; i++) {
 		holdarr[i] = [];
 		for (let j = 0; j < 6; j++) {
 			let tag = document.createElement('div');
-			tag.style.width = slmin - 1 + 'px';
-			tag.style.height = slmin - 1 + 'px';
-			tag.style.left = slmin * (j - 1) - 1 + 'px';
-			tag.style.top = slmin * (4 - 1 - i + 1) - 1 + 'px';
+			tag.style.width = slmin + 'px';
+			tag.style.height = slmin + 'px';
+			tag.style.left = slmin * (j - 1) + 'px';
+			tag.style.top = slmin * (4 - 1 - i + 1) + 'px';
 			tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
 			hold.appendChild(tag);
 
 			tag = document.createElement('div');
-			tag.style.width = slmin - 1 + 'px';
-			tag.style.height = slmin - 1 + 'px';
-			tag.style.left = slmin * (j - 1) - 1 + 'px';
-			tag.style.top = slmin * (4 - 1 - i + 1) - 1 + 'px';
+			tag.style.width = slmin + 'px';
+			tag.style.height = slmin + 'px';
+			tag.style.left = slmin * (j - 1) + 'px';
+			tag.style.top = slmin * (4 - 1 - i + 1) + 'px';
 			hold.appendChild(tag);
 			holdarr[i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 		}
 	}
-	next.style.width = 4 * slmin - 1 + 'px';
-	next.style.height = (4 * slmin + 20) * nextlen - 20 - 1 + 'px';
+	next.style.width = 4 * slmin + 2 + 'px';
+	next.style.height = (4 * slmin + 20) * nextlen - 20 + 2 + 'px';
 	for (let k = 0; k < nextlen; k++) {
 		nextarr[k] = [];
 		let ntag = document.createElement('div');
-		ntag.style.width = 4 * slmin - 1 + 'px';
-		ntag.style.height = 4 * slmin - 1 + 'px';
+		ntag.style.width = 4 * slmin + 'px';
+		ntag.style.height = 4 * slmin + 'px';
 		ntag.style.left = 0 + 'px';
 		ntag.style.top = k * (slmin * 4 + 20) + 'px';
 		ntag.classList.add("next");
@@ -1209,18 +1209,18 @@ window.onload = function () {
 			nextarr[k][i] = [];
 			for (let j = 0; j < 6; j++) {
 				let tag = document.createElement('div');
-				tag.style.width = slmin - 1 + 'px';
-				tag.style.height = slmin - 1 + 'px';
-				tag.style.left = slmin * (j - 1) - 1 + 'px';
-				tag.style.top = slmin * (4 - 1 - i + 1) - 1 + 'px';
+				tag.style.width = slmin + 'px';
+				tag.style.height = slmin + 'px';
+				tag.style.left = slmin * (j - 1) + 'px';
+				tag.style.top = slmin * (4 - 1 - i + 1) + 'px';
 				tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
 				ntag.appendChild(tag);
 
 				tag = document.createElement('div');
-				tag.style.width = slmin - 1 + 'px';
-				tag.style.height = slmin - 1 + 'px';
-				tag.style.left = slmin * (j - 1) - 1 + 'px';
-				tag.style.top = slmin * (4 - 1 - i + 1) - 1 + 'px';
+				tag.style.width = slmin + 'px';
+				tag.style.height = slmin + 'px';
+				tag.style.left = slmin * (j - 1) + 'px';
+				tag.style.top = slmin * (4 - 1 - i + 1) + 'px';
 				ntag.appendChild(tag);
 				nextarr[k][i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 			}
