@@ -424,22 +424,20 @@ function loadcolor(orgrgb, proportion) {
 	}
 	return rgbToHex(...hslToRgb(...hsl));
 }
-
 function settextxoffset(element, line = 0) {
 	let width = element.getAttribute('viewBox').split(' ')[2];
 	let tag = element.getElementsByTagName('text');
-	let newx = (width - tag[line * 2].getBBox().width) / 2;
-	tag[line * 2].setAttribute('x', newx);
-	tag[line * 2 + 1].setAttribute('x', newx);
+	console.log(tag[line].getBBox().width);
+	let newx = (width - tag[line].getBBox().width) / 2;
+	tag[line].setAttribute('x', newx);
 }
 function settext(element, str) {
 	let tag = element.getElementsByTagName('text');
 	tag[0].innerHTML = str;
-	tag[1].innerHTML = str;
 	settextxoffset(element);
 }
 function settextcolor(element, color) {
-	let tag = element.getElementsByTagName('text');
+	let tag = element.getElementsByTagName('use');
 	tag[1].setAttribute('fill', color);
 	tag[1].setAttribute('stroke', color);
 }

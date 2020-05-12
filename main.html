@@ -17,48 +17,78 @@
 <body>
 	<div id="hold"></div>
 	<svg id="senttext" width="150" height="90" viewBox="0 0 50 30">
-		<text x="4" y="22" fill="#fff" stroke="#000" stroke-width="4">Sent</text>
-		<text x="4" y="22" fill="#ff0" stroke="#ff0" stroke-width="1">Sent</text>
+		<defs>
+			<text id="senttexttag" x="4" y="22">Sent</text>
+		</defs>
+		<use xlink:href="#senttexttag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#senttexttag" fill="#ff0" stroke="#ff0" stroke-width="1"/>
 	</svg>
 	<svg id="sent" width="150" height="90" viewBox="0 0 50 30">
-		<text x="19" y="22" fill="#fff" stroke="#000" stroke-width="4">0</text>
-		<text x="19" y="22" fill="#fff" stroke="#fff" stroke-width="1">0</text>
+		<defs>
+			<text id="senttag" x="19" y="22">0</text>
+		</defs>
+		<use xlink:href="#senttag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#senttag" fill="#fff" stroke="#fff" stroke-width="1"/>
 	</svg>
 	<svg id="b2btext" width="125" height="200" viewBox="0 0 50 80">
-		<text x="3" y="22" fill="#fff" stroke="#000" stroke-width="4">Back</text>
-		<text x="3" y="22" fill="#0cf" stroke="#0cf" stroke-width="1">Back</text>
-		<text x="15" y="36" fill="#fff" stroke="#000" stroke-width="4">to</text>
-		<text x="15" y="36" fill="#fff" stroke="#fff" stroke-width="1">to</text>
-		<text x="3" y="50" fill="#fff" stroke="#000" stroke-width="4">Back</text>
-		<text x="3" y="50" fill="#0cf" stroke="#0cf" stroke-width="1">Back</text>
+		<defs>
+			<text id="b2btexttag" x="3" y="22">Back</text>
+			<text id="b2btexttag2" x="15" y="36">to</text>
+			<text id="b2btexttag3" x="3" y="50">Back</text>
+		</defs>
+		<use xlink:href="#b2btexttag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#b2btexttag" fill="#0cf" stroke="#0cf" stroke-width="1"/>
+		<use xlink:href="#b2btexttag2" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#b2btexttag2" fill="#fff" stroke="#fff" stroke-width="1"/>
+		<use xlink:href="#b2btexttag3" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#b2btexttag3" fill="#0cf" stroke="#0cf" stroke-width="1"/>
 	</svg>
 	<svg id="spintext" width="154" height="66" viewBox="0 0 70 30">
-		<text x="5" y="22" fill="#fff" stroke="#000" stroke-width="4">T-spin</text>
-		<text x="5" y="22" fill="#f0f" stroke="#f0f" stroke-width="1">T-spin</text>
+		<defs>
+			<text id="spintexttag" x="5" y="22">T-spin</text>
+		</defs>
+		<use xlink:href="#spintexttag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#spintexttag" fill="#f0f" stroke="#f0f" stroke-width="1"/>
 	</svg>
 	<svg id="linetext" width="154" height="66" viewBox="0 0 70 30">
-		<text x="5" y="22" fill="#fff" stroke="#000" stroke-width="4">Single</text>
-		<text x="5" y="22" fill="#f0f" stroke="#f0f" stroke-width="1">Single</text>
+		<defs>
+			<text id="linetexttag" x="5" y="22">Single</text>
+		</defs>
+		<use xlink:href="#linetexttag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#linetexttag" fill="#f0f" stroke="#f0f" stroke-width="1"/>
 	</svg>
 	<svg id="combonumtext" width="90" height="90" viewBox="0 0 30 30">
-		<text x="9" y="22" fill="#fff" stroke="#000" stroke-width="4">1</text>
-		<text x="9" y="22" fill="#0cf" stroke="#0cf" stroke-width="1">1</text>
+		<defs>
+			<text id="combonumtexttag" x="9" y="22">1</text>
+		</defs>
+		<use xlink:href="#combonumtexttag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#combonumtexttag" fill="#0cf" stroke="#0cf" stroke-width="1"/>
 	</svg>
 	<svg id="combotext" width="160" height="60" viewBox="0 0 80 30">
-		<text x="5" y="22" fill="#fff" stroke="#000" stroke-width="4">Combo</text>
-		<text x="5" y="22" fill="#0cf" stroke="#0cf" stroke-width="1">Combo</text>
+		<defs>
+			<text id="combotexttag" x="5" y="22">Combo</text>
+		</defs>
+		<use xlink:href="#combotexttag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#combotexttag" fill="#0cf" stroke="#0cf" stroke-width="1"/>
 	</svg>
 	<div id="board"></div>
 	<svg id="gameover" width="350" height="250" viewBox="0 0 70 50">
-		<text x="7" y="22" fill="#fff" stroke="#000" stroke-width="4">Game</text>
-		<text x="7" y="22" fill="#fff" stroke="#fff" stroke-width="1">Game</text>
-		<text x="11" y="42" fill="#fff" stroke="#000" stroke-width="4">Over</text>
-		<text x="11" y="42" fill="#fff" stroke="#fff" stroke-width="1">Over</text>
+		<defs>
+			<text id="gameovertag" x="7" y="22">Game</text>
+			<text id="gameovertag2" x="11" y="42">Over</text>
+		</defs>
+		<use xlink:href="#gameovertag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#gameovertag" fill="#fff" stroke="#fff" stroke-width="1"/>
+		<use xlink:href="#gameovertag2" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#gameovertag2" fill="#fff" stroke="#fff" stroke-width="1"/>
 	</svg>
 	<svg id="starttext" width="364" height="42" viewBox="0 0 260 30">
 		<rect x="2" y="2" rx="10" ry="10" width="256" height="26" stroke="#bbb" stroke-width="3" fill="#eee" />
-		<text x="5" y="22" fill="#fff" stroke="#000" stroke-width="4">Press Enter to start Tetris...</text>
-		<text x="5" y="22" fill="#fff" stroke="#fff" stroke-width="1">Press Enter to start Tetris...</text>
+		<defs>
+			<text id="starttexttag" x="5" y="22">Press Enter to start Tetris...</text>
+		</defs>
+		<use xlink:href="#starttexttag" stroke="#000" stroke-width="4"/>
+		<use xlink:href="#starttexttag" fill="#fff" stroke="#fff" stroke-width="1"/>
 	</svg>
 	<svg id="gameset" width="380" height="380" viewBox="0 0 300 300">
 		<rect x="2" y="2" rx="10" ry="10" width="296" height="296" stroke="#bbb" stroke-width="3" fill="#eee" />
