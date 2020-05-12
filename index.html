@@ -33,6 +33,16 @@
 			document.body.onresize = setfoundation;
 			setfoundation();
 			document.body.style.opacity = 1;
+			game.focus();
+			window.onmousedown = function () {
+				game.focus();
+			};
+			window.onmouseup = function () {
+				game.focus();
+			};
+			window.onclick = function () {
+				game.focus();
+			};
 		};
 	</script>
 </head>
