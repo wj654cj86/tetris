@@ -77,19 +77,19 @@ body {
 }
 
 #gameover {
-	top    : 40px;
+	top    : 20px;
 	left   : 205px;
 	opacity: 0;
 }
 
 #starttext {
-	top : 280px;
+	top : 250px;
 	left: 198px;
 }
 
 #gameset {
-	top : 340px;
-	left: 190px;
+	top : 300px;
+	left: 191px;
 }
 
 #senttext,

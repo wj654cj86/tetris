@@ -32,7 +32,7 @@ var color = {
 var proportion = { move: [1, 0.5], set: [1, 0.4], ghost: [1, 0.7], text: [1, 0.5] };
 var minodata = [
 	{
-		name: 'X', ofs: 0, srs: 0, md: [[
+		name: 'X', ofs: 0, srs: 0, bonus: -1, md: [[
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
@@ -62,7 +62,7 @@ var minodata = [
 			[0, 0, 0, 0, 0, 0]
 		]]
 	}, {
-		name: 'I', ofs: -1, srs: 4, md: [[
+		name: 'I', ofs: -1, srs: 4, bonus: 0, md: [[
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
 			[0, 1, 1, 1, 1, 0],
@@ -92,7 +92,7 @@ var minodata = [
 			[0, 0, 0, 0, 0, 0]
 		]]
 	}, {
-		name: 'O', ofs: 0, srs: 4, md: [[
+		name: 'O', ofs: 0, srs: 4, bonus: -1, md: [[
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 1, 1, 0, 0],
@@ -122,48 +122,37 @@ var minodata = [
 			[0, 0, 0, 0, 0, 0]
 		]]
 	}, {
-		name: 'T', ofs: 0, srs: 3, md: [[
+		name: 'T', ofs: 0, srs: 3, bonus: 1, md: [[
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
-			[0, 5, 1, 4, 0, 0],
-			[6, 1, 1, 1, 7, 0],
-			[0, 2, 0, 3, 0, 0],
+			[0, 0, 1, 0, 0, 0],
+			[0, 1, 1, 1, 0, 0],
+			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0]
 		], [
 			[0, 0, 0, 0, 0, 0],
-			[0, 0, 6, 0, 0, 0],
-			[0, 2, 1, 5, 0, 0],
+			[0, 0, 0, 0, 0, 0],
+			[0, 0, 1, 0, 0, 0],
 			[0, 0, 1, 1, 0, 0],
-			[0, 3, 1, 4, 0, 0],
-			[0, 0, 7, 0, 0, 0]
-		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 3, 0, 2, 0, 0],
-			[7, 1, 1, 1, 6, 0],
-			[0, 4, 1, 5, 0, 0],
+			[0, 0, 1, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0]
 		], [
 			[0, 0, 0, 0, 0, 0],
-			[0, 0, 7, 0, 0, 0],
-			[0, 4, 1, 3, 0, 0],
+			[0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0],
+			[0, 1, 1, 1, 0, 0],
+			[0, 0, 1, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0]
+		], [
+			[0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0],
+			[0, 0, 1, 0, 0, 0],
 			[0, 1, 1, 0, 0, 0],
-			[0, 5, 1, 2, 0, 0],
-			[0, 0, 6, 0, 0, 0]
-		]], isspin: function (arr) {
-			if ((arr[2] || arr[3]) && arr[4] && arr[5]) {
-				return 1;
-			}
-			if ((arr[2] || arr[3]) && arr[4] && arr[6]) {
-				return 1;
-			}
-			if ((arr[2] || arr[3]) && arr[7] && arr[5]) {
-				return 1;
-			}
-			return 0;
-		}
+			[0, 0, 1, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0]
+		]]
 	}, {
-		name: 'J', ofs: 0, srs: 3, md: [[
+		name: 'J', ofs: 0, srs: 3, bonus: 0, md: [[
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
 			[0, 1, 0, 0, 0, 0],
@@ -193,7 +182,7 @@ var minodata = [
 			[0, 0, 0, 0, 0, 0]
 		]]
 	}, {
-		name: 'L', ofs: 0, srs: 3, md: [[
+		name: 'L', ofs: 0, srs: 3, bonus: 0, md: [[
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 1, 0, 0],
@@ -223,7 +212,7 @@ var minodata = [
 			[0, 0, 0, 0, 0, 0]
 		]]
 	}, {
-		name: 'Z', ofs: 0, srs: 3, md: [[
+		name: 'Z', ofs: 0, srs: 3, bonus: 0, md: [[
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
 			[0, 1, 1, 0, 0, 0],
@@ -253,7 +242,7 @@ var minodata = [
 			[0, 0, 0, 0, 0, 0]
 		]]
 	}, {
-		name: 'S', ofs: 0, srs: 3, md: [[
+		name: 'S', ofs: 0, srs: 3, bonus: 0, md: [[
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0],
 			[0, 0, 1, 1, 0, 0],
@@ -293,6 +282,12 @@ for (let i = 0; i <= 7; i++) {
 		}
 	}
 }
+var bonus = [
+	{ open: 0, mino: [1] },
+	{ open: 1, mino: [3] },
+	{ open: 0, mino: [4, 5] },
+	{ open: 0, mino: [6, 7] }
+];
 
 var srs = {
 	3: {
@@ -852,32 +847,34 @@ class mino {
 		}
 		return 0;
 	}
-	testspinclear() {
+	_testspinclear(ofsx, ofsy) {
 		let md = minodata[this.id];
-		let arr = [0, 0];
 		for (let i = 0; i < 6; i++) {
 			for (let j = 0; j < 6; j++) {
-				let x = this.x + j - 3;
-				let y = this.y + i - 3 + md.ofs;
-				if (md.mr[this.rotate][i][j] > 1) {
+				let x = this.x + ofsx + j - 3;
+				let y = this.y + ofsy + i - 3 + md.ofs;
+				if (md.mr[this.rotate][i][j] == 1) {
 					if (x < 0 || x >= w) {
-						arr[md.mr[this.rotate][i][j]] = 1;
-						continue;
+						return 1;
 					}
 					if (y < 0 || y >= hall) {
-						arr[md.mr[this.rotate][i][j]] = 1;
-						continue;
+						return 1;
 					}
 					let ba = boardarr[y][x];
 					if (ba.set == 1) {
-						arr[md.mr[this.rotate][i][j]] = 1;
-						continue;
+						return 1;
 					}
-					arr[md.mr[this.rotate][i][j]] = 0;
 				}
 			}
 		}
-		return md.isspin(arr);
+		return 0;
+	}
+	testspinclear() {
+		return (
+			this._testspinclear(-1, 0) &&
+			this._testspinclear(1, 0) &&
+			this._testspinclear(0, -1) &&
+			this._testspinclear(0, 1));
 	}
 	testgameover() {
 		if (this.test()) {
@@ -947,7 +944,7 @@ class mino {
 			}
 		}
 		if (b == 1) {
-			if (this.id == 3) {
+			if (md.bonus == 1) {
 				this.spinaction = this.testspinclear();
 			}
 		} else {
@@ -1319,12 +1316,13 @@ window.onload = function () {
 			i++;
 		}
 	}
+
 	let width = gameset.getAttribute('viewBox').split(' ')[2];
 	let newx = (width - openghosttag.getBBox().width) / 2;
 	openghosttag.setAttribute('transform', 'translate(' + newx + ',' + 250 + ')');
 	let og = getCookie('openghost');
 	if (og == '' || isNaN(og)) og = openghost;
-	openghost = og;
+	openghost = og * 1;
 	openghostcheck.setAttribute('fill-opacity', openghost);
 	openghosttag.onclick = function () {
 		if (openghost) {
@@ -1336,5 +1334,35 @@ window.onload = function () {
 		setCookie('openghost', openghost);
 	};
 
+	newx = (width - spinbonustext.getBBox().width) / 2;
+	spinbonustext.setAttribute('x', newx);
+	spinbonustext.setAttribute('y', 320);
+	for (let i = 0; i < 4; i++) {
+		let tag = window['spinbonustag' + i];
+		let check = window['spinbonuscheck' + i];
+		let bns = bonus[i];
+		let ckn = 'spinbonus' + i;
+		let newx = (width - tag.getBBox().width) / 2;
+		tag.setAttribute('transform', 'translate(' + (newx - 90 + i * 60) + ',' + 330 + ')');
+		let sb = getCookie(ckn);
+		if (sb == '' || isNaN(sb)) sb = bns.open;
+		bns.open = sb * 1;
+		for (let j = 0; j < bns.mino.length; j++) {
+			minodata[bns.mino[j]].bonus = bns.open;
+		}
+		check.setAttribute('fill-opacity', bns.open);
+		tag.onclick = function () {
+			if (bns.open) {
+				bns.open = 0;
+			} else {
+				bns.open = 1;
+			}
+			for (let j = 0; j < bns.mino.length; j++) {
+				minodata[bns.mino[j]].bonus = bns.open;
+			}
+			check.setAttribute('fill-opacity', bns.open);
+			setCookie(ckn, bns.open);
+		};
+	}
 	document.body.style.opacity = 1;
 };
