@@ -6,7 +6,7 @@
 		content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Tetris</title>
+	<title>Tetris JavaScript</title>
 	<link href="icon.png" rel="icon">
 	<script type="text/javascript" src="mylibrary.js"></script>
 	<script type="text/javascript" src="color-conversion-algorithms.js"></script>
@@ -72,72 +72,132 @@
 		<use xlink:href="#combotexttag" fill="#0cf" stroke="#0cf" stroke-width="1" />
 	</svg>
 	<div id="board"></div>
-	<svg id="gameover" width="350" height="250" viewBox="0 0 70 50">
-		<g opacity="0">
-			<text id="gameovertag" x="7" y="22">Game</text>
-			<text id="gameovertag2" x="11" y="42">Over</text>
-		</g>
-		<use xlink:href="#gameovertag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#gameovertag" fill="#fff" stroke="#fff" stroke-width="1" />
-		<use xlink:href="#gameovertag2" stroke="#000" stroke-width="4" />
-		<use xlink:href="#gameovertag2" fill="#fff" stroke="#fff" stroke-width="1" />
-	</svg>
-	<svg id="starttext" width="364" height="42" viewBox="0 0 260 30">
-		<rect x="2" y="2" rx="10" ry="10" width="256" height="26" stroke="#bbb" stroke-width="3" fill="#eee" />
-		<g opacity="0">
-			<text id="starttexttag" x="5" y="22">Press Enter to start Tetris...</text>
-		</g>
-		<use xlink:href="#starttexttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#starttexttag" fill="#fff" stroke="#fff" stroke-width="1" />
-	</svg>
-	<svg id="gameset" width="378" height="513" viewBox="0 0 280 380">
-		<rect x="2" y="2" rx="10" ry="10" width="276" height="376" stroke="#bbb" stroke-width="3" fill="#eee" />
-		<g opacity="0">
-			<g id="subbt">
-				<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
-				<text x="7" y="56" fill="#fff" stroke="#fff" stroke-width="1">«</text>
+	<div id="mainboard">
+		<svg id="logotext" width="380" height="190" viewBox="0 0 100 50">
+			<g opacity="0">
+				<text id="logotag" x="7" y="22">Tetris</text>
+				<text id="logotag2" x="11" y="42">JavaScript</text>
 			</g>
-			<g id="decbt">
-				<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
-				<text x="9" y="56" fill="#fff" stroke="#fff" stroke-width="1">‹</text>
+			<use xlink:href="#logotag" stroke="#000" stroke-width="4" />
+			<use xlink:href="#logotag" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#logotag2" stroke="#000" stroke-width="4" />
+			<use xlink:href="#logotag2" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+		<svg id="playtext" width="300" height="105" viewBox="0 0 100 35">
+			<rect x="2" y="2" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
+			<g opacity="0">
+				<text id="playtag" x="5" y="24">Play</text>
 			</g>
-			<g id="incbt">
-				<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
-				<text x="9" y="56" fill="#fff" stroke="#fff" stroke-width="1">›</text>
+			<use xlink:href="#playtag" stroke="#000" stroke-width="4" />
+			<use xlink:href="#playtag" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+		<svg id="keybttext" width="300" height="105" viewBox="0 0 100 35">
+			<rect x="2" y="2" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
+			<g opacity="0">
+				<text id="keybttag" x="5" y="24">Key Set</text>
 			</g>
-			<g id="addbt">
-				<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
-				<text x="7" y="56" fill="#fff" stroke="#fff" stroke-width="1">»</text>
+			<use xlink:href="#keybttag" stroke="#000" stroke-width="4" />
+			<use xlink:href="#keybttag" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+		<svg id="otherbttext" width="300" height="105" viewBox="0 0 100 35">
+			<rect x="2" y="2" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
+			<g opacity="0">
+				<text id="otherbttag" x="5" y="24">Other Set</text>
 			</g>
-		</g>
-		<g id="openghosttag">
-			<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
-			<path id="openghostcheck" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
-			<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">Open Ghost</text>
-		</g>
-		<text id="spinbonustext" x="0" y="0" fill="#222" stroke="#222" stroke-width="1">Spin clear Bonus</text>
-		<g id="spinbonustag0">
-			<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
-			<path id="spinbonuscheck0" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
-			<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">I</text>
-		</g>
-		<g id="spinbonustag1">
-			<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
-			<path id="spinbonuscheck1" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
-			<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">T</text>
-		</g>
-		<g id="spinbonustag2">
-			<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
-			<path id="spinbonuscheck2" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
-			<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">JL</text>
-		</g>
-		<g id="spinbonustag3">
-			<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
-			<path id="spinbonuscheck3" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
-			<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">SZ</text>
-		</g>
-	</svg>
-
+			<use xlink:href="#otherbttag" stroke="#000" stroke-width="4" />
+			<use xlink:href="#otherbttag" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+	</div>
+	<div id="overboard">
+		<svg id="gameover" width="350" height="250" viewBox="0 0 70 50">
+			<g opacity="0">
+				<text id="gameovertag" x="7" y="22">Game</text>
+				<text id="gameovertag2" x="11" y="42">Over</text>
+			</g>
+			<use xlink:href="#gameovertag" stroke="#000" stroke-width="4" />
+			<use xlink:href="#gameovertag" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#gameovertag2" stroke="#000" stroke-width="4" />
+			<use xlink:href="#gameovertag2" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+		<svg id="overoktext" width="300" height="105" viewBox="0 0 100 35">
+			<rect x="2" y="2" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
+			<g opacity="0">
+				<text id="overoktag" x="5" y="24">OK</text>
+			</g>
+			<use xlink:href="#overoktag" stroke="#000" stroke-width="4" />
+			<use xlink:href="#overoktag" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+	</div>
+	<div id="keysetboard">
+		<svg id="keyset" width="378" height="783" viewBox="0 0 280 580">
+			<rect x="2" y="2" rx="10" ry="10" width="276" height="576" stroke="#bbb" stroke-width="3" fill="#eee" />
+		</svg>
+		<svg id="keysetoktext" width="200" height="70" viewBox="0 0 100 35">
+			<rect x="2" y="2" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
+			<g opacity="0">
+				<text id="keysetoktag" x="5" y="24">OK</text>
+			</g>
+			<use xlink:href="#keysetoktag" stroke="#000" stroke-width="4" />
+			<use xlink:href="#keysetoktag" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+	</div>
+	<div id="otherboard">
+		<svg id="gameset" width="378" height="783" viewBox="0 0 280 580">
+			<rect x="2" y="2" rx="10" ry="10" width="276" height="576" stroke="#bbb" stroke-width="3" fill="#eee" />
+			<g opacity="0">
+				<g id="subbt">
+					<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
+					<text x="7" y="56" fill="#fff" stroke="#fff" stroke-width="1">«</text>
+				</g>
+				<g id="decbt">
+					<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
+					<text x="9" y="56" fill="#fff" stroke="#fff" stroke-width="1">‹</text>
+				</g>
+				<g id="incbt">
+					<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
+					<text x="9" y="56" fill="#fff" stroke="#fff" stroke-width="1">›</text>
+				</g>
+				<g id="addbt">
+					<rect x="0" y="38" rx="5" ry="5" width="25" height="25" fill="#444" />
+					<text x="7" y="56" fill="#fff" stroke="#fff" stroke-width="1">»</text>
+				</g>
+			</g>
+			<g id="openghosttag">
+				<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<path id="openghostcheck" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
+				<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">Open Ghost</text>
+			</g>
+			<text id="spinbonustext" x="0" y="0" fill="#222" stroke="#222" stroke-width="1">Spin clear Bonus</text>
+			<g id="spinbonustag0">
+				<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<path id="spinbonuscheck0" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
+				<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">I</text>
+			</g>
+			<g id="spinbonustag1">
+				<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<path id="spinbonuscheck1" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
+				<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">T</text>
+			</g>
+			<g id="spinbonustag2">
+				<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<path id="spinbonuscheck2" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
+				<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">JL</text>
+			</g>
+			<g id="spinbonustag3">
+				<rect x="0" y="8" rx="5" ry="5" width="25" height="25" fill="#444" />
+				<path id="spinbonuscheck3" d="M3,20l2-2l5,5l10-10l2,2l-12,12l-7-7z" fill="#fff" />
+				<text x="30" y="27" fill="#222" stroke="#222" stroke-width="1">SZ</text>
+			</g>
+		</svg>
+		<svg id="otheroktext" width="200" height="70" viewBox="0 0 100 35">
+			<rect x="2" y="2" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
+			<g opacity="0">
+				<text id="otheroktag" x="5" y="24">OK</text>
+			</g>
+			<use xlink:href="#otheroktag" stroke="#000" stroke-width="4" />
+			<use xlink:href="#otheroktag" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+	</div>
 	<div id="next"></div>
 </body>
 

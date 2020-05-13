@@ -360,18 +360,52 @@ var timename = {
 var openghost = 1;
 
 var key = {
-	newgame: { use: 'Enter', lock: 0, timeout: null, interval: null },
-	left: { use: 'ArrowLeft', lock: 0, timeout: null, interval: null },
-	right: { use: 'ArrowRight', lock: 0, timeout: null, interval: null },
-	soft: { use: 'ArrowDown', lock: 0, timeout: null, interval: null },
-	hard: { use: ' ', lock: 0, timeout: null, interval: null },
-	hold: { use: 'Shift', lock: 0, timeout: null, interval: null },
-	hold2: { use: 'C', lock: 0, timeout: null, interval: null },
-	cw: { use: 'ArrowUp', lock: 0, timeout: null, interval: null },
-	cw2: { use: 'X', lock: 0, timeout: null, interval: null },
-	ccw: { use: 'Control', lock: 0, timeout: null, interval: null },
-	ccw2: { use: 'Z', lock: 0, timeout: null, interval: null }
+	newgame: {
+		name: 'Determine', use: 'Enter',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	left: {
+		name: 'Move left', use: 'ArrowLeft',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	right: {
+		name: 'Move right', use: 'ArrowRight',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	soft: {
+		name: 'Soft down', use: 'ArrowDown',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	hard: {
+		name: 'Hard down', use: 'Space',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	hold: {
+		name: 'Hold', use: 'ShiftLeft',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	hold2: {
+		name: 'Hold', use: 'KeyC',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	spinleft: {
+		name: 'Spin left', use: 'ControlLeft',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	spinleft2: {
+		name: 'Spin left', use: 'KeyZ',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	spinright: {
+		name: 'Spin right', use: 'ArrowUp',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	spinright2: {
+		name: 'Spin right', use: 'KeyX',
+		lock: 0, timeout: null, interval: null, tag: null
+	}
 };
+var keytmp = { ckn: '', obj: null };
 
 function keyreset() {
 	for (let name in key) {
@@ -387,14 +421,6 @@ function keyreset() {
 
 var now;
 
-function letter(key) {
-	if (key.length == 1) {
-		return key.toUpperCase();
-	} else {
-		return key;
-	}
-}
-
 function boardarrreset() {
 	for (let i = 0; i < hall; i++) {
 		for (let j = 0; j < w; j++) {
@@ -404,9 +430,6 @@ function boardarrreset() {
 			boardarr[i][j].tag.style.background = 'none';
 		}
 	}
-	gameover.style.opacity = 0;
-	starttext.style.zIndex = -1;
-	gameset.style.zIndex = -1;
 }
 
 function loadcolor(orgrgb, proportion) {
@@ -486,30 +509,68 @@ function clearclear() {
 	combotext.style.opacity = 0;
 }
 
+var action = {
+	play: function () {
+		mainboard.style.zIndex = -1;
+		now = new mino();
+		now.show();
+		now.holdreset();
+		game.change('play');
+	},
+	over: function () {
+		game.change('pause');
+		keyreset();
+		overboard.style.zIndex = 1;
+		game.change('over');
+	},
+	tomain: function () {
+		now.holdreset();
+		now.nextreset();
+		keyreset();
+		sentnum = 0;
+		settext(sent, sentnum);
+		clearclear();
+		boardarrreset();
+		overboard.style.zIndex = -1;
+		mainboard.style.zIndex = 1;
+		game.change('load');
+	}
+};
 var game = {
 	change: function (name) {
 		window.onkeydown = function (e) {
-			console.log(e.key);
+			console.log(e.code);
 			game[name].down(e);
 		};
 		window.onkeyup = function (e) {
-			console.log(e.key);
+			console.log(e.code);
 			game[name].up(e);
 		};
 	},
+	pause: {
+		down: function (e) {
+		},
+		up: function (e) {
+		}
+	},
 	load: {
 		down: function (e) {
-			switch (letter(e.key)) {
+			switch (e.code) {
 				case key.newgame.use:
-					keyreset();
-					sentnum = 0;
-					settext(sent, sentnum);
-					clearclear();
-					boardarrreset();
-					now = new mino();
-					now.show();
-					now.holdreset();
-					game.change('play');
+					action.play();
+					break;
+				default:
+					break;
+			}
+		},
+		up: function (e) {
+		}
+	},
+	over: {
+		down: function (e) {
+			switch (e.code) {
+				case key.newgame.use:
+					action.tomain();
 					break;
 				default:
 					break;
@@ -520,29 +581,29 @@ var game = {
 	},
 	play: {
 		down: function (e) {
-			switch (letter(e.key)) {
-				case key.ccw.use:
-					if (key.ccw.lock == 0) {
+			switch (e.code) {
+				case key.spinleft.use:
+					if (key.spinleft.lock == 0) {
 						now.spin(-1);
-						key.ccw.lock = 1;
+						key.spinleft.lock = 1;
 					}
 					break;
-				case key.ccw2.use:
-					if (key.ccw2.lock == 0) {
+				case key.spinleft2.use:
+					if (key.spinleft2.lock == 0) {
 						now.spin(-1);
-						key.ccw2.lock = 1;
+						key.spinleft2.lock = 1;
 					}
 					break;
-				case key.cw.use:
-					if (key.cw.lock == 0) {
+				case key.spinright.use:
+					if (key.spinright.lock == 0) {
 						now.spin(1);
-						key.cw.lock = 1;
+						key.spinright.lock = 1;
 					}
 					break;
-				case key.cw2.use:
-					if (key.cw2.lock == 0) {
+				case key.spinright2.use:
+					if (key.spinright2.lock == 0) {
 						now.spin(1);
-						key.cw2.lock = 1;
+						key.spinright2.lock = 1;
 					}
 					break;
 				case key.left.use:
@@ -635,18 +696,18 @@ var game = {
 			}
 		},
 		up: function (e) {
-			switch (letter(e.key)) {
-				case key.ccw.use:
-					key.ccw.lock = 0;
+			switch (e.code) {
+				case key.spinleft.use:
+					key.spinleft.lock = 0;
 					break;
-				case key.ccw2.use:
-					key.ccw2.lock = 0;
+				case key.spinleft2.use:
+					key.spinleft2.lock = 0;
 					break;
-				case key.cw.use:
-					key.cw.lock = 0;
+				case key.spinright.use:
+					key.spinright.lock = 0;
 					break;
-				case key.cw2.use:
-					key.cw2.lock = 0;
+				case key.spinright2.use:
+					key.spinright2.lock = 0;
 					break;
 				case key.left.use:
 					key.left.lock = 0;
@@ -688,6 +749,17 @@ var game = {
 					break;
 			}
 		}
+	},
+	keyset: {
+		down: function (e) {
+			keytmp.obj.use = e.code;
+			keytmp.obj.tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
+			keytmp.obj.tag.getElementsByTagName('text')[1].innerHTML = keytmp.obj.use;
+			setCookie(keytmp.ckn, keytmp.obj.use);
+			game.change('pause');
+		},
+		up: function (e) {
+		}
 	}
 };
 
@@ -700,9 +772,9 @@ class mino {
 		this.holduse = 0;
 		this.spinaction = 0;
 		this.b2b = 0;
-		this.loadnext();
+		this.nextload();
 	}
-	loadnext() {
+	nextload() {
 		while (this.nextcnt * 7 - this.cnt < 14) {
 			let arr = [1, 2, 3, 4, 5, 6, 7];
 			for (let i = 0; i < 7; i++) {
@@ -722,6 +794,11 @@ class mino {
 		this.y = 20;
 		for (let i = 0; i < nextlen; i++) {
 			this.showmin(nextarr[i], this.next[this.cnt + i]);
+		}
+	}
+	nextreset() {
+		for (let i = 0; i < nextlen; i++) {
+			this.showmin(nextarr[i], 0);
 		}
 	}
 	show() {
@@ -882,10 +959,7 @@ class mino {
 			this.y = 21;
 			if (this.test()) {
 			} else {
-				gameover.style.opacity = 1;
-				starttext.style.zIndex = 3;
-				gameset.style.zIndex = 3;
-				game.change('load');
+				action.over();
 			}
 		}
 	}
@@ -905,7 +979,7 @@ class mino {
 			}
 		}
 		this.clearline();
-		this.loadnext();
+		this.nextload();
 		this.testgameover();
 		this.spinaction = 0;
 		this.show();
@@ -1027,7 +1101,7 @@ class mino {
 		if (this._hold == 0) {
 			this._hold = this.id;
 			this.showmin(holdarr, this.id);
-			this.loadnext();
+			this.nextload();
 			this.testgameover();
 			this.show();
 		} else {
@@ -1224,10 +1298,106 @@ window.onload = function () {
 	game.change('load');
 	settext(sent, sentnum);
 	settextxoffset(senttext);
+
+	settextxoffset(logotext);
+	settextxoffset(logotext, 1);
+
+	settextxoffset(playtext);
+	playtext.onclick = function () {
+		action.play();
+	};
+
+	settextxoffset(keybttext);
+	keybttext.onclick = function () {
+		keysetboard.style.zIndex = 1;
+		game.change('pause');
+	};
+
+	settextxoffset(otherbttext);
+	otherbttext.onclick = function () {
+		otherboard.style.zIndex = 1;
+		game.change('pause');
+	};
+
 	settextxoffset(gameover);
 	settextxoffset(gameover, 1);
-	settextxoffset(starttext);
+
+	settextxoffset(overoktext);
+	overoktext.onclick = function () {
+		action.tomain();
+	};
+
+	settextxoffset(keysetoktext);
+	keysetoktext.onclick = function () {
+		for (let ii in key) {
+			key[ii].tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
+		}
+		keysetboard.style.zIndex = -1;
+		game.change('load');
+	};
+
+	settextxoffset(otheroktext);
+	otheroktext.onclick = function () {
+		otherboard.style.zIndex = -1;
+		game.change('load');
+	};
+
 	let i = 0;
+	for (let ii in key) {
+		let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		keyset.appendChild(tag);
+		let newy = i * 40 + 10;
+
+		let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+		text.setAttribute('y', 27);
+		text.setAttribute('fill', '#222');
+		text.setAttribute('stroke', '#222');
+		text.setAttribute('stroke-width', '1');
+		text.innerHTML = key[ii].name;
+		tag.appendChild(text);
+
+		let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+		rect.setAttribute('x', 115);
+		rect.setAttribute('y', 8);
+		rect.setAttribute('rx', 5);
+		rect.setAttribute('ry', 5);
+		rect.setAttribute('width', 140);
+		rect.setAttribute('height', 25);
+		rect.setAttribute('fill', '#444');
+		tag.appendChild(rect);
+
+		let use = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+		use.setAttribute('x', 125);
+		use.setAttribute('y', 27);
+		use.setAttribute('fill', '#fff');
+		use.setAttribute('stroke', '#fff');
+		use.setAttribute('stroke-width', '1');
+		let ck = getCookie('key_' + ii);
+		if (ck == '') ck = key[ii].use;
+		key[ii].use = ck;
+		use.innerHTML = key[ii].use;
+		tag.appendChild(use);
+
+		let width = keyset.getAttribute('viewBox').split(' ')[2];
+		let newx = (width - tag.getBBox().width) / 2;
+		tag.setAttribute('transform', 'translate(' + newx + ',' + newy + ')');
+		key[ii].tag = tag;
+
+		let ckn = 'key_' + ii;
+		let iii = ii;
+		tag.onclick = function name(params) {
+			for (let ii in key) {
+				key[ii].tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
+			}
+			rect.setAttribute('fill', '#066');
+			keytmp.ckn = ckn;
+			keytmp.obj = key[iii];
+			game.change('keyset');
+		};
+		i++;
+	}
+
+	i = 0;
 	for (let ii in time) {
 		for (let jj in time[ii]) {
 			let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');

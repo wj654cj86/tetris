@@ -76,20 +76,90 @@ body {
 	opacity: 0;
 }
 
-#gameover {
-	top    : 20px;
-	left   : 205px;
-	opacity: 0;
+#hold div,
+#hold img,
+#board div,
+#board img,
+#next .next div,
+#next .next img {
+	position: absolute;
 }
 
-#starttext {
-	top : 250px;
-	left: 198px;
+#mainboard {
+	z-index: 1;
+}
+
+#logotext {
+	top : 100px;
+	left: 10px;
+}
+
+#playtext {
+	top : 300px;
+	left: 50px;
+}
+
+#keybttext {
+	top : 420px;
+	left: 50px;
+}
+
+#otherbttext {
+	top : 540px;
+	left: 50px;
+}
+
+#overboard {
+	z-index: -1;
+}
+
+#gameover {
+	top : 170px;
+	left: 25px;
+}
+
+#overoktext {
+	top : 420px;
+	left: 50px;
+}
+
+#keysetboard {
+	z-index : -1;
+}
+
+#keyset {
+	top : 12px;
+	left: 12px;
+}
+
+#keysetoktext {
+	top : 700px;
+	left: 100px;
+}
+
+#otherboard {
+	z-index : -1;
 }
 
 #gameset {
-	top : 300px;
-	left: 191px;
+	top : 12px;
+	left: 12px;
+}
+
+#otheroktext {
+	top : 700px;
+	left: 100px;
+}
+
+#mainboard,
+#overboard,
+#keysetboard,
+#otherboard {
+	position: absolute;
+	top     : 20px;
+	left    : 180px;
+	width   : 402px;
+	height  : 810px;
 }
 
 #senttext,
@@ -99,20 +169,18 @@ body {
 #linetext,
 #combonumtext,
 #combotext,
+
+#logotext,
+#playtext,
+#keybttext,
+#otherbttext,
 #gameover,
-#starttext,
-#gameset {
+#overoktext,
+#keyset,
+#keysetoktext,
+#gameset,
+#otheroktext {
 	position   : absolute;
 	font-size  : 20px;
 	font-family: Microsoft JhengHei;
-}
-
-
-#hold div,
-#hold img,
-#board div,
-#board img,
-#next .next div,
-#next .next img {
-	position: absolute;
 }
