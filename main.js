@@ -293,22 +293,22 @@ var srs = {
 	3: {
 		0: {
 			1: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: -1, y: 1 }, { x: 0, y: -2 }, { x: -1, y: -2 }],
-			2: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
+			2: [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 }, { x: 0, y: 3 }, { x: 0, y: 4 }],
 			3: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 0, y: -2 }, { x: 1, y: -2 }]
 		},
 		1: {
 			0: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: -1 }, { x: 0, y: 2 }, { x: 1, y: 2 }],
 			2: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: -1 }, { x: 0, y: 2 }, { x: 1, y: 2 }],
-			3: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }]
+			3: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 }, { x: 4, y: 0 }]
 		},
 		2: {
-			0: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
+			0: [{ x: 0, y: 0 }, { x: 0, y: -1 }, { x: 0, y: -2 }, { x: 0, y: -3 }, { x: 0, y: -4 }],
 			1: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: -1, y: 1 }, { x: 0, y: -2 }, { x: -1, y: -2 }],
 			3: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 0, y: -2 }, { x: 1, y: -2 }]
 		},
 		3: {
 			0: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: -1, y: -1 }, { x: 0, y: 2 }, { x: -1, y: 2 }],
-			1: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
+			1: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: -2, y: 0 }, { x: -3, y: 0 }, { x: -4, y: 0 }],
 			2: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: -1, y: -1 }, { x: 0, y: 2 }, { x: -1, y: 2 }]
 		}
 	},
@@ -402,6 +402,14 @@ var key = {
 	},
 	spinright2: {
 		name: 'Spin right', use: 'KeyX',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	spinhalf: {
+		name: 'Spin half', use: 'AltLeft',
+		lock: 0, timeout: null, interval: null, tag: null
+	},
+	spinhalf2: {
+		name: 'Spin half', use: 'KeyS',
 		lock: 0, timeout: null, interval: null, tag: null
 	}
 };
@@ -541,10 +549,12 @@ var game = {
 		window.onkeydown = function (e) {
 			console.log(e.code);
 			game[name].down(e);
+			return false;
 		};
 		window.onkeyup = function (e) {
 			console.log(e.code);
 			game[name].up(e);
+			return false;
 		};
 	},
 	pause: {
@@ -604,6 +614,18 @@ var game = {
 					if (key.spinright2.lock == 0) {
 						now.spin(1);
 						key.spinright2.lock = 1;
+					}
+					break;
+				case key.spinhalf.use:
+					if (key.spinhalf.lock == 0) {
+						now.spin(2);
+						key.spinhalf.lock = 1;
+					}
+					break;
+				case key.spinhalf2.use:
+					if (key.spinhalf2.lock == 0) {
+						now.spin(2);
+						key.spinhalf2.lock = 1;
 					}
 					break;
 				case key.left.use:
@@ -708,6 +730,12 @@ var game = {
 					break;
 				case key.spinright2.use:
 					key.spinright2.lock = 0;
+					break;
+				case key.spinhalf.use:
+					key.spinhalf.lock = 0;
+					break;
+				case key.spinhalf2.use:
+					key.spinhalf2.lock = 0;
 					break;
 				case key.left.use:
 					key.left.lock = 0;
@@ -1346,7 +1374,7 @@ window.onload = function () {
 	for (let ii in key) {
 		let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 		keyset.appendChild(tag);
-		let newy = i * 40 + 10;
+		let newy = i * 38 + 10;
 
 		let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 		text.setAttribute('y', 27);
