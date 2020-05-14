@@ -31,6 +31,7 @@ body {
 #next .next {
 	position    : absolute;
 	overflow    : hidden;
+	background-color: #fff;
 	border-style: solid;
 	border-width: 1px;
 	border-color: #aaa;
