@@ -336,22 +336,22 @@ var srs = {
 	}
 }
 
-var linesent = [
-	{ name: '      ', sent: { normal: { normal: 0, b2b: 0 }, spin: { normal: 0, b2b: 0 } } },
-	{ name: 'Single', sent: { normal: { normal: 0, b2b: 0 }, spin: { normal: 2, b2b: 3 } } },
-	{ name: 'Double', sent: { normal: { normal: 1, b2b: 0 }, spin: { normal: 4, b2b: 5 } } },
-	{ name: 'Triple', sent: { normal: { normal: 2, b2b: 0 }, spin: { normal: 6, b2b: 8 } } },
-	{ name: 'Tetris', sent: { normal: { normal: 4, b2b: 5 }, spin: { normal: 10, b2b: 13 } } }
-];
+var sentdata = {
+	line: [
+		{ name: '      ', sent: { normal: { normal: 0, b2b: 0 }, spin: { normal: 0, b2b: 0 } } },
+		{ name: 'Single', sent: { normal: { normal: 0, b2b: 0 }, spin: { normal: 2, b2b: 3 } } },
+		{ name: 'Double', sent: { normal: { normal: 1, b2b: 0 }, spin: { normal: 4, b2b: 5 } } },
+		{ name: 'Triple', sent: { normal: { normal: 2, b2b: 0 }, spin: { normal: 6, b2b: 8 } } },
+		{ name: 'Tetris', sent: { normal: { normal: 4, b2b: 5 }, spin: { normal: 10, b2b: 13 } } }
+	],
+	combo: [0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5]
+};
 
-var combosent = [0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5];
-var sentnum = 0;
-var combo = 0;
-var time = {
+var delay = {
 	move: { start: 100, interval: 35 },
 	down: { start: 30, interval: 10 }
 };
-var timename = {
+var delayname = {
 	move: 'Move',
 	down: 'Down',
 	start: 'second',
@@ -359,6 +359,39 @@ var timename = {
 };
 var openghost = 1;
 
+var time = {
+	num: 0,
+	data: 2,
+	interval: null,
+	tostr() {
+		return paddingLeft(Math.floor(this.num / 60), 2) + ':' + paddingLeft(this.num % 60, 2);
+	},
+	initial() {
+		this.num = this.data * 60;
+		settext(timenum, this.tostr());
+		settextxoffset(timetext);
+	},
+	reset() {
+		this.num = this.data * 60;
+		settext(timenum, this.tostr());
+	},
+	start() {
+		if (this.num != 0) {
+			this.interval = setInterval(function () {
+				time.num--;
+				settext(timenum, time.tostr());
+				if (time.num == 0) {
+					time.stop();
+					action.timeup();
+				}
+			}, 1000);
+		}
+	},
+	stop() {
+		if (this.interval != null)
+			clearInterval(this.interval);
+	}
+};
 var key = {
 	newgame: {
 		name: 'Determine', use: 'Enter',
@@ -427,9 +460,7 @@ function keyreset() {
 	}
 }
 
-var now;
-
-function boardarrreset() {
+function boardreset() {
 	for (let i = 0; i < hall; i++) {
 		for (let j = 0; j < w; j++) {
 			boardarr[i][j].cnt = 0;
@@ -457,7 +488,7 @@ function settextxoffset(element, line = 0) {
 	let newx = (width - tag[line].getBBox().width) / 2;
 	tag[line].setAttribute('x', newx);
 }
-function settext(element, str) {
+function settext(element, str = '') {
 	let tag = element.getElementsByTagName('text');
 	tag[0].innerHTML = str;
 	settextxoffset(element);
@@ -467,85 +498,175 @@ function settextcolor(element, color) {
 	tag[1].setAttribute('fill', color);
 	tag[1].setAttribute('stroke', color);
 }
-var setclearinterval = null;
-function setclear(b2b, id, line, combo) {
-	if (setclearinterval != null)
-		clearInterval(setclearinterval);
-	if (b2b) {
-		b2btext.style.opacity = 1;
-	} else {
-		b2btext.style.opacity = 0;
-	}
-	if (id == 0) {
-		spintext.style.opacity = 0;
-		linetext.style.opacity = 0;
-		linetext.style.top = '440px';
-		settext(linetext, linesent[line].name);
-		settextcolor(linetext, loadcolor(color.sent[line], proportion.text));
-		linetext.style.opacity = 1;
-	} else {
-		spintext.style.opacity = 0;
-		settext(spintext, minodata[id].name + '-spin');
-		settextcolor(spintext, loadcolor(color.mino[id], proportion.text));
-		spintext.style.opacity = 1;
 
+var sent = {
+	num: 0,
+	b2b: 0,
+	combo: 0,
+	interval: null,
+	initial() {
+		settext(sentnum, this.num);
+		settextxoffset(senttext);
+	},
+	reset() {
+		this.num = 0;
+		this.b2b = 0;
+		this.combo = 0;
+		settext(sentnum, this.num);
+		this.clear();
+	},
+	test(id, line, spinaction) {
+		if (line > 0) {
+			let s = '';
+			let num = 0;
+			let action = '';
+			let action2 = 0;
+			let b2b = '';
+			let b2b2 = 0;
+			let ls = sentdata.line[line];
+
+			if (spinaction) {
+				action = 'spin';
+				action2 = id;
+				s += minodata[id].name + '-Spin ';
+			} else {
+				action = 'normal';
+				action2 = 0;
+			}
+
+			if (this.b2b) {
+				if (ls.sent[action].b2b) {
+					b2b = 'b2b';
+					b2b2 = 1;
+					s = 'Back to Back ' + s;
+					this.b2b = 1;
+				} else {
+					b2b = 'normal';
+					b2b2 = 0;
+					this.b2b = 0;
+				}
+			} else {
+				if (ls.sent[action].b2b) {
+					b2b = 'normal';
+					b2b2 = 0;
+					this.b2b = 1;
+				} else {
+					b2b = 'normal';
+					b2b2 = 0;
+					this.b2b = 0;
+				}
+			}
+
+			num += ls.sent[action][b2b];
+			s += ls.name;
+
+			num += sentdata.combo[this.combo];
+			s += ' ' + this.combo + ' Combo';
+
+			this.num += num;
+			settext(sentnum, this.num);
+			console.log('sent:', num, s);
+			this.set(action2, line, b2b2);
+			this.combo++;
+		} else {
+			this.combo = 0;
+		}
+	},
+	set(id, line, b2b) {
+		if (this.interval != null)
+			clearInterval(this.interval);
+		if (b2b) {
+			b2btext.style.opacity = 1;
+		} else {
+			b2btext.style.opacity = 0;
+		}
+		if (id == 0) {
+			spintext.style.opacity = 0;
+			linetext.style.opacity = 0;
+			linetext.style.top = '560px';
+			settext(linetext, sentdata.line[line].name);
+			settextcolor(linetext, loadcolor(color.sent[line], proportion.text));
+			linetext.style.opacity = 1;
+		} else {
+			spintext.style.opacity = 0;
+			settext(spintext, minodata[id].name + '-spin');
+			settextcolor(spintext, loadcolor(color.mino[id], proportion.text));
+			spintext.style.opacity = 1;
+
+			linetext.style.opacity = 0;
+			linetext.style.top = '600px';
+			settext(linetext, sentdata.line[line].name);
+			settextcolor(linetext, loadcolor(color.mino[id], proportion.text));
+			linetext.style.opacity = 1;
+		}
+		if (this.combo == 0) {
+			combonumtext.style.opacity = 0;
+			combotext.style.opacity = 0;
+		} else {
+			combonumtext.style.opacity = 0;
+			settext(combonumtext, this.combo);
+			combonumtext.style.opacity = 1;
+			combotext.style.opacity = 1;
+		}
+		this.interval = setInterval(function () {
+			sent.clear();
+		}, 3000);
+	},
+	clear() {
+		if (this.interval != null)
+			clearInterval(this.interval);
+		b2btext.style.opacity = 0;
+		spintext.style.opacity = 0;
 		linetext.style.opacity = 0;
-		linetext.style.top = '480px';
-		settext(linetext, linesent[line].name);
-		settextcolor(linetext, loadcolor(color.mino[id], proportion.text));
-		linetext.style.opacity = 1;
-	}
-	if (combo == 0) {
 		combonumtext.style.opacity = 0;
 		combotext.style.opacity = 0;
-	} else {
-		combonumtext.style.opacity = 0;
-		settext(combonumtext, combo);
-		combonumtext.style.opacity = 1;
-		combotext.style.opacity = 1;
 	}
-	setclearinterval = setInterval(function () {
-		clearclear();
-	}, 3000);
-}
+};
 
-function clearclear() {
-	b2btext.style.opacity = 0;
-	spintext.style.opacity = 0;
-	linetext.style.opacity = 0;
-	combonumtext.style.opacity = 0;
-	combotext.style.opacity = 0;
-}
+var now;
 
 var action = {
-	play: function () {
+	play() {
 		mainboard.style.zIndex = -1;
 		now = new mino();
 		now.show();
 		now.holdreset();
+		time.start();
 		game.change('play');
 	},
-	over: function () {
+	over() {
 		game.change('pause');
 		keyreset();
+		gameover.style.opacity = 1;
+		timeup.style.opacity = 0;
 		overboard.style.zIndex = 1;
+		time.stop();
 		game.change('over');
 	},
-	tomain: function () {
+	timeup() {
+		game.change('pause');
+		keyreset();
+		gameover.style.opacity = 0;
+		timeup.style.opacity = 1;
+		overboard.style.zIndex = 1;
+		time.stop();
+		game.change('over');
+	},
+	tomain() {
 		now.holdreset();
 		now.nextreset();
 		keyreset();
-		sentnum = 0;
-		settext(sent, sentnum);
-		clearclear();
-		boardarrreset();
+		sent.reset();
+		time.reset();
+		boardreset();
 		overboard.style.zIndex = -1;
 		mainboard.style.zIndex = 1;
 		game.change('load');
 	}
 };
+
 var game = {
-	change: function (name) {
+	change(name) {
 		window.onkeydown = function (e) {
 			console.log(e.code);
 			game[name].down(e);
@@ -558,13 +679,13 @@ var game = {
 		};
 	},
 	pause: {
-		down: function (e) {
+		down(e) {
 		},
-		up: function (e) {
+		up(e) {
 		}
 	},
 	load: {
-		down: function (e) {
+		down(e) {
 			switch (e.code) {
 				case key.newgame.use:
 					action.play();
@@ -573,11 +694,11 @@ var game = {
 					break;
 			}
 		},
-		up: function (e) {
+		up(e) {
 		}
 	},
 	over: {
-		down: function (e) {
+		down(e) {
 			switch (e.code) {
 				case key.newgame.use:
 					action.tomain();
@@ -586,11 +707,11 @@ var game = {
 					break;
 			}
 		},
-		up: function (e) {
+		up(e) {
 		}
 	},
 	play: {
-		down: function (e) {
+		down(e) {
 			switch (e.code) {
 				case key.spinleft.use:
 					if (key.spinleft.lock == 0) {
@@ -651,8 +772,8 @@ var game = {
 										clearInterval(key.left.interval);
 									}
 								});
-							}, time.move.interval);
-						}, time.move.start);
+							}, delay.move.interval);
+						}, delay.move.start);
 					}
 					break;
 				case key.right.use:
@@ -678,8 +799,8 @@ var game = {
 										clearInterval(key.right.interval);
 									}
 								});
-							}, time.move.interval);
-						}, time.move.start);
+							}, delay.move.interval);
+						}, delay.move.start);
 					}
 					break;
 				case key.soft.use:
@@ -691,8 +812,8 @@ var game = {
 							key.soft.timeout = null;
 							key.soft.interval = setInterval(function () {
 								now.movey(-1);
-							}, time.down.interval);
-						}, time.down.start);
+							}, delay.down.interval);
+						}, delay.down.start);
 					}
 					break;
 				case key.hard.use:
@@ -717,7 +838,7 @@ var game = {
 					break;
 			}
 		},
-		up: function (e) {
+		up(e) {
 			switch (e.code) {
 				case key.spinleft.use:
 					key.spinleft.lock = 0;
@@ -779,14 +900,14 @@ var game = {
 		}
 	},
 	keyset: {
-		down: function (e) {
+		down(e) {
 			keytmp.obj.use = e.code;
 			keytmp.obj.tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
 			keytmp.obj.tag.getElementsByTagName('text')[1].innerHTML = keytmp.obj.use;
 			setCookie(keytmp.ckn, keytmp.obj.use);
 			game.change('pause');
 		},
-		up: function (e) {
+		up(e) {
 		}
 	}
 };
@@ -799,7 +920,6 @@ class mino {
 		this._hold = 0;
 		this.holduse = 0;
 		this.spinaction = 0;
-		this.b2b = 0;
 		this.nextload();
 	}
 	nextload() {
@@ -1189,63 +1309,10 @@ class mino {
 				}
 			}
 		}
-		if (linecnt > 0) {
-			let s = '';
-			let num = 0;
-			let action = '';
-			let action2 = 0;
-			let b2b = '';
-			let b2b2 = 0;
-			let ls = linesent[linecnt];
-			if (this.spinaction) {
-				action = 'spin';
-				action2 = this.id;
-				s += minodata[this.id] + '-Spin ';
-			} else {
-				action = 'normal';
-				action2 = 0;
-			}
-			if (this.b2b) {
-				if (ls.sent[action].b2b) {
-					b2b = 'b2b';
-					b2b2 = 1;
-					s = 'Back to Back ' + s;
-					this.b2b = 1;
-				} else {
-					b2b = 'normal';
-					b2b2 = 0;
-					this.b2b = 0;
-				}
-			} else {
-				if (ls.sent[action].b2b) {
-					b2b = 'normal';
-					b2b2 = 0;
-					this.b2b = 1;
-				} else {
-					b2b = 'normal';
-					b2b2 = 0;
-					this.b2b = 0;
-				}
-			}
-			num += ls.sent[action][b2b];
-			s += ls.name;
-
-			if (combo == 1) {
-				s += ' ' + combo + ' Combo';
-			} else if (combo > 1) {
-				s += ' ' + combo + ' Combos';
-			}
-			num += combosent[combo];
-			sentnum += num;
-			settext(sent, sentnum);
-			console.log('sent:', num, s);
-			setclear(b2b2, action2, linecnt, combo);
-			combo++;
-		} else {
-			combo = 0;
-		}
+		sent.test(this.id, linecnt, this.spinaction);
 	}
 }
+
 window.onload = function () {
 	board.style.width = w * sl + 'px';
 	board.style.height = h * sl + 'px';
@@ -1324,8 +1391,9 @@ window.onload = function () {
 		}
 	}
 	game.change('load');
-	settext(sent, sentnum);
-	settextxoffset(senttext);
+
+	sent.initial();
+	time.initial();
 
 	settextxoffset(logotext);
 	settextxoffset(logotext, 1);
@@ -1349,6 +1417,9 @@ window.onload = function () {
 
 	settextxoffset(gameover);
 	settextxoffset(gameover, 1);
+
+	settextxoffset(timeup);
+	settextxoffset(timeup, 1);
 
 	settextxoffset(overoktext);
 	overoktext.onclick = function () {
@@ -1426,14 +1497,14 @@ window.onload = function () {
 	}
 
 	i = 0;
-	for (let ii in time) {
-		for (let jj in time[ii]) {
+	for (let ii in delay) {
+		for (let jj in delay[ii]) {
 			let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 			text.setAttribute('y', i * 60 + 27);
 			text.setAttribute('fill', '#222');
 			text.setAttribute('stroke', '#222');
 			text.setAttribute('stroke-width', '1');
-			text.innerHTML = timename[ii] + ' ' + timename[jj];
+			text.innerHTML = delayname[ii] + ' ' + delayname[jj];
 			gameset.appendChild(text);
 			let width = gameset.getAttribute('viewBox').split(' ')[2];
 			let newx = (width - text.getBBox().width) / 2;
@@ -1456,11 +1527,11 @@ window.onload = function () {
 			value.setAttribute('stroke', '#fff');
 			value.setAttribute('stroke-width', '1');
 			gameset.appendChild(value);
-			let valuename = timename[ii] + '_' + timename[jj] + '_value';
+			let valuename = delayname[ii] + '_' + delayname[jj] + '_value';
 			let cv = getCookie(valuename);
-			if (cv == '' || isNaN(cv)) cv = time[ii][jj];
-			time[ii][jj] = cv * 1;
-			value.innerHTML = time[ii][jj] + ' ms';
+			if (cv == '' || isNaN(cv)) cv = delay[ii][jj];
+			delay[ii][jj] = cv * 1;
+			value.innerHTML = delay[ii][jj] + ' ms';
 			newx = (width - value.getBBox().width) / 2;
 			value.setAttribute('x', newx);
 			value.setAttribute('id', valuename);
@@ -1469,13 +1540,13 @@ window.onload = function () {
 			let jjj = jj;
 
 			let changevalue = function (num) {
-				time[iii][jjj] += num;
-				if (time[iii][jjj] < 0) time[iii][jjj] = 0;
-				if (time[iii][jjj] > 1000) time[iii][jjj] = 1000;
-				value.innerHTML = time[iii][jjj] + ' ms';
+				delay[iii][jjj] += num;
+				if (delay[iii][jjj] < 0) delay[iii][jjj] = 0;
+				if (delay[iii][jjj] > 1000) delay[iii][jjj] = 1000;
+				value.innerHTML = delay[iii][jjj] + ' ms';
 				let newx = (width - value.getBBox().width) / 2;
 				value.setAttribute('x', newx);
-				setCookie(valuename, time[iii][jjj]);
+				setCookie(valuename, delay[iii][jjj]);
 			};
 			newx = (width - rect.getBBox().width) / 2;
 			let newy = i * 60;
@@ -1562,5 +1633,87 @@ window.onload = function () {
 			setCookie(ckn, bns.open);
 		};
 	}
+	let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+	text.setAttribute('y', 360 + 27);
+	text.setAttribute('fill', '#222');
+	text.setAttribute('stroke', '#222');
+	text.setAttribute('stroke-width', '1');
+	text.innerHTML = 'Game Time';
+	gameset.appendChild(text);
+	newx = (width - text.getBBox().width) / 2;
+	text.setAttribute('x', newx);
+
+	let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+	rect.setAttribute('y', 360 + 38);
+	rect.setAttribute('rx', 5);
+	rect.setAttribute('ry', 5);
+	rect.setAttribute('width', 120);
+	rect.setAttribute('height', 25);
+	rect.setAttribute('fill', '#444');
+	gameset.appendChild(rect);
+	newx = (width - rect.getBBox().width) / 2;
+	rect.setAttribute('x', newx);
+
+	let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+	value.setAttribute('y', 360 + 58);
+	value.setAttribute('fill', '#fff');
+	value.setAttribute('stroke', '#fff');
+	value.setAttribute('stroke-width', '1');
+	gameset.appendChild(value);
+	let valuename = 'Game_Time_value';
+	let cv = getCookie(valuename);
+	if (cv == '' || isNaN(cv)) cv = time.data;
+	time.data = cv * 1;
+	value.innerHTML = time.data + ' min';
+	time.reset();
+	newx = (width - value.getBBox().width) / 2;
+	value.setAttribute('x', newx);
+	value.setAttribute('id', valuename);
+
+	let changevalue = function (num) {
+		time.data += num;
+		if (time.data < 0) time.data = 0;
+		if (time.data > 60) time.data = 60;
+		value.innerHTML = time.data + ' min';
+		time.reset();
+		let newx = (width - value.getBBox().width) / 2;
+		value.setAttribute('x', newx);
+		setCookie(valuename, time.data);
+	};
+
+	newx = (width - rect.getBBox().width) / 2;
+	let newy = 360;
+	let subbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+	subbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#subbt');
+	subbt.setAttribute('transform', 'translate(' + (newx - 60) + ',' + newy + ')');
+	gameset.appendChild(subbt);
+	subbt.onclick = function () {
+		changevalue(-10);
+	};
+
+	let decbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+	decbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#decbt');
+	decbt.setAttribute('transform', 'translate(' + (newx - 30) + ',' + newy + ')');
+	gameset.appendChild(decbt);
+	decbt.onclick = function () {
+		changevalue(-1);
+	};
+
+	let incbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+	incbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#incbt');
+	incbt.setAttribute('transform', 'translate(' + (newx + rect.getBBox().width + 5) + ',' + newy + ')');
+	gameset.appendChild(incbt);
+	incbt.onclick = function () {
+		changevalue(1);
+	};
+
+	let addbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+	addbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#addbt');
+	addbt.setAttribute('transform', 'translate(' + (newx + rect.getBBox().width + 35) + ',' + newy + ')');
+	gameset.appendChild(addbt);
+	addbt.onclick = function () {
+		changevalue(10);
+	};
+
 	document.body.style.opacity = 1;
 };
