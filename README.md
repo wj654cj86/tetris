@@ -1,2 +1,2 @@
-# Tetris
+# Tetris JavaScript
 Play in Github: https://wj654cj86.github.io/tetris/
