@@ -369,7 +369,6 @@ var time = {
 	initial() {
 		this.num = this.data * 60;
 		settext(timenum, this.tostr());
-		settextxoffset(timetext);
 	},
 	reset() {
 		this.num = this.data * 60;
@@ -481,17 +480,9 @@ function loadcolor(orgrgb, proportion) {
 	}
 	return rgbToHex(...hslToRgb(...hsl));
 }
-function settextxoffset(element, line = 0) {
-	let width = element.getAttribute('viewBox').split(' ')[2];
-	let tag = element.getElementsByTagName('text');
-	console.log(tag[line].getBBox().width);
-	let newx = (width - tag[line].getBBox().width) / 2;
-	tag[line].setAttribute('x', newx);
-}
 function settext(element, str = '') {
 	let tag = element.getElementsByTagName('text');
 	tag[0].innerHTML = str;
-	settextxoffset(element);
 }
 function settextcolor(element, color) {
 	let tag = element.getElementsByTagName('use');
@@ -506,7 +497,6 @@ var sent = {
 	interval: null,
 	initial() {
 		settext(sentnum, this.num);
-		settextxoffset(senttext);
 	},
 	reset() {
 		this.num = 0;
@@ -1313,6 +1303,12 @@ class mino {
 	}
 }
 
+function newusebyid(id) {
+	let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+	use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
+	return use;
+}
+
 window.onload = function () {
 	board.style.width = w * sl + 'px';
 	board.style.height = h * sl + 'px';
@@ -1395,38 +1391,24 @@ window.onload = function () {
 	sent.initial();
 	time.initial();
 
-	settextxoffset(logotext);
-	settextxoffset(logotext, 1);
-
-	settextxoffset(playtext);
 	playtext.onclick = function () {
 		action.play();
 	};
 
-	settextxoffset(keybttext);
 	keybttext.onclick = function () {
 		keysetboard.style.zIndex = 1;
 		game.change('pause');
 	};
 
-	settextxoffset(otherbttext);
 	otherbttext.onclick = function () {
 		otherboard.style.zIndex = 1;
 		game.change('pause');
 	};
 
-	settextxoffset(gameover);
-	settextxoffset(gameover, 1);
-
-	settextxoffset(timeup);
-	settextxoffset(timeup, 1);
-
-	settextxoffset(overoktext);
 	overoktext.onclick = function () {
 		action.tomain();
 	};
 
-	settextxoffset(keysetoktext);
 	keysetoktext.onclick = function () {
 		for (let ii in key) {
 			key[ii].tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
@@ -1435,7 +1417,6 @@ window.onload = function () {
 		game.change('load');
 	};
 
-	settextxoffset(otheroktext);
 	otheroktext.onclick = function () {
 		otherboard.style.zIndex = -1;
 		game.change('load');
@@ -1444,11 +1425,12 @@ window.onload = function () {
 	let i = 0;
 	for (let ii in key) {
 		let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		tag.setAttribute('transform', 'translate(' + 13 + ',' + (i * 38 + 10) + ')');
 		keyset.appendChild(tag);
-		let newy = i * 38 + 10;
+		key[ii].tag = tag;
 
 		let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-		text.setAttribute('y', 27);
+		text.setAttribute('y', 22);
 		text.setAttribute('fill', '#222');
 		text.setAttribute('stroke', '#222');
 		text.setAttribute('stroke-width', '1');
@@ -1467,7 +1449,7 @@ window.onload = function () {
 
 		let use = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 		use.setAttribute('x', 125);
-		use.setAttribute('y', 27);
+		use.setAttribute('y', 22);
 		use.setAttribute('fill', '#fff');
 		use.setAttribute('stroke', '#fff');
 		use.setAttribute('stroke-width', '1');
@@ -1476,11 +1458,6 @@ window.onload = function () {
 		key[ii].use = ck;
 		use.innerHTML = key[ii].use;
 		tag.appendChild(use);
-
-		let width = keyset.getAttribute('viewBox').split(' ')[2];
-		let newx = (width - tag.getBBox().width) / 2;
-		tag.setAttribute('transform', 'translate(' + newx + ',' + newy + ')');
-		key[ii].tag = tag;
 
 		let ckn = 'key_' + ii;
 		let iii = ii;
@@ -1499,41 +1476,34 @@ window.onload = function () {
 	i = 0;
 	for (let ii in delay) {
 		for (let jj in delay[ii]) {
+			let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+			tag.setAttribute('transform', 'translate(' + 0 + ',' + i * 60 + ')');
+			gameset.appendChild(tag);
+
 			let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-			text.setAttribute('y', i * 60 + 27);
+			text.setAttribute('x', 140);
+			text.setAttribute('y', 22);
 			text.setAttribute('fill', '#222');
 			text.setAttribute('stroke', '#222');
 			text.setAttribute('stroke-width', '1');
 			text.innerHTML = delayname[ii] + ' ' + delayname[jj];
-			gameset.appendChild(text);
-			let width = gameset.getAttribute('viewBox').split(' ')[2];
-			let newx = (width - text.getBBox().width) / 2;
-			text.setAttribute('x', newx);
+			tag.appendChild(text);
 
-			let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-			rect.setAttribute('y', i * 60 + 38);
-			rect.setAttribute('rx', 5);
-			rect.setAttribute('ry', 5);
-			rect.setAttribute('width', 120);
-			rect.setAttribute('height', 25);
-			rect.setAttribute('fill', '#444');
-			gameset.appendChild(rect);
-			newx = (width - rect.getBBox().width) / 2;
-			rect.setAttribute('x', newx);
+			let vlrt = newusebyid('vlrt');
+			tag.appendChild(vlrt);
 
 			let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-			value.setAttribute('y', i * 60 + 58);
+			value.setAttribute('x', 140);
+			value.setAttribute('y', 53);
 			value.setAttribute('fill', '#fff');
 			value.setAttribute('stroke', '#fff');
 			value.setAttribute('stroke-width', '1');
-			gameset.appendChild(value);
+			tag.appendChild(value);
 			let valuename = delayname[ii] + '_' + delayname[jj] + '_value';
 			let cv = getCookie(valuename);
 			if (cv == '' || isNaN(cv)) cv = delay[ii][jj];
 			delay[ii][jj] = cv * 1;
 			value.innerHTML = delay[ii][jj] + ' ms';
-			newx = (width - value.getBBox().width) / 2;
-			value.setAttribute('x', newx);
 			value.setAttribute('id', valuename);
 
 			let iii = ii;
@@ -1544,40 +1514,29 @@ window.onload = function () {
 				if (delay[iii][jjj] < 0) delay[iii][jjj] = 0;
 				if (delay[iii][jjj] > 1000) delay[iii][jjj] = 1000;
 				value.innerHTML = delay[iii][jjj] + ' ms';
-				let newx = (width - value.getBBox().width) / 2;
-				value.setAttribute('x', newx);
 				setCookie(valuename, delay[iii][jjj]);
 			};
-			newx = (width - rect.getBBox().width) / 2;
-			let newy = i * 60;
-			let subbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-			subbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#subbt');
-			subbt.setAttribute('transform', 'translate(' + (newx - 60) + ',' + newy + ')');
-			gameset.appendChild(subbt);
+
+			let subbt = newusebyid('subbt');
+			tag.appendChild(subbt);
 			subbt.onclick = function () {
 				changevalue(-10);
 			};
 
-			let decbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-			decbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#decbt');
-			decbt.setAttribute('transform', 'translate(' + (newx - 30) + ',' + newy + ')');
-			gameset.appendChild(decbt);
+			let decbt = newusebyid('decbt');
+			tag.appendChild(decbt);
 			decbt.onclick = function () {
 				changevalue(-1);
 			};
 
-			let incbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-			incbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#incbt');
-			incbt.setAttribute('transform', 'translate(' + (newx + rect.getBBox().width + 5) + ',' + newy + ')');
-			gameset.appendChild(incbt);
+			let incbt = newusebyid('incbt');
+			tag.appendChild(incbt);
 			incbt.onclick = function () {
 				changevalue(1);
 			};
 
-			let addbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-			addbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#addbt');
-			addbt.setAttribute('transform', 'translate(' + (newx + rect.getBBox().width + 35) + ',' + newy + ')');
-			gameset.appendChild(addbt);
+			let addbt = newusebyid('addbt');
+			tag.appendChild(addbt);
 			addbt.onclick = function () {
 				changevalue(10);
 			};
@@ -1586,9 +1545,7 @@ window.onload = function () {
 		}
 	}
 
-	let width = gameset.getAttribute('viewBox').split(' ')[2];
-	let newx = (width - openghosttag.getBBox().width) / 2;
-	openghosttag.setAttribute('transform', 'translate(' + newx + ',' + 250 + ')');
+	openghosttag.setAttribute('transform', 'translate(70,' + 250 + ')');
 	let og = getCookie('openghost');
 	if (og == '' || isNaN(og)) og = openghost;
 	openghost = og * 1;
@@ -1603,16 +1560,14 @@ window.onload = function () {
 		setCookie('openghost', openghost);
 	};
 
-	newx = (width - spinbonustext.getBBox().width) / 2;
-	spinbonustext.setAttribute('x', newx);
-	spinbonustext.setAttribute('y', 320);
+	spinbonustext.setAttribute('x', 140);
+	spinbonustext.setAttribute('y', 310);
 	for (let i = 0; i < 4; i++) {
 		let tag = window['spinbonustag' + i];
 		let check = window['spinbonuscheck' + i];
 		let bns = bonus[i];
 		let ckn = 'spinbonus' + i;
-		let newx = (width - tag.getBBox().width) / 2;
-		tag.setAttribute('transform', 'translate(' + (newx - 90 + i * 60) + ',' + 330 + ')');
+		tag.setAttribute('transform', 'translate(' + (30 + i * 60) + ',' + 320 + ')');
 		let sb = getCookie(ckn);
 		if (sb == '' || isNaN(sb)) sb = bns.open;
 		bns.open = sb * 1;
@@ -1633,41 +1588,36 @@ window.onload = function () {
 			setCookie(ckn, bns.open);
 		};
 	}
+
+	let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+	tag.setAttribute('transform', 'translate(' + 0 + ',' + 360 + ')');
+	gameset.appendChild(tag);
+
 	let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-	text.setAttribute('y', 360 + 27);
+	text.setAttribute('x', 140);
+	text.setAttribute('y', 22);
 	text.setAttribute('fill', '#222');
 	text.setAttribute('stroke', '#222');
 	text.setAttribute('stroke-width', '1');
 	text.innerHTML = 'Game Time';
-	gameset.appendChild(text);
-	newx = (width - text.getBBox().width) / 2;
-	text.setAttribute('x', newx);
+	tag.appendChild(text);
 
-	let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-	rect.setAttribute('y', 360 + 38);
-	rect.setAttribute('rx', 5);
-	rect.setAttribute('ry', 5);
-	rect.setAttribute('width', 120);
-	rect.setAttribute('height', 25);
-	rect.setAttribute('fill', '#444');
-	gameset.appendChild(rect);
-	newx = (width - rect.getBBox().width) / 2;
-	rect.setAttribute('x', newx);
+	let vlrt = newusebyid('vlrt');
+	tag.appendChild(vlrt);
 
 	let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-	value.setAttribute('y', 360 + 58);
+	value.setAttribute('x', 140);
+	value.setAttribute('y', 53);
 	value.setAttribute('fill', '#fff');
 	value.setAttribute('stroke', '#fff');
 	value.setAttribute('stroke-width', '1');
-	gameset.appendChild(value);
+	tag.appendChild(value);
 	let valuename = 'Game_Time_value';
 	let cv = getCookie(valuename);
 	if (cv == '' || isNaN(cv)) cv = time.data;
 	time.data = cv * 1;
 	value.innerHTML = time.data + ' min';
 	time.reset();
-	newx = (width - value.getBBox().width) / 2;
-	value.setAttribute('x', newx);
 	value.setAttribute('id', valuename);
 
 	let changevalue = function (num) {
@@ -1676,41 +1626,29 @@ window.onload = function () {
 		if (time.data > 60) time.data = 60;
 		value.innerHTML = time.data + ' min';
 		time.reset();
-		let newx = (width - value.getBBox().width) / 2;
-		value.setAttribute('x', newx);
 		setCookie(valuename, time.data);
 	};
 
-	newx = (width - rect.getBBox().width) / 2;
-	let newy = 360;
-	let subbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-	subbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#subbt');
-	subbt.setAttribute('transform', 'translate(' + (newx - 60) + ',' + newy + ')');
-	gameset.appendChild(subbt);
+	let subbt = newusebyid('subbt');
+	tag.appendChild(subbt);
 	subbt.onclick = function () {
 		changevalue(-10);
 	};
 
-	let decbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-	decbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#decbt');
-	decbt.setAttribute('transform', 'translate(' + (newx - 30) + ',' + newy + ')');
-	gameset.appendChild(decbt);
+	let decbt = newusebyid('decbt');
+	tag.appendChild(decbt);
 	decbt.onclick = function () {
 		changevalue(-1);
 	};
 
-	let incbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-	incbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#incbt');
-	incbt.setAttribute('transform', 'translate(' + (newx + rect.getBBox().width + 5) + ',' + newy + ')');
-	gameset.appendChild(incbt);
+	let incbt = newusebyid('incbt');
+	tag.appendChild(incbt);
 	incbt.onclick = function () {
 		changevalue(1);
 	};
 
-	let addbt = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-	addbt.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#addbt');
-	addbt.setAttribute('transform', 'translate(' + (newx + rect.getBBox().width + 35) + ',' + newy + ')');
-	gameset.appendChild(addbt);
+	let addbt = newusebyid('addbt');
+	tag.appendChild(addbt);
 	addbt.onclick = function () {
 		changevalue(10);
 	};

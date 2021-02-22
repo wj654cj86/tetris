@@ -58,7 +58,7 @@ body {
 }
 
 #b2btext {
-	top    : 440px;
+	top    : 400px;
 	left   : 27.5px;
 	opacity: 0;
 }
@@ -202,4 +202,21 @@ body {
 	position   : absolute;
 	font-size  : 20px;
 	font-family: Microsoft JhengHei;
+}
+
+text {
+	text-anchor      : middle;
+	dominant-baseline: middle;
+	transform        : translate(0px, 1px);
+}
+
+#keyset text,
+#openghosttag text,
+#spinbonustag0 text,
+#spinbonustag1 text,
+#spinbonustag2 text,
+#spinbonustag3 text {
+	text-anchor      : start;
+	dominant-baseline: middle;
+	transform        : translate(0px, 1px);
 }

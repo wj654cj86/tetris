@@ -5,6 +5,7 @@ function paddingLeft(str, lenght) {
 	else
 		return paddingLeft("0" + str, lenght);
 }
+
 function setCookie(cname, cvalue) {
 	var d;
 	var expires = '';
@@ -236,6 +237,20 @@ function componentToHex(c) {
 
 function rgbToHex(r, g, b) {
 	return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexToRgb(h) {
+	let r, g, b;
+	if (h.length == 4) {
+		r = 0x11 * ('0x' + h[1]);
+		g = 0x11 * ('0x' + h[2]);
+		b = 0x11 * ('0x' + h[3]);
+	} else {
+		r = 1 * ('0x' + h[1] + h[2]);
+		g = 1 * ('0x' + h[3] + h[4]);
+		b = 1 * ('0x' + h[5] + h[6]);
+	}
+	return [r, g, b];
 }
 
 Node.prototype.getElementsByAttributeValue = function (attribute, value) {
