@@ -87,6 +87,20 @@ body {
 	opacity: 0;
 }
 
+#board div,
+#board img {
+	width : var(--sl);
+	height: var(--sl);
+}
+
+#hold div,
+#hold img,
+#next .next div,
+#next .next img {
+	width : var(--slmin);
+	height: var(--slmin);
+}
+
 #hold div,
 #hold img,
 #board div,
@@ -178,36 +192,16 @@ body {
 	height  : 810px;
 }
 
-#senttext,
-#sentnum,
-#timetext,
-#timenum,
-#b2btext,
-#spintext,
-#linetext,
-#combonumtext,
-#combotext,
-
-#logotext,
-#playtext,
-#keybttext,
-#otherbttext,
-#gameover,
-#timeup,
-#overoktext,
-#keyset,
-#keysetoktext,
-#gameset,
-#otheroktext {
-	position   : absolute;
-	font-size  : 20px;
-	font-family: Microsoft JhengHei;
+svg {
+	position: absolute;
 }
 
 text {
+	stroke-linejoin  : round;
+	font-size        : 20px;
+	font-family      : Microsoft JhengHei;
 	text-anchor      : middle;
 	dominant-baseline: middle;
-	transform        : translate(0px, 1px);
 }
 
 #keyset text,
@@ -216,7 +210,5 @@ text {
 #spinbonustag1 text,
 #spinbonustag2 text,
 #spinbonustag3 text {
-	text-anchor      : start;
-	dominant-baseline: middle;
-	transform        : translate(0px, 1px);
+	text-anchor: start;
 }

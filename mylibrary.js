@@ -54,6 +54,26 @@ function array2url(arr) {
 	window.history.pushState({}, 0, url + strUrl + location.hash);
 }
 
+function promise(callback, ...args) {
+	return new Promise((resolve, reject) => {
+		callback(...args, (data) => {
+			resolve(data);
+		});
+	});
+}
+
+function promisearr(callback, ...args) {
+	return new Promise((resolve, reject) => {
+		callback(...args, (...args) => {
+			resolve(args);
+		});
+	});
+}
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function openfile(url, callback) {
 	if (typeof callback == "undefined") {
 		callback = function (str) { };
@@ -62,6 +82,26 @@ function openfile(url, callback) {
 	oReq.addEventListener("load", function () {
 		if (oReq.status != 404) {
 			callback(this.responseText);
+		} else {
+			callback('{}');
+		}
+	});
+	oReq.addEventListener("error", function () {
+		callback('{}');
+	});
+	oReq.open("GET", url);
+	oReq.send();
+}
+
+function openfilebinary(url, callback) {
+	if (typeof callback == "undefined") {
+		callback = function (str) { };
+	}
+	let oReq = new XMLHttpRequest();
+	oReq.responseType = "arraybuffer";
+	oReq.addEventListener("load", function () {
+		if (oReq.status != 404) {
+			callback(new Uint8Array(this.response));
 		} else {
 			callback('{}');
 		}
@@ -85,23 +125,6 @@ function xml2text(xml) {
 
 function copyxml(xml) {
 	return text2xml(xml2text(xml));
-}
-
-function generator(genfunc) {
-	var g = genfunc();
-
-	function next() {
-		let res = g.next();
-		if (!res.done) {
-			if (typeof res.value.argsfront != 'object') res.value.argsfront = [];
-			if (typeof res.value.argsback != 'object') res.value.argsback = [];
-			res.value.nextfunc(...res.value.argsfront, function (...args) {
-				res.value.cbfunc(...args);
-				next();
-			}, ...res.value.argsback);
-		}
-	}
-	next();
 }
 
 function getimgsize(imgsrc, callback) {
@@ -266,23 +289,27 @@ Node.prototype.getElementsByAttributeValue = function (attribute, value) {
 	return match;
 };
 
-Node.prototype.getElementByIdSvg = function (value) {
-	return this.getElementsByAttributeValue('id', value)[0];
-};
-
 function removeChild(node) {
 	if (node.parentNode) {
 		node.parentNode.removeChild(node);
 	}
 }
 
-function sentpost(url, obj) {
+function sentpost(url, obj, callback) {
 	obj = obj || {};
-
+	callback = callback || (() => { });
 	let oReq = new XMLHttpRequest();
 	oReq.open("POST", url, true);
 	oReq.setRequestHeader('Content-Type', 'application/json');
-	oReq.onreadystatechange = function () {
-	};
+	oReq.addEventListener("load", function () {
+		if (oReq.status != 404) {
+			callback(this.responseText);
+		} else {
+			callback('{}');
+		}
+	});
+	oReq.addEventListener("error", function () {
+		callback('{}');
+	});
 	oReq.send(JSON.stringify(obj));
 }
