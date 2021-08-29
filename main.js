@@ -376,7 +376,7 @@ var time = {
 	},
 	start() {
 		if (this.num != 0) {
-			this.interval = setInterval(function () {
+			this.interval = setInterval(() => {
 				time.num--;
 				settext(timenum, time.tostr());
 				if (time.num == 0) {
@@ -598,7 +598,7 @@ var sent = {
 			combonumtext.style.opacity = 1;
 			combotext.style.opacity = 1;
 		}
-		this.interval = setInterval(function () {
+		this.interval = setInterval(() => {
 			sent.clear();
 		}, 3000);
 	},
@@ -657,12 +657,12 @@ var action = {
 
 var game = {
 	change(name) {
-		window.onkeydown = function (e) {
+		window.onkeydown = (e) => {
 			console.log(e.code);
 			game[name].down(e);
 			return false;
 		};
-		window.onkeyup = function (e) {
+		window.onkeyup = (e) => {
 			console.log(e.code);
 			game[name].up(e);
 			return false;
@@ -743,8 +743,8 @@ var game = {
 					if (key.left.lock == 0) {
 						now.movex(-1);
 						key.left.lock = 1;
-						key.left.timeout = setTimeout(function () {
-							now.movex(-1, function () {
+						key.left.timeout = setTimeout(() => {
+							now.movex(-1, () => {
 								if (key.left.timeout != null) {
 									clearTimeout(key.left.timeout);
 								}
@@ -753,8 +753,8 @@ var game = {
 								}
 							});
 							key.left.timeout = null;
-							key.left.interval = setInterval(function () {
-								now.movex(-1, function () {
+							key.left.interval = setInterval(() => {
+								now.movex(-1, () => {
 									if (key.left.timeout != null) {
 										clearTimeout(key.left.timeout);
 									}
@@ -770,8 +770,8 @@ var game = {
 					if (key.right.lock == 0) {
 						now.movex(1);
 						key.right.lock = 1;
-						key.right.timeout = setTimeout(function () {
-							now.movex(1, function () {
+						key.right.timeout = setTimeout(() => {
+							now.movex(1, () => {
 								if (key.right.timeout != null) {
 									clearTimeout(key.right.timeout);
 								}
@@ -780,8 +780,8 @@ var game = {
 								}
 							});
 							key.right.timeout = null;
-							key.right.interval = setInterval(function () {
-								now.movex(1, function () {
+							key.right.interval = setInterval(() => {
+								now.movex(1, () => {
 									if (key.right.timeout != null) {
 										clearTimeout(key.right.timeout);
 									}
@@ -797,10 +797,10 @@ var game = {
 					if (key.soft.lock == 0) {
 						now.movey(-1);
 						key.soft.lock = 1;
-						key.soft.timeout = setTimeout(function () {
+						key.soft.timeout = setTimeout(() => {
 							now.movey(-1);
 							key.soft.timeout = null;
-							key.soft.interval = setInterval(function () {
+							key.soft.interval = setInterval(() => {
 								now.movey(-1);
 							}, delay.down.interval);
 						}, delay.down.start);
@@ -1165,7 +1165,7 @@ class mino {
 		this.show();
 		// this.testset();
 	}
-	movex(x, cb = function () { }) {
+	movex(x, cb = () => { }) {
 		this.clear();
 		this._movex(x);
 		if (this.test()) {
@@ -1177,7 +1177,7 @@ class mino {
 		this.show();
 		// this.testset();
 	}
-	movey(y, cb = function () { }) {
+	movey(y, cb = () => { }) {
 		this.clear();
 		this._movey(y);
 		if (this.test()) {
@@ -1309,41 +1309,39 @@ function newusebyid(id) {
 	return use;
 }
 
-window.onload = function () {
-	board.style.width = w * sl + 'px';
-	board.style.height = h * sl + 'px';
+window.onload = () => {
+	document.body.style.setProperty('--w', w);
+	document.body.style.setProperty('--h', h);
 	document.body.style.setProperty('--sl', sl + 'px');
 	for (let i = 0; i < hall; i++) {
 		boardarr[i] = [];
 		for (let j = 0; j < w; j++) {
 			let tag = document.createElement('div');
-			tag.style.left = sl * j + 'px';
-			tag.style.top = sl * (h - 1 - i) + 'px';
+			tag.style.setProperty('--left', j);
+			tag.style.setProperty('--top', h - 1 - i);
 			tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
 			board.appendChild(tag);
 
 			tag = document.createElement('div');
-			tag.style.left = sl * j + 'px';
-			tag.style.top = sl * (h - 1 - i) + 'px';
+			tag.style.setProperty('--left', j);
+			tag.style.setProperty('--top', h - 1 - i);
 			board.appendChild(tag);
 			boardarr[i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 		}
 	}
-	hold.style.width = 4 * slmin + 'px';
-	hold.style.height = 4 * slmin + 'px';
 	document.body.style.setProperty('--slmin', slmin + 'px');
 	for (let i = 0; i < 6; i++) {
 		holdarr[i] = [];
 		for (let j = 0; j < 6; j++) {
 			let tag = document.createElement('div');
-			tag.style.left = slmin * (j - 1) + 'px';
-			tag.style.top = slmin * (4 - 1 - i + 1) + 'px';
+			tag.style.setProperty('--left', j - 1);
+			tag.style.setProperty('--top', 4 - 1 - i + 1);
 			tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
 			hold.appendChild(tag);
 
 			tag = document.createElement('div');
-			tag.style.left = slmin * (j - 1) + 'px';
-			tag.style.top = slmin * (4 - 1 - i + 1) + 'px';
+			tag.style.setProperty('--left', j - 1);
+			tag.style.setProperty('--top', 4 - 1 - i + 1);
 			hold.appendChild(tag);
 			holdarr[i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 		}
@@ -1353,8 +1351,6 @@ window.onload = function () {
 	for (let k = 0; k < nextlen; k++) {
 		nextarr[k] = [];
 		let ntag = document.createElement('div');
-		ntag.style.width = 4 * slmin + 'px';
-		ntag.style.height = 4 * slmin + 'px';
 		ntag.style.left = 0 + 'px';
 		ntag.style.top = k * (slmin * 4 + 20) + 'px';
 		ntag.classList.add("next");
@@ -1363,14 +1359,14 @@ window.onload = function () {
 			nextarr[k][i] = [];
 			for (let j = 0; j < 6; j++) {
 				let tag = document.createElement('div');
-				tag.style.left = slmin * (j - 1) + 'px';
-				tag.style.top = slmin * (4 - 1 - i + 1) + 'px';
+				tag.style.setProperty('--left', j - 1);
+				tag.style.setProperty('--top', 4 - 1 - i + 1);
 				tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
 				ntag.appendChild(tag);
 
 				tag = document.createElement('div');
-				tag.style.left = slmin * (j - 1) + 'px';
-				tag.style.top = slmin * (4 - 1 - i + 1) + 'px';
+				tag.style.setProperty('--left', j - 1);
+				tag.style.setProperty('--top', 4 - 1 - i + 1);
 				ntag.appendChild(tag);
 				nextarr[k][i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 			}
@@ -1381,25 +1377,25 @@ window.onload = function () {
 	sent.initial();
 	time.initial();
 
-	playtext.onclick = function () {
+	playtext.onclick = () => {
 		action.play();
 	};
 
-	keybttext.onclick = function () {
+	keybttext.onclick = () => {
 		keysetboard.style.zIndex = 1;
 		game.change('pause');
 	};
 
-	otherbttext.onclick = function () {
+	otherbttext.onclick = () => {
 		otherboard.style.zIndex = 1;
 		game.change('pause');
 	};
 
-	overoktext.onclick = function () {
+	overoktext.onclick = () => {
 		action.tomain();
 	};
 
-	keysetoktext.onclick = function () {
+	keysetoktext.onclick = () => {
 		for (let ii in key) {
 			key[ii].tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
 		}
@@ -1407,7 +1403,7 @@ window.onload = function () {
 		game.change('load');
 	};
 
-	otheroktext.onclick = function () {
+	otheroktext.onclick = () => {
 		otherboard.style.zIndex = -1;
 		game.change('load');
 	};
@@ -1451,7 +1447,7 @@ window.onload = function () {
 
 		let ckn = 'key_' + ii;
 		let iii = ii;
-		tag.onclick = function name(params) {
+		tag.onclick = () => {
 			for (let ii in key) {
 				key[ii].tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
 			}
@@ -1499,7 +1495,7 @@ window.onload = function () {
 			let iii = ii;
 			let jjj = jj;
 
-			let changevalue = function (num) {
+			let changevalue = (num) => {
 				delay[iii][jjj] += num;
 				if (delay[iii][jjj] < 0) delay[iii][jjj] = 0;
 				if (delay[iii][jjj] > 1000) delay[iii][jjj] = 1000;
@@ -1509,25 +1505,25 @@ window.onload = function () {
 
 			let subbt = newusebyid('subbt');
 			tag.appendChild(subbt);
-			subbt.onclick = function () {
+			subbt.onclick = () => {
 				changevalue(-10);
 			};
 
 			let decbt = newusebyid('decbt');
 			tag.appendChild(decbt);
-			decbt.onclick = function () {
+			decbt.onclick = () => {
 				changevalue(-1);
 			};
 
 			let incbt = newusebyid('incbt');
 			tag.appendChild(incbt);
-			incbt.onclick = function () {
+			incbt.onclick = () => {
 				changevalue(1);
 			};
 
 			let addbt = newusebyid('addbt');
 			tag.appendChild(addbt);
-			addbt.onclick = function () {
+			addbt.onclick = () => {
 				changevalue(10);
 			};
 
@@ -1540,7 +1536,7 @@ window.onload = function () {
 	if (og == '' || isNaN(og)) og = openghost;
 	openghost = og * 1;
 	openghostcheck.setAttribute('fill-opacity', openghost);
-	openghosttag.onclick = function () {
+	openghosttag.onclick = () => {
 		if (openghost) {
 			openghost = 0;
 		} else {
@@ -1565,7 +1561,7 @@ window.onload = function () {
 			minodata[bns.mino[j]].bonus = bns.open;
 		}
 		check.setAttribute('fill-opacity', bns.open);
-		tag.onclick = function () {
+		tag.onclick = () => {
 			if (bns.open) {
 				bns.open = 0;
 			} else {
@@ -1610,7 +1606,7 @@ window.onload = function () {
 	time.reset();
 	value.setAttribute('id', valuename);
 
-	let changevalue = function (num) {
+	let changevalue = (num) => {
 		time.data += num;
 		if (time.data < 0) time.data = 0;
 		if (time.data > 60) time.data = 60;
@@ -1621,25 +1617,25 @@ window.onload = function () {
 
 	let subbt = newusebyid('subbt');
 	tag.appendChild(subbt);
-	subbt.onclick = function () {
+	subbt.onclick = () => {
 		changevalue(-10);
 	};
 
 	let decbt = newusebyid('decbt');
 	tag.appendChild(decbt);
-	decbt.onclick = function () {
+	decbt.onclick = () => {
 		changevalue(-1);
 	};
 
 	let incbt = newusebyid('incbt');
 	tag.appendChild(incbt);
-	incbt.onclick = function () {
+	incbt.onclick = () => {
 		changevalue(1);
 	};
 
 	let addbt = newusebyid('addbt');
 	tag.appendChild(addbt);
-	addbt.onclick = function () {
+	addbt.onclick = () => {
 		changevalue(10);
 	};
 

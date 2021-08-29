@@ -7,23 +7,29 @@ body {
 }
 
 #hold {
-	top : 20px;
-	left: 20px;
+	left  : 20px;
+	top   : 20px;
+	width : calc(var(--slmin) * 4);
+	height: calc(var(--slmin) * 4);
 }
 
 #board {
-	top : 20px;
-	left: 180px;
+	left  : 180px;
+	top   : 20px;
+	width : calc(var(--sl) * var(--w));
+	height: calc(var(--sl) * var(--h));
 }
 
 #next {
 	position: absolute;
-	top     : 20px;
 	left    : 600px;
+	top     : 20px;
 }
 
 #next .next {
-	left: 0px;
+	left  : 0px;
+	width : calc(var(--slmin) * 4);
+	height: calc(var(--slmin) * 4);
 }
 
 #hold,
@@ -38,57 +44,59 @@ body {
 }
 
 #senttext {
-	top : 160px;
 	left: 15px;
+	top : 160px;
 }
 
 #sentnum {
-	top : 220px;
 	left: 15px;
+	top : 220px;
 }
 
 #timetext {
-	top : 300px;
 	left: 15px;
+	top : 300px;
 }
 
 #timenum {
-	top : 360px;
 	left: 15px;
+	top : 360px;
 }
 
 #b2btext {
-	top    : 400px;
 	left   : 27.5px;
+	top    : 400px;
 	opacity: 0;
 }
 
 #spintext {
-	top    : 560px;
 	left   : 12px;
+	top    : 560px;
 	opacity: 0;
 }
 
 #linetext {
-	top    : 600px;
 	left   : 12px;
+	top    : 600px;
 	opacity: 0;
 }
 
 #combonumtext {
-	top    : 660px;
 	left   : 45px;
+	top    : 660px;
 	opacity: 0;
 }
 
 #combotext {
-	top    : 720px;
 	left   : 5px;
+	top    : 720px;
 	opacity: 0;
 }
 
 #board div,
 #board img {
+	left  : calc(var(--left) * var(--sl));
+	top   : calc(var(--top) * var(--sl));
 	width : var(--sl);
 	height: var(--sl);
 }
@@ -97,6 +105,8 @@ body {
 #hold img,
 #next .next div,
 #next .next img {
+	left  : calc(var(--left) * var(--slmin));
+	top   : calc(var(--top) * var(--slmin));
 	width : var(--slmin);
 	height: var(--slmin);
 }
@@ -115,23 +125,23 @@ body {
 }
 
 #logotext {
-	top : 100px;
 	left: 10px;
+	top : 100px;
 }
 
 #playtext {
-	top : 300px;
 	left: 50px;
+	top : 300px;
 }
 
 #keybttext {
-	top : 420px;
 	left: 50px;
+	top : 420px;
 }
 
 #otherbttext {
-	top : 540px;
 	left: 50px;
+	top : 540px;
 }
 
 #overboard {
@@ -139,18 +149,18 @@ body {
 }
 
 #gameover {
-	top : 170px;
 	left: 25px;
+	top : 170px;
 }
 
 #timeup {
-	top : 170px;
 	left: 25px;
+	top : 170px;
 }
 
 #overoktext {
-	top : 420px;
 	left: 50px;
+	top : 420px;
 }
 
 #keysetboard {
@@ -158,13 +168,13 @@ body {
 }
 
 #keyset {
-	top : 12px;
 	left: 12px;
+	top : 12px;
 }
 
 #keysetoktext {
-	top : 700px;
 	left: 100px;
+	top : 700px;
 }
 
 #otherboard {
@@ -172,13 +182,13 @@ body {
 }
 
 #gameset {
-	top : 12px;
 	left: 12px;
+	top : 12px;
 }
 
 #otheroktext {
-	top : 700px;
 	left: 100px;
+	top : 700px;
 }
 
 #mainboard,
@@ -186,10 +196,10 @@ body {
 #keysetboard,
 #otherboard {
 	position: absolute;
-	top     : 20px;
 	left    : 180px;
-	width   : 402px;
-	height  : 810px;
+	top     : 20px;
+	width   : calc(var(--sl) * var(--w) + 2px);
+	height  : calc(var(--sl) * var(--h) + 2px);
 }
 
 svg {

@@ -2,8 +2,7 @@
 <html>
 
 <head>
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Tetris JavaScript</title>
@@ -15,21 +14,27 @@
 
 		iframe {
 			position: absolute;
-			top: 50%;
 			left: 50%;
+			top: 50%;
 			transform-origin: 0px 0px;
+			transform: scale(var(--fm));
+			margin-left: calc(var(--fm) * var(--w) / -2 * 1px);
+			margin-top: calc(var(--fm) * var(--h) / -2 * 1px);
+			width: calc(var(--w) * 1px);
+			height: calc(var(--h) * 1px);
 		}
 	</style>
 	<script type="text/javascript" src="mylibrary.js"></script>
 	<script type="text/javascript">
+		let w = 770, h = 860;
 		function setfoundation() {
-			let fm = Math.min(window.innerWidth / 770, window.innerHeight / 860, 1.5);
+			let fm = Math.min(window.innerWidth / w, window.innerHeight / h, 1.5);
 			fm = Math.max(fm, 0.25);
-			game.style.transform = 'scale(' + fm + ')';
-			game.style.marginTop = -fm * 860 / 2 + 'px';
-			game.style.marginLeft = -fm * 770 / 2 + 'px';
+			game.style.setProperty('--fm', fm);
 		}
 		window.onload = function () {
+			game.style.setProperty('--w', w);
+			game.style.setProperty('--h', h);
 			document.body.onresize = setfoundation;
 			setfoundation();
 			document.body.style.opacity = 1;
@@ -48,7 +53,7 @@
 </head>
 
 <body>
-	<iframe id="game" src="main.html" width="770" height="860" frameborder="no"></iframe>
+	<iframe id="game" src="main.html" frameborder="no"></iframe>
 </body>
 
 </html>
