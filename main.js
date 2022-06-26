@@ -314,24 +314,24 @@ var srs = {
 	},
 	4: {
 		0: {
-			1: [{ x: 0, y: 0 }, { x: -2, y: 0 }, { x: 1, y: 0 }, { x: -2, y: -1 }, { x: 1, y: 2 }],
+			1: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: -2, y: 0 }, { x: -2, y: -1 }, { x: 1, y: 2 }],
 			2: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
-			3: [{ x: 0, y: 0 }, { x: 2, y: 0 }, { x: -1, y: 0 }, { x: 2, y: -1 }, { x: -1, y: 2 }]
+			3: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 2, y: 0 }, { x: 2, y: -1 }, { x: -1, y: 2 }]
 		},
 		1: {
-			0: [{ x: 0, y: 0 }, { x: 2, y: 0 }, { x: -1, y: 0 }, { x: 2, y: 1 }, { x: -1, y: -2 }],
-			2: [{ x: 0, y: 0 }, { x: 2, y: 0 }, { x: -1, y: 0 }, { x: 2, y: 1 }, { x: -1, y: -2 }],
+			0: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 2, y: 0 }, { x: -1, y: -2 }, { x: 2, y: 1 }],
+			2: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 2, y: 0 }, { x: -1, y: 2 }, { x: 2, y: -1 }],
 			3: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }]
 		},
 		2: {
 			0: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
-			1: [{ x: 0, y: 0 }, { x: -2, y: 0 }, { x: 1, y: 0 }, { x: -2, y: -1 }, { x: 1, y: 2 }],
-			3: [{ x: 0, y: 0 }, { x: 2, y: 0 }, { x: -1, y: 0 }, { x: 2, y: -1 }, { x: -1, y: 2 }]
+			1: [{ x: 0, y: 0 }, { x: -2, y: 0 }, { x: 1, y: 0 }, { x: -2, y: 1 }, { x: 1, y: -2 }],
+			3: [{ x: 0, y: 0 }, { x: 2, y: 0 }, { x: -1, y: 0 }, { x: 2, y: 1 }, { x: -1, y: -2 }]
 		},
 		3: {
-			0: [{ x: 0, y: 0 }, { x: -2, y: 0 }, { x: 1, y: 0 }, { x: -2, y: 1 }, { x: 1, y: -2 }],
+			0: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: -2, y: 0 }, { x: 1, y: -2 }, { x: -2, y: 1 }],
 			1: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
-			2: [{ x: 0, y: 0 }, { x: -2, y: 0 }, { x: 1, y: 0 }, { x: -2, y: 1 }, { x: 1, y: -2 }]
+			2: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: -2, y: 0 }, { x: 1, y: 2 }, { x: -2, y: -1 }]
 		}
 	}
 }
@@ -555,7 +555,7 @@ var sent = {
 
 			this.num += num;
 			settext(sentnum, this.num);
-			console.log('sent:', num, s);
+			// console.log('sent:', num, s);
 			this.set(action2, line, b2b2);
 			this.combo++;
 		} else {
@@ -658,12 +658,12 @@ var action = {
 var game = {
 	change(name) {
 		window.onkeydown = (e) => {
-			console.log(e.code);
+			// console.log(e.code);
 			game[name].down(e);
 			return false;
 		};
 		window.onkeyup = (e) => {
-			console.log(e.code);
+			// console.log(e.code);
 			game[name].up(e);
 			return false;
 		};
@@ -1320,12 +1320,12 @@ window.onload = () => {
 			tag.style.setProperty('--left', j);
 			tag.style.setProperty('--top', h - 1 - i);
 			tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
-			board.appendChild(tag);
+			board.append(tag);
 
 			tag = document.createElement('div');
 			tag.style.setProperty('--left', j);
 			tag.style.setProperty('--top', h - 1 - i);
-			board.appendChild(tag);
+			board.append(tag);
 			boardarr[i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 		}
 	}
@@ -1337,12 +1337,12 @@ window.onload = () => {
 			tag.style.setProperty('--left', j - 1);
 			tag.style.setProperty('--top', 4 - 1 - i + 1);
 			tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
-			hold.appendChild(tag);
+			hold.append(tag);
 
 			tag = document.createElement('div');
 			tag.style.setProperty('--left', j - 1);
 			tag.style.setProperty('--top', 4 - 1 - i + 1);
-			hold.appendChild(tag);
+			hold.append(tag);
 			holdarr[i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 		}
 	}
@@ -1354,7 +1354,7 @@ window.onload = () => {
 		ntag.style.left = 0 + 'px';
 		ntag.style.top = k * (slmin * 4 + 20) + 'px';
 		ntag.classList.add("next");
-		next.appendChild(ntag);
+		next.append(ntag);
 		for (let i = 0; i < 6; i++) {
 			nextarr[k][i] = [];
 			for (let j = 0; j < 6; j++) {
@@ -1362,12 +1362,12 @@ window.onload = () => {
 				tag.style.setProperty('--left', j - 1);
 				tag.style.setProperty('--top', 4 - 1 - i + 1);
 				tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
-				ntag.appendChild(tag);
+				ntag.append(tag);
 
 				tag = document.createElement('div');
 				tag.style.setProperty('--left', j - 1);
 				tag.style.setProperty('--top', 4 - 1 - i + 1);
-				ntag.appendChild(tag);
+				ntag.append(tag);
 				nextarr[k][i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
 			}
 		}
@@ -1412,7 +1412,7 @@ window.onload = () => {
 	for (let ii in key) {
 		let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 		tag.setAttribute('transform', 'translate(' + 13 + ',' + (i * 38 + 10) + ')');
-		keyset.appendChild(tag);
+		keyset.append(tag);
 		key[ii].tag = tag;
 
 		let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -1421,7 +1421,7 @@ window.onload = () => {
 		text.setAttribute('stroke', '#222');
 		text.setAttribute('stroke-width', '1');
 		text.innerHTML = key[ii].name;
-		tag.appendChild(text);
+		tag.append(text);
 
 		let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		rect.setAttribute('x', 115);
@@ -1431,7 +1431,7 @@ window.onload = () => {
 		rect.setAttribute('width', 140);
 		rect.setAttribute('height', 25);
 		rect.setAttribute('fill', '#444');
-		tag.appendChild(rect);
+		tag.append(rect);
 
 		let use = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 		use.setAttribute('x', 125);
@@ -1443,7 +1443,7 @@ window.onload = () => {
 		if (ck == '') ck = key[ii].use;
 		key[ii].use = ck;
 		use.innerHTML = key[ii].use;
-		tag.appendChild(use);
+		tag.append(use);
 
 		let ckn = 'key_' + ii;
 		let iii = ii;
@@ -1464,7 +1464,7 @@ window.onload = () => {
 		for (let jj in delay[ii]) {
 			let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 			tag.setAttribute('transform', 'translate(' + 0 + ',' + i * 60 + ')');
-			gameset.appendChild(tag);
+			gameset.append(tag);
 
 			let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 			text.setAttribute('x', 140);
@@ -1473,10 +1473,10 @@ window.onload = () => {
 			text.setAttribute('stroke', '#222');
 			text.setAttribute('stroke-width', '1');
 			text.innerHTML = delayname[ii] + ' ' + delayname[jj];
-			tag.appendChild(text);
+			tag.append(text);
 
 			let vlrt = newusebyid('vlrt');
-			tag.appendChild(vlrt);
+			tag.append(vlrt);
 
 			let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 			value.setAttribute('x', 140);
@@ -1484,7 +1484,7 @@ window.onload = () => {
 			value.setAttribute('fill', '#fff');
 			value.setAttribute('stroke', '#fff');
 			value.setAttribute('stroke-width', '1');
-			tag.appendChild(value);
+			tag.append(value);
 			let valuename = delayname[ii] + '_' + delayname[jj] + '_value';
 			let cv = getCookie(valuename);
 			if (cv == '' || isNaN(cv)) cv = delay[ii][jj];
@@ -1504,25 +1504,25 @@ window.onload = () => {
 			};
 
 			let subbt = newusebyid('subbt');
-			tag.appendChild(subbt);
+			tag.append(subbt);
 			subbt.onclick = () => {
 				changevalue(-10);
 			};
 
 			let decbt = newusebyid('decbt');
-			tag.appendChild(decbt);
+			tag.append(decbt);
 			decbt.onclick = () => {
 				changevalue(-1);
 			};
 
 			let incbt = newusebyid('incbt');
-			tag.appendChild(incbt);
+			tag.append(incbt);
 			incbt.onclick = () => {
 				changevalue(1);
 			};
 
 			let addbt = newusebyid('addbt');
-			tag.appendChild(addbt);
+			tag.append(addbt);
 			addbt.onclick = () => {
 				changevalue(10);
 			};
@@ -1577,7 +1577,7 @@ window.onload = () => {
 
 	let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 	tag.setAttribute('transform', 'translate(' + 0 + ',' + 360 + ')');
-	gameset.appendChild(tag);
+	gameset.append(tag);
 
 	let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 	text.setAttribute('x', 140);
@@ -1586,10 +1586,10 @@ window.onload = () => {
 	text.setAttribute('stroke', '#222');
 	text.setAttribute('stroke-width', '1');
 	text.innerHTML = 'Game Time';
-	tag.appendChild(text);
+	tag.append(text);
 
 	let vlrt = newusebyid('vlrt');
-	tag.appendChild(vlrt);
+	tag.append(vlrt);
 
 	let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 	value.setAttribute('x', 140);
@@ -1597,7 +1597,7 @@ window.onload = () => {
 	value.setAttribute('fill', '#fff');
 	value.setAttribute('stroke', '#fff');
 	value.setAttribute('stroke-width', '1');
-	tag.appendChild(value);
+	tag.append(value);
 	let valuename = 'Game_Time_value';
 	let cv = getCookie(valuename);
 	if (cv == '' || isNaN(cv)) cv = time.data;
@@ -1616,25 +1616,25 @@ window.onload = () => {
 	};
 
 	let subbt = newusebyid('subbt');
-	tag.appendChild(subbt);
+	tag.append(subbt);
 	subbt.onclick = () => {
 		changevalue(-10);
 	};
 
 	let decbt = newusebyid('decbt');
-	tag.appendChild(decbt);
+	tag.append(decbt);
 	decbt.onclick = () => {
 		changevalue(-1);
 	};
 
 	let incbt = newusebyid('incbt');
-	tag.appendChild(incbt);
+	tag.append(incbt);
 	incbt.onclick = () => {
 		changevalue(1);
 	};
 
 	let addbt = newusebyid('addbt');
-	tag.appendChild(addbt);
+	tag.append(addbt);
 	addbt.onclick = () => {
 		changevalue(10);
 	};
