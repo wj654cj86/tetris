@@ -13,7 +13,6 @@
 </head>
 
 <body>
-	<div id="hold"></div>
 	<svg id="senttext" width="150" height="90" viewBox="-25 -15 50 30">
 		<g opacity="0">
 			<text id="senttexttag" x="0" y="0">Sent</text>
@@ -83,9 +82,21 @@
 		<use xlink:href="#combotexttag" stroke="#000" stroke-width="4" />
 		<use xlink:href="#combotexttag" fill="#0cf" stroke="#0cf" stroke-width="1" />
 	</svg>
-	<div id="board"></div>
-	<div id="mainboard">
-		<svg id="logotext" width="380" height="190" viewBox="-50 -25 100 50">
+	<svg opacity="0">
+		<rect id="basemino" width="1" height="1" />
+	</svg>
+	<svg id="hold" viewBox="0 0 4 4">
+		<g id="holdbg"></g>
+		<g id="holdrun"></g>
+	</svg>
+	<svg id="board">
+		<g id="boardbg"></g>
+		<g id="boardrun"></g>
+	</svg>
+	<div id="next">
+	</div>
+	<svg id="mainboard">
+		<svg id="logotext" x="10" y="100" width="380" height="190" viewBox="-50 -25 100 50">
 			<g opacity="0">
 				<text id="logotag" x="0" y="-10">Tetris</text>
 				<text id="logotag2" x="0" y="10">JavaScript</text>
@@ -95,7 +106,7 @@
 			<use xlink:href="#logotag2" stroke="#000" stroke-width="4" />
 			<use xlink:href="#logotag2" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="playtext" width="300" height="105" viewBox="-50 -17.5 100 35">
+		<svg id="playtext" x="50" y="300" width="300" height="105" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
 				<text id="playtag" x="0" y="1">Play</text>
@@ -103,7 +114,7 @@
 			<use xlink:href="#playtag" stroke="#000" stroke-width="4" />
 			<use xlink:href="#playtag" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="keybttext" width="300" height="105" viewBox="-50 -17.5 100 35">
+		<svg id="keybttext" x="50" y="420" width="300" height="105" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
 				<text id="keybttag" x="0" y="1">Key Set</text>
@@ -111,7 +122,7 @@
 			<use xlink:href="#keybttag" stroke="#000" stroke-width="4" />
 			<use xlink:href="#keybttag" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="otherbttext" width="300" height="105" viewBox="-50 -17.5 100 35">
+		<svg id="otherbttext" x="50" y="540" width="300" height="105" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
 				<text id="otherbttag" x="0" y="1">Other Set</text>
@@ -119,9 +130,9 @@
 			<use xlink:href="#otherbttag" stroke="#000" stroke-width="4" />
 			<use xlink:href="#otherbttag" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-	</div>
-	<div id="overboard">
-		<svg id="gameover" width="350" height="250" viewBox="-35 -25 70 50">
+	</svg>
+	<svg id="overboard">
+		<svg id="gameover" x="25" y="170" width="350" height="250" viewBox="-35 -25 70 50">
 			<g opacity="0">
 				<text id="gameovertag" x="0" y="-10">Game</text>
 				<text id="gameovertag2" x="0" y="10">Over</text>
@@ -131,7 +142,7 @@
 			<use xlink:href="#gameovertag2" stroke="#000" stroke-width="4" />
 			<use xlink:href="#gameovertag2" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="timeup" width="350" height="250" viewBox="-35 -25 70 50">
+		<svg id="timeup" x="25" y="170" width="350" height="250" viewBox="-35 -25 70 50">
 			<g opacity="0">
 				<text id="timeuptag" x="0" y="-10">Time</text>
 				<text id="timeuptag2" x="0" y="10">Up</text>
@@ -141,7 +152,7 @@
 			<use xlink:href="#timeuptag2" stroke="#000" stroke-width="4" />
 			<use xlink:href="#timeuptag2" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="overoktext" width="300" height="105" viewBox="-50 -17.5 100 35">
+		<svg id="overoktext" x="50" y="420" width="300" height="105" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
 				<text id="overoktag" x="0" y="1">OK</text>
@@ -149,12 +160,12 @@
 			<use xlink:href="#overoktag" stroke="#000" stroke-width="4" />
 			<use xlink:href="#overoktag" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-	</div>
-	<div id="keysetboard">
-		<svg id="keyset" width="378" height="783" viewBox="0 0 280 580">
+	</svg>
+	<svg id="keysetboard">
+		<svg id="keyset" x="12" y="12" width="378" height="783" viewBox="0 0 280 580">
 			<rect x="2" y="2" rx="10" ry="10" width="276" height="576" stroke="#bbb" stroke-width="3" fill="#eee" />
 		</svg>
-		<svg id="keysetoktext" width="200" height="70" viewBox="-50 -17.5 100 35">
+		<svg id="keysetoktext" x="100" y="700" width="200" height="70" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
 				<text id="keysetoktag" x="0" y="1">OK</text>
@@ -162,9 +173,9 @@
 			<use xlink:href="#keysetoktag" stroke="#000" stroke-width="4" />
 			<use xlink:href="#keysetoktag" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-	</div>
-	<div id="otherboard">
-		<svg id="gameset" width="378" height="783" viewBox="0 0 280 580">
+	</svg>
+	<svg id="otherboard">
+		<svg id="gameset" x="12" y="12" width="378" height="783" viewBox="0 0 280 580">
 			<rect x="2" y="2" rx="10" ry="10" width="276" height="576" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
 				<g id="subbt" transform="translate(20, 0)">
@@ -212,7 +223,7 @@
 				<text x="30" y="22" fill="#222" stroke="#222" stroke-width="1">SZ</text>
 			</g>
 		</svg>
-		<svg id="otheroktext" width="200" height="70" viewBox="-50 -17.5 100 35">
+		<svg id="otheroktext" x="100" y="700" width="200" height="70" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
 				<text id="otheroktag" x="0" y="1">OK</text>
@@ -220,8 +231,7 @@
 			<use xlink:href="#otheroktag" stroke="#000" stroke-width="4" />
 			<use xlink:href="#otheroktag" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-	</div>
-	<div id="next"></div>
+	</svg>
 </body>
 
 </html>

@@ -28,6 +28,7 @@ body {
 
 #next .next {
 	left  : 0px;
+	top   : calc(var(--n) * (var(--slmin) * 4 + 20px));
 	width : calc(var(--slmin) * 4);
 	height: calc(var(--slmin) * 4);
 }
@@ -93,102 +94,20 @@ body {
 	opacity: 0;
 }
 
-#board div,
-#board img {
-	left  : calc(var(--left) * var(--sl));
-	top   : calc(var(--top) * var(--sl));
-	width : var(--sl);
-	height: var(--sl);
-}
-
-#hold div,
-#hold img,
-#next .next div,
-#next .next img {
-	left  : calc(var(--left) * var(--slmin));
-	top   : calc(var(--top) * var(--slmin));
-	width : var(--slmin);
-	height: var(--slmin);
-}
-
-#hold div,
-#hold img,
-#board div,
-#board img,
-#next .next div,
-#next .next img {
-	position: absolute;
-}
-
 #mainboard {
 	z-index: 1;
-}
-
-#logotext {
-	left: 10px;
-	top : 100px;
-}
-
-#playtext {
-	left: 50px;
-	top : 300px;
-}
-
-#keybttext {
-	left: 50px;
-	top : 420px;
-}
-
-#otherbttext {
-	left: 50px;
-	top : 540px;
 }
 
 #overboard {
 	z-index: -1;
 }
 
-#gameover {
-	left: 25px;
-	top : 170px;
-}
-
-#timeup {
-	left: 25px;
-	top : 170px;
-}
-
-#overoktext {
-	left: 50px;
-	top : 420px;
-}
-
 #keysetboard {
 	z-index: -1;
 }
 
-#keyset {
-	left: 12px;
-	top : 12px;
-}
-
-#keysetoktext {
-	left: 100px;
-	top : 700px;
-}
-
 #otherboard {
 	z-index: -1;
-}
-
-#gameset {
-	left: 12px;
-	top : 12px;
-}
-
-#otheroktext {
-	left: 100px;
-	top : 700px;
 }
 
 #mainboard,

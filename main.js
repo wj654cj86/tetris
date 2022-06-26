@@ -394,55 +394,55 @@ var time = {
 var key = {
 	newgame: {
 		name: 'Determine', use: 'Enter',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	left: {
 		name: 'Move left', use: 'ArrowLeft',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	right: {
 		name: 'Move right', use: 'ArrowRight',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	soft: {
 		name: 'Soft down', use: 'ArrowDown',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	hard: {
 		name: 'Hard down', use: 'Space',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	hold: {
 		name: 'Hold', use: 'ShiftLeft',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	hold2: {
 		name: 'Hold', use: 'KeyC',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	spinleft: {
 		name: 'Spin left', use: 'ControlLeft',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	spinleft2: {
 		name: 'Spin left', use: 'KeyZ',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	spinright: {
 		name: 'Spin right', use: 'ArrowUp',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	spinright2: {
 		name: 'Spin right', use: 'KeyX',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	spinhalf: {
 		name: 'Spin half', use: 'AltLeft',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	},
 	spinhalf2: {
 		name: 'Spin half', use: 'KeyS',
-		lock: 0, timeout: null, interval: null, tag: null
+		lock: 0, timeout: null, interval: null
 	}
 };
 var keytmp = { ckn: '', obj: null };
@@ -465,7 +465,7 @@ function boardreset() {
 			boardarr[i][j].cnt = 0;
 			boardarr[i][j].id = 0;
 			boardarr[i][j].set = 0;
-			boardarr[i][j].tag.style.background = 'none';
+			boardarr[i][j].color = 'none';
 		}
 	}
 }
@@ -892,8 +892,8 @@ var game = {
 	keyset: {
 		down(e) {
 			keytmp.obj.use = e.code;
-			keytmp.obj.tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
-			keytmp.obj.tag.getElementsByTagName('text')[1].innerHTML = keytmp.obj.use;
+			keytmp.obj.color = '#444';
+			keytmp.obj.use2 = keytmp.obj.use;
 			setCookie(keytmp.ckn, keytmp.obj.use);
 			game.change('pause');
 		},
@@ -963,7 +963,7 @@ class mino {
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = this.id;
-					ba.tag.style.background = loadcolor(color.mino[this.id], proportion.move);
+					ba.color = loadcolor(color.mino[this.id], proportion.move);
 				}
 			}
 		}
@@ -977,7 +977,7 @@ class mino {
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = 0;
-					ba.tag.style.background = 'none';
+					ba.color = 'none';
 				}
 			}
 		}
@@ -1013,7 +1013,7 @@ class mino {
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = this.id;
-					ba.tag.style.background = loadcolor(color.mino[this.id], proportion.ghost);
+					ba.color = loadcolor(color.mino[this.id], proportion.ghost);
 				}
 			}
 		}
@@ -1027,7 +1027,7 @@ class mino {
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = 0;
-					ba.tag.style.background = 'none';
+					ba.color = 'none';
 				}
 			}
 		}
@@ -1110,7 +1110,7 @@ class mino {
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = this.id;
-					ba.tag.style.background = loadcolor(color.mino[this.id], proportion.set);
+					ba.color = loadcolor(color.mino[this.id], proportion.set);
 					ba.cnt = this.cnt;
 					ba.set = 1;
 				}
@@ -1223,10 +1223,10 @@ class mino {
 				let ma = minarr[y][x];
 				if (md.mr[0][i][j] == 1) {
 					ma.id = id;
-					ma.tag.style.background = loadcolor(color.mino[id], proportion.move);
+					ma.color = loadcolor(color.mino[id], proportion.move);
 				} else {
 					ma.id = 0;
-					ma.tag.style.background = 'none';
+					ma.color = 'none';
 				}
 			}
 		}
@@ -1288,14 +1288,14 @@ class mino {
 					boardarr[i][j].cnt = boardarr[k][j].cnt;
 					boardarr[i][j].id = boardarr[k][j].id;
 					boardarr[i][j].set = boardarr[k][j].set;
-					boardarr[i][j].tag.style.background = boardarr[k][j].tag.style.background;
+					boardarr[i][j].color = boardarr[k][j].color;
 				}
 			} else {
 				for (let j = 0; j < w; j++) {
 					boardarr[i][j].cnt = 0;
 					boardarr[i][j].id = 0;
 					boardarr[i][j].set = 0;
-					boardarr[i][j].tag.style.background = 'none';
+					boardarr[i][j].color = 'none';
 				}
 			}
 		}
@@ -1303,72 +1303,68 @@ class mino {
 	}
 }
 
-function newusebyid(id) {
+function createUseAndSetId(id) {
 	let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
 	use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
 	return use;
+}
+function createMino(bg, run, x, y, bgcolor) {
+	let use = createUseAndSetId('basemino');
+	use.setAttribute('x', x);
+	use.setAttribute('y', y);
+	use.setAttribute('fill', bgcolor);
+	bg.append(use);
+
+	use = createUseAndSetId('basemino');
+	use.setAttribute('x', x);
+	use.setAttribute('y', y);
+	use.setAttribute('fill', 'none');
+	run.append(use);
+	return {
+		cnt: 0, id: 0, set: 0,
+		get color() {
+			return use.getAttribute('fill');
+		},
+		set color(c) {
+			use.setAttribute('fill', c);
+		}
+	};
 }
 
 window.onload = () => {
 	document.body.style.setProperty('--w', w);
 	document.body.style.setProperty('--h', h);
 	document.body.style.setProperty('--sl', sl + 'px');
+	board.setAttribute('viewBox', [0, 0, w, h].join(' '));
 	for (let i = 0; i < hall; i++) {
 		boardarr[i] = [];
 		for (let j = 0; j < w; j++) {
-			let tag = document.createElement('div');
-			tag.style.setProperty('--left', j);
-			tag.style.setProperty('--top', h - 1 - i);
-			tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
-			board.append(tag);
-
-			tag = document.createElement('div');
-			tag.style.setProperty('--left', j);
-			tag.style.setProperty('--top', h - 1 - i);
-			board.append(tag);
-			boardarr[i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
+			boardarr[i][j] = createMino(boardbg, boardrun, j, h - 1 - i, (i + j) % 2 == 1 ? '#fff' : '#eee');
 		}
 	}
 	document.body.style.setProperty('--slmin', slmin + 'px');
 	for (let i = 0; i < 6; i++) {
 		holdarr[i] = [];
 		for (let j = 0; j < 6; j++) {
-			let tag = document.createElement('div');
-			tag.style.setProperty('--left', j - 1);
-			tag.style.setProperty('--top', 4 - 1 - i + 1);
-			tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
-			hold.append(tag);
-
-			tag = document.createElement('div');
-			tag.style.setProperty('--left', j - 1);
-			tag.style.setProperty('--top', 4 - 1 - i + 1);
-			hold.append(tag);
-			holdarr[i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
+			holdarr[i][j] = createMino(holdbg, holdrun, j - 1, 4 - 1 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
 		}
 	}
 	next.style.width = 4 * slmin + 2 + 'px';
 	next.style.height = (4 * slmin + 20) * nextlen - 20 + 2 + 'px';
 	for (let k = 0; k < nextlen; k++) {
 		nextarr[k] = [];
-		let ntag = document.createElement('div');
-		ntag.style.left = 0 + 'px';
-		ntag.style.top = k * (slmin * 4 + 20) + 'px';
-		ntag.classList.add("next");
-		next.append(ntag);
+		let nextsvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		nextsvg.setAttribute('viewBox', [0, 0, 4, 4].join(' '));
+		nextsvg.style.setProperty('--n', k);
+		nextsvg.classList.add("next");
+		next.append(nextsvg);
+		let nextbg = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		let nextrun = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		nextsvg.append(nextbg, nextrun);
 		for (let i = 0; i < 6; i++) {
 			nextarr[k][i] = [];
 			for (let j = 0; j < 6; j++) {
-				let tag = document.createElement('div');
-				tag.style.setProperty('--left', j - 1);
-				tag.style.setProperty('--top', 4 - 1 - i + 1);
-				tag.style.background = (i + j) % 2 == 1 ? '#fff' : '#eee';
-				ntag.append(tag);
-
-				tag = document.createElement('div');
-				tag.style.setProperty('--left', j - 1);
-				tag.style.setProperty('--top', 4 - 1 - i + 1);
-				ntag.append(tag);
-				nextarr[k][i][j] = { cnt: 0, id: 0, set: 0, tag: tag };
+				nextarr[k][i][j] = createMino(nextbg, nextrun, j - 1, 4 - 1 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
 			}
 		}
 	}
@@ -1397,7 +1393,7 @@ window.onload = () => {
 
 	keysetoktext.onclick = () => {
 		for (let ii in key) {
-			key[ii].tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
+			key[ii].color = '#444';
 		}
 		keysetboard.style.zIndex = -1;
 		game.change('load');
@@ -1410,17 +1406,17 @@ window.onload = () => {
 
 	let i = 0;
 	for (let ii in key) {
+		let nowkey = key[ii];
 		let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 		tag.setAttribute('transform', 'translate(' + 13 + ',' + (i * 38 + 10) + ')');
 		keyset.append(tag);
-		key[ii].tag = tag;
 
 		let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 		text.setAttribute('y', 22);
 		text.setAttribute('fill', '#222');
 		text.setAttribute('stroke', '#222');
 		text.setAttribute('stroke-width', '1');
-		text.innerHTML = key[ii].name;
+		text.innerHTML = nowkey.name;
 		tag.append(text);
 
 		let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -1432,6 +1428,11 @@ window.onload = () => {
 		rect.setAttribute('height', 25);
 		rect.setAttribute('fill', '#444');
 		tag.append(rect);
+		Object.defineProperty(nowkey, 'color', {
+			set: function (c) {
+				rect.setAttribute('fill', c);
+			}
+		});
 
 		let use = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 		use.setAttribute('x', 125);
@@ -1440,18 +1441,23 @@ window.onload = () => {
 		use.setAttribute('stroke', '#fff');
 		use.setAttribute('stroke-width', '1');
 		let ck = getCookie('key_' + ii);
-		if (ck == '') ck = key[ii].use;
-		key[ii].use = ck;
-		use.innerHTML = key[ii].use;
+		if (ck == '') ck = nowkey.use;
+		nowkey.use = ck;
+		use.innerHTML = nowkey.use;
 		tag.append(use);
+		Object.defineProperty(nowkey, 'use2', {
+			set: function (k) {
+				use.innerHTML = k;
+			}
+		});
 
 		let ckn = 'key_' + ii;
 		let iii = ii;
 		tag.onclick = () => {
 			for (let ii in key) {
-				key[ii].tag.getElementsByTagName('rect')[0].setAttribute('fill', '#444');
+				key[ii].color = '#444';
 			}
-			rect.setAttribute('fill', '#066');
+			nowkey.color = '#066';
 			keytmp.ckn = ckn;
 			keytmp.obj = key[iii];
 			game.change('keyset');
@@ -1475,7 +1481,7 @@ window.onload = () => {
 			text.innerHTML = delayname[ii] + ' ' + delayname[jj];
 			tag.append(text);
 
-			let vlrt = newusebyid('vlrt');
+			let vlrt = createUseAndSetId('vlrt');
 			tag.append(vlrt);
 
 			let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -1503,25 +1509,25 @@ window.onload = () => {
 				setCookie(valuename, delay[iii][jjj]);
 			};
 
-			let subbt = newusebyid('subbt');
+			let subbt = createUseAndSetId('subbt');
 			tag.append(subbt);
 			subbt.onclick = () => {
 				changevalue(-10);
 			};
 
-			let decbt = newusebyid('decbt');
+			let decbt = createUseAndSetId('decbt');
 			tag.append(decbt);
 			decbt.onclick = () => {
 				changevalue(-1);
 			};
 
-			let incbt = newusebyid('incbt');
+			let incbt = createUseAndSetId('incbt');
 			tag.append(incbt);
 			incbt.onclick = () => {
 				changevalue(1);
 			};
 
-			let addbt = newusebyid('addbt');
+			let addbt = createUseAndSetId('addbt');
 			tag.append(addbt);
 			addbt.onclick = () => {
 				changevalue(10);
@@ -1588,7 +1594,7 @@ window.onload = () => {
 	text.innerHTML = 'Game Time';
 	tag.append(text);
 
-	let vlrt = newusebyid('vlrt');
+	let vlrt = createUseAndSetId('vlrt');
 	tag.append(vlrt);
 
 	let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -1615,25 +1621,25 @@ window.onload = () => {
 		setCookie(valuename, time.data);
 	};
 
-	let subbt = newusebyid('subbt');
+	let subbt = createUseAndSetId('subbt');
 	tag.append(subbt);
 	subbt.onclick = () => {
 		changevalue(-10);
 	};
 
-	let decbt = newusebyid('decbt');
+	let decbt = createUseAndSetId('decbt');
 	tag.append(decbt);
 	decbt.onclick = () => {
 		changevalue(-1);
 	};
 
-	let incbt = newusebyid('incbt');
+	let incbt = createUseAndSetId('incbt');
 	tag.append(incbt);
 	incbt.onclick = () => {
 		changevalue(1);
 	};
 
-	let addbt = newusebyid('addbt');
+	let addbt = createUseAndSetId('addbt');
 	tag.append(addbt);
 	addbt.onclick = () => {
 		changevalue(10);
