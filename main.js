@@ -426,6 +426,14 @@ function settextcolor(element, color) {
 	tag[1].setAttribute('stroke', color);
 }
 
+Object.defineProperty(Node.prototype, 'opacity', {
+	set: function (o) {
+		this.setAttribute('opacity', o);
+	}, get: function (params) {
+		return this.getAttribute('opacity');
+	}
+});
+
 var sent = {
 	num: 0,
 	b2b: 0,
@@ -502,37 +510,37 @@ var sent = {
 		if (this.interval != null)
 			clearInterval(this.interval);
 		if (b2b) {
-			b2bstr.style.opacity = 1;
+			b2bstr.opacity = 1;
 		} else {
-			b2bstr.style.opacity = 0;
+			b2bstr.opacity = 0;
 		}
 		if (id == 0) {
-			spinstr.style.opacity = 0;
-			linestr.style.opacity = 0;
-			linestr.style.top = '560px';
+			spinstr.opacity = 0;
+			linestr.opacity = 0;
+			linestr.setAttribute('y', 400);
 			settext(linestr, sentdata.line[line].name);
 			settextcolor(linestr, loadcolor(color.sent[line], proportion.text));
-			linestr.style.opacity = 1;
+			linestr.opacity = 1;
 		} else {
-			spinstr.style.opacity = 0;
+			spinstr.opacity = 0;
 			settext(spinstr, minodata[id].name + '-spin');
 			settextcolor(spinstr, loadcolor(color.mino[id], proportion.text));
-			spinstr.style.opacity = 1;
+			spinstr.opacity = 1;
 
-			linestr.style.opacity = 0;
-			linestr.style.top = '600px';
+			linestr.opacity = 0;
+			linestr.setAttribute('y', 440);
 			settext(linestr, sentdata.line[line].name);
 			settextcolor(linestr, loadcolor(color.mino[id], proportion.text));
-			linestr.style.opacity = 1;
+			linestr.opacity = 1;
 		}
 		if (this.combo == 0) {
-			combonum.style.opacity = 0;
-			combostr.style.opacity = 0;
+			combonum.opacity = 0;
+			combostr.opacity = 0;
 		} else {
-			combonum.style.opacity = 0;
+			combonum.opacity = 0;
 			settext(combonum, this.combo);
-			combonum.style.opacity = 1;
-			combostr.style.opacity = 1;
+			combonum.opacity = 1;
+			combostr.opacity = 1;
 		}
 		this.interval = setInterval(() => {
 			sent.clear();
@@ -541,11 +549,11 @@ var sent = {
 	clear() {
 		if (this.interval != null)
 			clearInterval(this.interval);
-		b2bstr.style.opacity = 0;
-		spinstr.style.opacity = 0;
-		linestr.style.opacity = 0;
-		combonum.style.opacity = 0;
-		combostr.style.opacity = 0;
+		b2bstr.opacity = 0;
+		spinstr.opacity = 0;
+		linestr.opacity = 0;
+		combonum.opacity = 0;
+		combostr.opacity = 0;
 	}
 };
 
@@ -563,8 +571,8 @@ var action = {
 	over() {
 		game.change('pause');
 		keyreset();
-		gameover.style.opacity = 1;
-		timeup.style.opacity = 0;
+		gameover.opacity = 1;
+		timeup.opacity = 0;
 		overboard.style.zIndex = 1;
 		time.stop();
 		game.change('over');
@@ -572,8 +580,8 @@ var action = {
 	timeup() {
 		game.change('pause');
 		keyreset();
-		gameover.style.opacity = 0;
-		timeup.style.opacity = 1;
+		gameover.opacity = 0;
+		timeup.opacity = 1;
 		overboard.style.zIndex = 1;
 		time.stop();
 		game.change('over');
@@ -829,7 +837,7 @@ var game = {
 		down(e) {
 			keytmp.obj.use = e.code;
 			keytmp.obj.color = '#444';
-			keytmp.obj.use2 = keytmp.obj.use;
+			keytmp.obj.show = keytmp.obj.use;
 			setCookie(keytmp.ckn, keytmp.obj.use);
 			game.change('pause');
 		},
@@ -1240,21 +1248,12 @@ class mino {
 }
 
 function createUseAndSetId(id) {
-	let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-	use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
-	return use;
+	return nodetext2svgnode(`<use xlink:href="#${id}"/>`);
 }
 function createMino(bg, run, x, y, bgcolor) {
-	let use = createUseAndSetId('basemino');
-	use.setAttribute('x', x);
-	use.setAttribute('y', y);
-	use.setAttribute('fill', bgcolor);
+	let use = nodetext2svgnode(`<use xlink:href="#basemino" x="${x}" y="${y}" fill="${bgcolor}"/>`);
 	bg.append(use);
-
-	use = createUseAndSetId('basemino');
-	use.setAttribute('x', x);
-	use.setAttribute('y', y);
-	use.setAttribute('fill', 'none');
+	use = nodetext2svgnode(`<use xlink:href="#basemino" x="${x}" y="${y}" fill="none"/>`);
 	run.append(use);
 	return {
 		cnt: 0, id: 0, set: 0,
@@ -1285,17 +1284,13 @@ window.onload = () => {
 			holdarr[i][j] = createMino(holdbg, holdrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
 		}
 	}
-	next.style.width = 4 * slmin + 2 + 'px';
-	next.style.height = (4 * slmin + 20) * nextlen - 20 + 2 + 'px';
+	next.style.setProperty('--nextlen', nextlen);
 	for (let k = 0; k < nextlen; k++) {
 		nextarr[k] = [];
-		let nextsvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		nextsvg.setAttribute('viewBox', [0, 0, 4, 4].join(' '));
-		nextsvg.style.setProperty('--n', k);
-		nextsvg.classList.add("next");
+		let nextsvg = nodetext2svgnode(`<svg viewBox="0 0 4 4" class="next" style="--n:${k};"></svg>`);
 		next.append(nextsvg);
-		let nextbg = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-		let nextrun = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		let nextbg = nodetext2svgnode(`<g></g>`);
+		let nextrun = nodetext2svgnode(`<g></g>`);
 		nextsvg.append(nextbg, nextrun);
 		for (let i = 0; i < 4; i++) {
 			nextarr[k][i] = [];
@@ -1343,53 +1338,34 @@ window.onload = () => {
 	let i = 0;
 	for (let ii in key) {
 		let nowkey = key[ii];
-		let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-		tag.setAttribute('transform', 'translate(' + 13 + ',' + (i * 38 + 10) + ')');
-		keyset.append(tag);
+		let g = nodetext2svgnode(`<g transform="translate(13,${i * 38 + 10})"></g>`);
+		keyset.append(g);
 
-		let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-		text.setAttribute('y', 22);
-		text.setAttribute('fill', '#222');
-		text.setAttribute('stroke', '#222');
-		text.setAttribute('stroke-width', '1');
-		text.innerHTML = nowkey.name;
-		tag.append(text);
+		let text = nodetext2svgnode(`<text y="22" fill="#222" stroke="#222" stroke-width="1">${nowkey.name}</text>`);
+		g.append(text);
 
-		let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-		rect.setAttribute('x', 115);
-		rect.setAttribute('y', 8);
-		rect.setAttribute('rx', 5);
-		rect.setAttribute('ry', 5);
-		rect.setAttribute('width', 140);
-		rect.setAttribute('height', 25);
-		rect.setAttribute('fill', '#444');
-		tag.append(rect);
+		let rect = nodetext2svgnode(`<rect x="115" y="8" rx="5" ry="5" width="140" height="25" fill="#444"/>`);
+		g.append(rect);
 		Object.defineProperty(nowkey, 'color', {
 			set: function (c) {
 				rect.setAttribute('fill', c);
 			}
 		});
 
-		let use = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-		use.setAttribute('x', 125);
-		use.setAttribute('y', 22);
-		use.setAttribute('fill', '#fff');
-		use.setAttribute('stroke', '#fff');
-		use.setAttribute('stroke-width', '1');
 		let ck = getCookie('key_' + ii);
 		if (ck == '') ck = nowkey.use;
 		nowkey.use = ck;
-		use.innerHTML = nowkey.use;
-		tag.append(use);
-		Object.defineProperty(nowkey, 'use2', {
+		let show = nodetext2svgnode(`<text x="125" y="22" fill="#fff" stroke="#fff" stroke-width="1">${nowkey.use}</text>`);
+		g.append(show);
+		Object.defineProperty(nowkey, 'show', {
 			set: function (k) {
-				use.innerHTML = k;
+				show.innerHTML = k;
 			}
 		});
 
 		let ckn = 'key_' + ii;
 		let iii = ii;
-		tag.onclick = () => {
+		g.onclick = () => {
 			for (let ii in key) {
 				key[ii].color = '#444';
 			}
@@ -1404,35 +1380,22 @@ window.onload = () => {
 	i = 0;
 	for (let ii in delay) {
 		for (let jj in delay[ii]) {
-			let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-			tag.setAttribute('transform', 'translate(' + 0 + ',' + i * 60 + ')');
+			let tag = nodetext2svgnode(`<g transform="translate(0,${i * 60})"></g>`);
 			gameset.append(tag);
 
-			let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-			text.setAttribute('x', 140);
-			text.setAttribute('y', 22);
-			text.setAttribute('fill', '#222');
-			text.setAttribute('stroke', '#222');
-			text.setAttribute('stroke-width', '1');
-			text.innerHTML = delayname[ii] + ' ' + delayname[jj];
+			let text = nodetext2svgnode(`<text x="140" y="22" fill="#222" stroke="#222" stroke-width="1">${delayname[ii]} ${delayname[jj]}</text>`);
 			tag.append(text);
 
 			let vlrt = createUseAndSetId('vlrt');
 			tag.append(vlrt);
 
-			let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-			value.setAttribute('x', 140);
-			value.setAttribute('y', 53);
-			value.setAttribute('fill', '#fff');
-			value.setAttribute('stroke', '#fff');
-			value.setAttribute('stroke-width', '1');
+			let value = nodetext2svgnode(`<text x="140" y="53" fill="#fff" stroke="#fff" stroke-width="1"></text>`);
 			tag.append(value);
 			let valuename = delayname[ii] + '_' + delayname[jj] + '_value';
 			let cv = getCookie(valuename);
 			if (cv == '' || isNaN(cv)) cv = delay[ii][jj];
 			delay[ii][jj] = cv * 1;
 			value.innerHTML = delay[ii][jj] + ' ms';
-			value.setAttribute('id', valuename);
 
 			let iii = ii;
 			let jjj = jj;
@@ -1477,14 +1440,14 @@ window.onload = () => {
 	let og = getCookie('openghost');
 	if (og == '' || isNaN(og)) og = openghost;
 	openghost = og * 1;
-	openghostcheck.setAttribute('fill-opacity', openghost);
+	openghostcheck.opacity = openghost;
 	openghosttag.onclick = () => {
 		if (openghost) {
 			openghost = 0;
 		} else {
 			openghost = 1;
 		}
-		openghostcheck.setAttribute('fill-opacity', openghost);
+		openghostcheck.opacity = openghost;
 		setCookie('openghost', openghost);
 	};
 
@@ -1502,7 +1465,7 @@ window.onload = () => {
 		for (let j = 0; j < bns.mino.length; j++) {
 			minodata[bns.mino[j]].bonus = bns.open;
 		}
-		check.setAttribute('fill-opacity', bns.open);
+		check.opacity = bns.open;
 		tag.onclick = () => {
 			if (bns.open) {
 				bns.open = 0;
@@ -1512,33 +1475,21 @@ window.onload = () => {
 			for (let j = 0; j < bns.mino.length; j++) {
 				minodata[bns.mino[j]].bonus = bns.open;
 			}
-			check.setAttribute('fill-opacity', bns.open);
+			check.opacity = bns.open;
 			setCookie(ckn, bns.open);
 		};
 	}
 
-	let tag = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-	tag.setAttribute('transform', 'translate(' + 0 + ',' + 360 + ')');
+	let tag = nodetext2svgnode(`<g transform="translate(0,360)"></g>`);
 	gameset.append(tag);
 
-	let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-	text.setAttribute('x', 140);
-	text.setAttribute('y', 22);
-	text.setAttribute('fill', '#222');
-	text.setAttribute('stroke', '#222');
-	text.setAttribute('stroke-width', '1');
-	text.innerHTML = 'Game Time';
+	let text = nodetext2svgnode(`<text x="140" y="22" fill="#222" stroke="#222" stroke-width="1">Game Time</text>`);
 	tag.append(text);
 
 	let vlrt = createUseAndSetId('vlrt');
 	tag.append(vlrt);
 
-	let value = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-	value.setAttribute('x', 140);
-	value.setAttribute('y', 53);
-	value.setAttribute('fill', '#fff');
-	value.setAttribute('stroke', '#fff');
-	value.setAttribute('stroke-width', '1');
+	let value = nodetext2svgnode(`<text x="140" y="53" fill="#fff" stroke="#fff" stroke-width="1"></text>`);
 	tag.append(value);
 	let valuename = 'Game_Time_value';
 	let cv = getCookie(valuename);
@@ -1546,7 +1497,6 @@ window.onload = () => {
 	time.data = cv * 1;
 	value.innerHTML = time.data + ' min';
 	time.reset();
-	value.setAttribute('id', valuename);
 
 	let changevalue = (num) => {
 		time.data += num;

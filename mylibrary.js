@@ -108,13 +108,19 @@ function openfilebinary(url, callback) {
 }
 
 function text2xml(text) {
-	let parser = new DOMParser();
-	return parser.parseFromString(text, "text/xml");
+	return (new DOMParser()).parseFromString(text, "text/xml");
 }
 
 function xml2text(xml) {
-	let xsl = new XMLSerializer();
-	return xsl.serializeToString(xml);
+	return (new XMLSerializer()).serializeToString(xml);
+}
+
+function nodetext2svgnode(text) {
+	return (new DOMParser()).parseFromString(
+		`<?xml version="1.0" encoding="UTF-8"?>
+			<svg xmlns="http://www.w3.org/2000/svg"
+				 xmlns:xlink="http://www.w3.org/1999/xlink">${text}
+			</svg>`, "image/svg+xml").querySelector('svg').childNodes[0];
 }
 
 function copyxml(xml) {

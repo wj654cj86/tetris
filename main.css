@@ -24,6 +24,8 @@ body {
 	position: absolute;
 	left    : 600px;
 	top     : 20px;
+	width   : calc(var(--slmin) * 4 + 2px);
+	height  : calc(var(--nextlen) * (var(--slmin) * 4 + 20px) - 20px + 2px);
 }
 
 #next .next {
