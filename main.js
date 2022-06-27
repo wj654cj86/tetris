@@ -33,243 +33,179 @@ var proportion = { move: [1, 0.5], set: [1, 0.4], ghost: [1, 0.7], text: [1, 0.5
 var minodata = [
 	{
 		name: 'X', ofs: 0, srs: 0, bonus: -1, md: [[
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0]
 		]]
 	}, {
 		name: 'I', ofs: -1, srs: 4, bonus: 0, md: [[
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 1, 1, 1, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[1, 1, 1, 1],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 1, 0, 0],
-			[0, 0, 0, 1, 0, 0],
-			[0, 0, 0, 1, 0, 0],
-			[0, 0, 0, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 1, 0],
+			[0, 0, 1, 0],
+			[0, 0, 1, 0],
+			[0, 0, 1, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 1, 1, 1, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[1, 1, 1, 1],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0]
 		]]
 	}, {
 		name: 'O', ofs: 0, srs: 4, bonus: -1, md: [[
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 1, 0],
+			[0, 1, 1, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 1, 0],
+			[0, 1, 1, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 1, 0],
+			[0, 1, 1, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 1, 0],
+			[0, 1, 1, 0],
+			[0, 0, 0, 0]
 		]]
 	}, {
 		name: 'T', ofs: 0, srs: 3, bonus: 1, md: [[
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 1, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 0, 0],
+			[1, 1, 1, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 1, 0],
+			[0, 1, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 1, 1, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[1, 1, 1, 0],
+			[0, 1, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 0, 0],
+			[1, 1, 0, 0],
+			[0, 1, 0, 0]
 		]]
 	}, {
 		name: 'J', ofs: 0, srs: 3, bonus: 0, md: [[
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 0, 0, 0, 0],
-			[0, 1, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[1, 0, 0, 0],
+			[1, 1, 1, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 1, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 1, 1, 0, 0],
-			[0, 0, 0, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[1, 1, 1, 0],
+			[0, 0, 1, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
+			[1, 1, 0, 0]
 		]]
 	}, {
 		name: 'L', ofs: 0, srs: 3, bonus: 0, md: [[
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 1, 0, 0],
-			[0, 1, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 1, 0],
+			[1, 1, 1, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 1, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 1, 1, 0, 0],
-			[0, 1, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[1, 1, 1, 0],
+			[1, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[1, 1, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0]
 		]]
 	}, {
 		name: 'Z', ofs: 0, srs: 3, bonus: 0, md: [[
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[1, 1, 0, 0],
+			[0, 1, 1, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 1, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 1, 0],
+			[0, 1, 1, 0],
+			[0, 1, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[1, 1, 0, 0],
+			[0, 1, 1, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 1, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 0, 0],
+			[1, 1, 0, 0],
+			[1, 0, 0, 0]
 		]]
 	}, {
 		name: 'S', ofs: 0, srs: 3, bonus: 0, md: [[
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 1, 0],
+			[1, 1, 0, 0],
+			[0, 0, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 0, 0, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 1, 0],
+			[0, 0, 1, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 1, 1, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 1, 1, 0],
+			[1, 1, 0, 0]
 		], [
-			[0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0],
-			[0, 1, 0, 0, 0, 0],
-			[0, 1, 1, 0, 0, 0],
-			[0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0],
+			[1, 0, 0, 0],
+			[1, 1, 0, 0],
+			[0, 1, 0, 0]
 		]]
 	}
 ];
@@ -277,8 +213,8 @@ for (let i = 0; i <= 7; i++) {
 	minodata[i].mr = [];
 	for (let j = 0; j < 4; j++) {
 		minodata[i].mr[j] = []
-		for (let k = 0; k < 6; k++) {
-			minodata[i].mr[j][k] = minodata[i].md[j][6 - 1 - k];
+		for (let k = 0; k < 4; k++) {
+			minodata[i].mr[j][k] = minodata[i].md[j][4 - 1 - k];
 		}
 	}
 }
@@ -566,37 +502,37 @@ var sent = {
 		if (this.interval != null)
 			clearInterval(this.interval);
 		if (b2b) {
-			b2btext.style.opacity = 1;
+			b2bstr.style.opacity = 1;
 		} else {
-			b2btext.style.opacity = 0;
+			b2bstr.style.opacity = 0;
 		}
 		if (id == 0) {
-			spintext.style.opacity = 0;
-			linetext.style.opacity = 0;
-			linetext.style.top = '560px';
-			settext(linetext, sentdata.line[line].name);
-			settextcolor(linetext, loadcolor(color.sent[line], proportion.text));
-			linetext.style.opacity = 1;
+			spinstr.style.opacity = 0;
+			linestr.style.opacity = 0;
+			linestr.style.top = '560px';
+			settext(linestr, sentdata.line[line].name);
+			settextcolor(linestr, loadcolor(color.sent[line], proportion.text));
+			linestr.style.opacity = 1;
 		} else {
-			spintext.style.opacity = 0;
-			settext(spintext, minodata[id].name + '-spin');
-			settextcolor(spintext, loadcolor(color.mino[id], proportion.text));
-			spintext.style.opacity = 1;
+			spinstr.style.opacity = 0;
+			settext(spinstr, minodata[id].name + '-spin');
+			settextcolor(spinstr, loadcolor(color.mino[id], proportion.text));
+			spinstr.style.opacity = 1;
 
-			linetext.style.opacity = 0;
-			linetext.style.top = '600px';
-			settext(linetext, sentdata.line[line].name);
-			settextcolor(linetext, loadcolor(color.mino[id], proportion.text));
-			linetext.style.opacity = 1;
+			linestr.style.opacity = 0;
+			linestr.style.top = '600px';
+			settext(linestr, sentdata.line[line].name);
+			settextcolor(linestr, loadcolor(color.mino[id], proportion.text));
+			linestr.style.opacity = 1;
 		}
 		if (this.combo == 0) {
-			combonumtext.style.opacity = 0;
-			combotext.style.opacity = 0;
+			combonum.style.opacity = 0;
+			combostr.style.opacity = 0;
 		} else {
-			combonumtext.style.opacity = 0;
-			settext(combonumtext, this.combo);
-			combonumtext.style.opacity = 1;
-			combotext.style.opacity = 1;
+			combonum.style.opacity = 0;
+			settext(combonum, this.combo);
+			combonum.style.opacity = 1;
+			combostr.style.opacity = 1;
 		}
 		this.interval = setInterval(() => {
 			sent.clear();
@@ -605,11 +541,11 @@ var sent = {
 	clear() {
 		if (this.interval != null)
 			clearInterval(this.interval);
-		b2btext.style.opacity = 0;
-		spintext.style.opacity = 0;
-		linetext.style.opacity = 0;
-		combonumtext.style.opacity = 0;
-		combotext.style.opacity = 0;
+		b2bstr.style.opacity = 0;
+		spinstr.style.opacity = 0;
+		linestr.style.opacity = 0;
+		combonum.style.opacity = 0;
+		combostr.style.opacity = 0;
 	}
 };
 
@@ -956,10 +892,10 @@ class mino {
 	}
 	showmino() {
 		let md = minodata[this.id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				let x = this.x + j - 3;
-				let y = this.y + i - 3 + md.ofs;
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let x = this.x + j - 2;
+				let y = this.y + i - 2 + md.ofs;
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = this.id;
@@ -970,10 +906,10 @@ class mino {
 	}
 	clearmino() {
 		let md = minodata[this.id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				let x = this.x + j - 3;
-				let y = this.y + i - 3 + md.ofs;
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let x = this.x + j - 2;
+				let y = this.y + i - 2 + md.ofs;
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = 0;
@@ -984,10 +920,10 @@ class mino {
 	}
 	testmino() {
 		let md = minodata[this.id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				let x = this.x + j - 3;
-				let y = this.y + i - 3 + md.ofs;
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let x = this.x + j - 2;
+				let y = this.y + i - 2 + md.ofs;
 				if (md.mr[this.rotate][i][j] == 1) {
 					if (x < 0 || x >= w) {
 						return 0;
@@ -1006,10 +942,10 @@ class mino {
 	}
 	showghost() {
 		let md = minodata[this.id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				let x = this.x + j - 3;
-				let y = this.ofsyghost() + i - 3 + md.ofs;
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let x = this.x + j - 2;
+				let y = this.ofsyghost() + i - 2 + md.ofs;
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = this.id;
@@ -1020,10 +956,10 @@ class mino {
 	}
 	clearghost() {
 		let md = minodata[this.id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				let x = this.x + j - 3;
-				let y = this.ofsyghost() + i - 3 + md.ofs;
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let x = this.x + j - 2;
+				let y = this.ofsyghost() + i - 2 + md.ofs;
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = 0;
@@ -1034,10 +970,10 @@ class mino {
 	}
 	testghost(yy) {
 		let md = minodata[this.id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				let x = this.x + j - 3;
-				let y = yy + i - 3 + md.ofs;
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let x = this.x + j - 2;
+				let y = yy + i - 2 + md.ofs;
 				if (md.mr[this.rotate][i][j] == 1) {
 					if (x < 0 || x >= w) {
 						return 0;
@@ -1064,10 +1000,10 @@ class mino {
 	}
 	_testspinclear(ofsx, ofsy) {
 		let md = minodata[this.id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				let x = this.x + ofsx + j - 3;
-				let y = this.y + ofsy + i - 3 + md.ofs;
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let x = this.x + ofsx + j - 2;
+				let y = this.y + ofsy + i - 2 + md.ofs;
 				if (md.mr[this.rotate][i][j] == 1) {
 					if (x < 0 || x >= w) {
 						return 1;
@@ -1103,10 +1039,10 @@ class mino {
 	}
 	set() {
 		let md = minodata[this.id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				let x = this.x + j - 3;
-				let y = this.y + i - 3 + md.ofs;
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let x = this.x + j - 2;
+				let y = this.y + i - 2 + md.ofs;
 				if (md.mr[this.rotate][i][j] == 1) {
 					let ba = boardarr[y][x];
 					ba.id = this.id;
@@ -1216,8 +1152,8 @@ class mino {
 	}
 	showmin(minarr, id) {
 		let md = minodata[id];
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
 				let x = j;
 				let y = i;
 				let ma = minarr[y][x];
@@ -1343,10 +1279,10 @@ window.onload = () => {
 		}
 	}
 	document.body.style.setProperty('--slmin', slmin + 'px');
-	for (let i = 0; i < 6; i++) {
+	for (let i = 0; i < 4; i++) {
 		holdarr[i] = [];
-		for (let j = 0; j < 6; j++) {
-			holdarr[i][j] = createMino(holdbg, holdrun, j - 1, 4 - 1 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
+		for (let j = 0; j < 4; j++) {
+			holdarr[i][j] = createMino(holdbg, holdrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
 		}
 	}
 	next.style.width = 4 * slmin + 2 + 'px';
@@ -1361,10 +1297,10 @@ window.onload = () => {
 		let nextbg = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 		let nextrun = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 		nextsvg.append(nextbg, nextrun);
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < 4; i++) {
 			nextarr[k][i] = [];
-			for (let j = 0; j < 6; j++) {
-				nextarr[k][i][j] = createMino(nextbg, nextrun, j - 1, 4 - 1 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
+			for (let j = 0; j < 4; j++) {
+				nextarr[k][i][j] = createMino(nextbg, nextrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
 			}
 		}
 	}
@@ -1373,25 +1309,25 @@ window.onload = () => {
 	sent.initial();
 	time.initial();
 
-	playtext.onclick = () => {
+	playbtn.onclick = () => {
 		action.play();
 	};
 
-	keybttext.onclick = () => {
+	keybtn.onclick = () => {
 		keysetboard.style.zIndex = 1;
 		game.change('pause');
 	};
 
-	otherbttext.onclick = () => {
+	otherbtn.onclick = () => {
 		otherboard.style.zIndex = 1;
 		game.change('pause');
 	};
 
-	overoktext.onclick = () => {
+	overok.onclick = () => {
 		action.tomain();
 	};
 
-	keysetoktext.onclick = () => {
+	keysetok.onclick = () => {
 		for (let ii in key) {
 			key[ii].color = '#444';
 		}
@@ -1399,7 +1335,7 @@ window.onload = () => {
 		game.change('load');
 	};
 
-	otheroktext.onclick = () => {
+	otherok.onclick = () => {
 		otherboard.style.zIndex = -1;
 		game.change('load');
 	};

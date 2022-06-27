@@ -44,54 +44,9 @@ body {
 	border-color    : #aaa;
 }
 
-#senttext {
+#textboard {
 	left: 15px;
 	top : 160px;
-}
-
-#sentnum {
-	left: 15px;
-	top : 220px;
-}
-
-#timetext {
-	left: 15px;
-	top : 300px;
-}
-
-#timenum {
-	left: 15px;
-	top : 360px;
-}
-
-#b2btext {
-	left   : 27.5px;
-	top    : 400px;
-	opacity: 0;
-}
-
-#spintext {
-	left   : 12px;
-	top    : 560px;
-	opacity: 0;
-}
-
-#linetext {
-	left   : 12px;
-	top    : 600px;
-	opacity: 0;
-}
-
-#combonumtext {
-	left   : 45px;
-	top    : 660px;
-	opacity: 0;
-}
-
-#combotext {
-	left   : 5px;
-	top    : 720px;
-	opacity: 0;
 }
 
 #mainboard {

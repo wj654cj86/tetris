@@ -13,74 +13,76 @@
 </head>
 
 <body>
-	<svg id="senttext" width="150" height="90" viewBox="-25 -15 50 30">
-		<g opacity="0">
-			<text id="senttexttag" x="0" y="0">Sent</text>
-		</g>
-		<use xlink:href="#senttexttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#senttexttag" fill="#ff0" stroke="#ff0" stroke-width="1" />
-	</svg>
-	<svg id="sentnum" width="150" height="90" viewBox="-25 -15 50 30">
-		<g opacity="0">
-			<text id="senttag" x="0" y="0">0</text>
-		</g>
-		<use xlink:href="#senttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#senttag" fill="#fff" stroke="#fff" stroke-width="1" />
-	</svg>
-	<svg id="timetext" width="150" height="75" viewBox="-30 -15 60 30">
-		<g opacity="0">
-			<text id="timetexttag" x="0" y="0">Time</text>
-		</g>
-		<use xlink:href="#timetexttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#timetexttag" fill="#ff0" stroke="#ff0" stroke-width="1" />
-	</svg>
-	<svg id="timenum" width="150" height="75" viewBox="-30 -15 60 30">
-		<g opacity="0">
-			<text id="timenumtag" x="0" y="0">00:00</text>
-		</g>
-		<use xlink:href="#timenumtag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#timenumtag" fill="#fff" stroke="#fff" stroke-width="1" />
-	</svg>
-	<svg id="b2btext" width="125" height="200" viewBox="-25 -35 50 70">
-		<g opacity="0">
-			<text id="b2btexttag" x="0" y="-14">Back</text>
-			<text id="b2btexttag2" x="0" y="0">to</text>
-			<text id="b2btexttag3" x="0" y="14">Back</text>
-		</g>
-		<use xlink:href="#b2btexttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#b2btexttag" fill="#0cf" stroke="#0cf" stroke-width="1" />
-		<use xlink:href="#b2btexttag2" stroke="#000" stroke-width="4" />
-		<use xlink:href="#b2btexttag2" fill="#fff" stroke="#fff" stroke-width="1" />
-		<use xlink:href="#b2btexttag3" stroke="#000" stroke-width="4" />
-		<use xlink:href="#b2btexttag3" fill="#0cf" stroke="#0cf" stroke-width="1" />
-	</svg>
-	<svg id="spintext" width="154" height="66" viewBox="-35 -15 70 30">
-		<g opacity="0">
-			<text id="spintexttag" x="0" y="0">T-spin</text>
-		</g>
-		<use xlink:href="#spintexttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#spintexttag" fill="#f0f" stroke="#f0f" stroke-width="1" />
-	</svg>
-	<svg id="linetext" width="154" height="66" viewBox="-35 -15 70 30">
-		<g opacity="0">
-			<text id="linetexttag" x="0" y="0">Single</text>
-		</g>
-		<use xlink:href="#linetexttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#linetexttag" fill="#f0f" stroke="#f0f" stroke-width="1" />
-	</svg>
-	<svg id="combonumtext" width="90" height="90" viewBox="-15 -15 30 30">
-		<g opacity="0">
-			<text id="combonumtexttag" x="0" y="0">1</text>
-		</g>
-		<use xlink:href="#combonumtexttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#combonumtexttag" fill="#0cf" stroke="#0cf" stroke-width="1" />
-	</svg>
-	<svg id="combotext" width="160" height="60" viewBox="-40 -15 80 30">
-		<g opacity="0">
-			<text id="combotexttag" x="0" y="0">Combo</text>
-		</g>
-		<use xlink:href="#combotexttag" stroke="#000" stroke-width="4" />
-		<use xlink:href="#combotexttag" fill="#0cf" stroke="#0cf" stroke-width="1" />
+	<svg id="textboard" width="160"  height="620" viewBox="-80 0 160 620">
+		<svg id="sentstr" x="-75" y="0" width="150" height="90" viewBox="-25 -15 50 30">
+			<g opacity="0">
+				<text id="sentstrtext" x="0" y="0">Sent</text>
+			</g>
+			<use xlink:href="#sentstrtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#sentstrtext" fill="#ff0" stroke="#ff0" stroke-width="1" />
+		</svg>
+		<svg id="sentnum" x="-75" y="60" width="150" height="90" viewBox="-25 -15 50 30">
+			<g opacity="0">
+				<text id="sentnumtext" x="0" y="0">0</text>
+			</g>
+			<use xlink:href="#sentnumtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#sentnumtext" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+		<svg id="timestr" x="-75" y="140" width="150" height="75" viewBox="-30 -15 60 30">
+			<g opacity="0">
+				<text id="timestrtext" x="0" y="0">Time</text>
+			</g>
+			<use xlink:href="#timestrtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#timestrtext" fill="#ff0" stroke="#ff0" stroke-width="1" />
+		</svg>
+		<svg id="timenum" x="-75" y="200" width="150" height="75" viewBox="-30 -15 60 30">
+			<g opacity="0">
+				<text id="timenumtext" x="0" y="0">00:00</text>
+			</g>
+			<use xlink:href="#timenumtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#timenumtext" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+		<svg id="b2bstr" x="-75" y="240" width="150" height="200" viewBox="-30 -40 60 80" opacity="0">
+			<g opacity="0">
+				<text id="b2bstrtext" x="0" y="-14">Back</text>
+				<text id="b2bstrtext2" x="0" y="0">to</text>
+				<text id="b2bstrtext3" x="0" y="14">Back</text>
+			</g>
+			<use xlink:href="#b2bstrtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#b2bstrtext" fill="#0cf" stroke="#0cf" stroke-width="1" />
+			<use xlink:href="#b2bstrtext2" stroke="#000" stroke-width="4" />
+			<use xlink:href="#b2bstrtext2" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#b2bstrtext3" stroke="#000" stroke-width="4" />
+			<use xlink:href="#b2bstrtext3" fill="#0cf" stroke="#0cf" stroke-width="1" />
+		</svg>
+		<svg id="spinstr" x="-70" y="400" width="140" height="60" viewBox="-35 -15 70 30" opacity="0">
+			<g opacity="0">
+				<text id="spinstrtext" x="0" y="0">T-spin</text>
+			</g>
+			<use xlink:href="#spinstrtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#spinstrtext" fill="#f0f" stroke="#f0f" stroke-width="1" />
+		</svg>
+		<svg id="linestr" x="-70" y="440" width="140" height="60" viewBox="-35 -15 70 30" opacity="0">
+			<g opacity="0">
+				<text id="linestrtext" x="0" y="0">Single</text>
+			</g>
+			<use xlink:href="#linestrtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#linestrtext" fill="#f0f" stroke="#f0f" stroke-width="1" />
+		</svg>
+		<svg id="combonum" x="-45" y="500" width="90" height="90" viewBox="-15 -15 30 30" opacity="0">
+			<g opacity="0">
+				<text id="combonumtext" x="0" y="0">1</text>
+			</g>
+			<use xlink:href="#combonumtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#combonumtext" fill="#0cf" stroke="#0cf" stroke-width="1" />
+		</svg>
+		<svg id="combostr" x="-80" y="560" width="160" height="60" viewBox="-40 -15 80 30" opacity="0">
+			<g opacity="0">
+				<text id="combostrtext" x="0" y="0">Combo</text>
+			</g>
+			<use xlink:href="#combostrtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#combostrtext" fill="#0cf" stroke="#0cf" stroke-width="1" />
+		</svg>
 	</svg>
 	<svg opacity="0">
 		<rect id="basemino" width="1" height="1" />
@@ -96,83 +98,79 @@
 	<div id="next">
 	</div>
 	<svg id="mainboard">
-		<svg id="logotext" x="10" y="100" width="380" height="190" viewBox="-50 -25 100 50">
+		<svg id="logo" x="10" y="100" width="380" height="190" viewBox="-50 -25 100 50">
 			<g opacity="0">
-				<text id="logotag" x="0" y="-10">Tetris</text>
-				<text id="logotag2" x="0" y="10">JavaScript</text>
+				<text id="logotext" x="0" y="-10">Tetris</text>
+				<text id="logotext2" x="0" y="10">JavaScript</text>
 			</g>
-			<use xlink:href="#logotag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#logotag" fill="#fff" stroke="#fff" stroke-width="1" />
-			<use xlink:href="#logotag2" stroke="#000" stroke-width="4" />
-			<use xlink:href="#logotag2" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#logotext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#logotext" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#logotext2" stroke="#000" stroke-width="4" />
+			<use xlink:href="#logotext2" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="playtext" x="50" y="300" width="300" height="105" viewBox="-50 -17.5 100 35">
+		<svg id="playbtn" x="50" y="300" width="300" height="105" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
-				<text id="playtag" x="0" y="1">Play</text>
+				<text id="playtext" x="0" y="1">Play</text>
 			</g>
-			<use xlink:href="#playtag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#playtag" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#playtext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#playtext" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="keybttext" x="50" y="420" width="300" height="105" viewBox="-50 -17.5 100 35">
+		<svg id="keybtn" x="50" y="420" width="300" height="105" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
-				<text id="keybttag" x="0" y="1">Key Set</text>
+				<text id="keytext" x="0" y="1">Key Set</text>
 			</g>
-			<use xlink:href="#keybttag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#keybttag" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#keytext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#keytext" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="otherbttext" x="50" y="540" width="300" height="105" viewBox="-50 -17.5 100 35">
+		<svg id="otherbtn" x="50" y="540" width="300" height="105" viewBox="-50 -17.5 100 35">
 			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
 			<g opacity="0">
-				<text id="otherbttag" x="0" y="1">Other Set</text>
+				<text id="othertext" x="0" y="1">Other Set</text>
 			</g>
-			<use xlink:href="#otherbttag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#otherbttag" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#othertext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#othertext" fill="#fff" stroke="#fff" stroke-width="1" />
+		</svg>
+	</svg>
+	<svg opacity="0">
+		<svg id="ok" viewBox="-50 -17.5 100 35">
+			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
+			<g opacity="0">
+				<text id="oktext" x="0" y="1">OK</text>
+			</g>
+			<use xlink:href="#oktext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#oktext" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
 	</svg>
 	<svg id="overboard">
 		<svg id="gameover" x="25" y="170" width="350" height="250" viewBox="-35 -25 70 50">
 			<g opacity="0">
-				<text id="gameovertag" x="0" y="-10">Game</text>
-				<text id="gameovertag2" x="0" y="10">Over</text>
+				<text id="gameovertext" x="0" y="-10">Game</text>
+				<text id="gameovertext2" x="0" y="10">Over</text>
 			</g>
-			<use xlink:href="#gameovertag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#gameovertag" fill="#fff" stroke="#fff" stroke-width="1" />
-			<use xlink:href="#gameovertag2" stroke="#000" stroke-width="4" />
-			<use xlink:href="#gameovertag2" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#gameovertext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#gameovertext" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#gameovertext2" stroke="#000" stroke-width="4" />
+			<use xlink:href="#gameovertext2" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
 		<svg id="timeup" x="25" y="170" width="350" height="250" viewBox="-35 -25 70 50">
 			<g opacity="0">
-				<text id="timeuptag" x="0" y="-10">Time</text>
-				<text id="timeuptag2" x="0" y="10">Up</text>
+				<text id="timeuptext" x="0" y="-10">Time</text>
+				<text id="timeuptext2" x="0" y="10">Up</text>
 			</g>
-			<use xlink:href="#timeuptag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#timeuptag" fill="#fff" stroke="#fff" stroke-width="1" />
-			<use xlink:href="#timeuptag2" stroke="#000" stroke-width="4" />
-			<use xlink:href="#timeuptag2" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#timeuptext" stroke="#000" stroke-width="4" />
+			<use xlink:href="#timeuptext" fill="#fff" stroke="#fff" stroke-width="1" />
+			<use xlink:href="#timeuptext2" stroke="#000" stroke-width="4" />
+			<use xlink:href="#timeuptext2" fill="#fff" stroke="#fff" stroke-width="1" />
 		</svg>
-		<svg id="overoktext" x="50" y="420" width="300" height="105" viewBox="-50 -17.5 100 35">
-			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
-			<g opacity="0">
-				<text id="overoktag" x="0" y="1">OK</text>
-			</g>
-			<use xlink:href="#overoktag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#overoktag" fill="#fff" stroke="#fff" stroke-width="1" />
-		</svg>
+		<use id="overok" xlink:href="#ok" x="50" y="420" width="300" height="105" />
 	</svg>
 	<svg id="keysetboard">
 		<svg id="keyset" x="12" y="12" width="378" height="783" viewBox="0 0 280 580">
 			<rect x="2" y="2" rx="10" ry="10" width="276" height="576" stroke="#bbb" stroke-width="3" fill="#eee" />
 		</svg>
-		<svg id="keysetoktext" x="100" y="700" width="200" height="70" viewBox="-50 -17.5 100 35">
-			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
-			<g opacity="0">
-				<text id="keysetoktag" x="0" y="1">OK</text>
-			</g>
-			<use xlink:href="#keysetoktag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#keysetoktag" fill="#fff" stroke="#fff" stroke-width="1" />
-		</svg>
+		<use id="keysetok" xlink:href="#ok" x="100" y="700" width="200" height="70" />
 	</svg>
 	<svg id="otherboard">
 		<svg id="gameset" x="12" y="12" width="378" height="783" viewBox="0 0 280 580">
@@ -223,14 +221,7 @@
 				<text x="30" y="22" fill="#222" stroke="#222" stroke-width="1">SZ</text>
 			</g>
 		</svg>
-		<svg id="otheroktext" x="100" y="700" width="200" height="70" viewBox="-50 -17.5 100 35">
-			<rect x="-48" y="-15.5" rx="10" ry="10" width="96" height="31" stroke="#bbb" stroke-width="3" fill="#eee" />
-			<g opacity="0">
-				<text id="otheroktag" x="0" y="1">OK</text>
-			</g>
-			<use xlink:href="#otheroktag" stroke="#000" stroke-width="4" />
-			<use xlink:href="#otheroktag" fill="#fff" stroke="#fff" stroke-width="1" />
-		</svg>
+		<use id="otherok" xlink:href="#ok" x="100" y="700" width="200" height="70" />
 	</svg>
 </body>
 
