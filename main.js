@@ -294,39 +294,6 @@ var delayname = {
 	interval: 'delay'
 };
 var ghost = { open: 1 };
-
-var time = {
-	num: 0,
-	data: 2,
-	interval: null,
-	tostr() {
-		return paddingLeft(Math.floor(this.num / 60), 2) + ':' + paddingLeft(this.num % 60, 2);
-	},
-	initial() {
-		this.num = this.data * 60;
-		settext(timenum, this.tostr());
-	},
-	reset() {
-		this.num = this.data * 60;
-		settext(timenum, this.tostr());
-	},
-	start() {
-		if (this.num != 0) {
-			this.interval = setInterval(() => {
-				time.num--;
-				settext(timenum, time.tostr());
-				if (time.num == 0) {
-					time.stop();
-					action.timeup();
-				}
-			}, 1000);
-		}
-	},
-	stop() {
-		if (this.interval != null)
-			clearInterval(this.interval);
-	}
-};
 var key = {
 	newgame: {
 		name: 'Determine', use: 'Enter',
@@ -416,14 +383,6 @@ function loadcolor(orgrgb, proportion) {
 	}
 	return rgbToHex(...hslToRgb(...hsl));
 }
-function settext(element, str = '') {
-	element.getElementsByTagName('text')[0].innerHTML = str;
-}
-function settextcolor(element, color) {
-	let use = element.getElementsByTagName('use')[1];
-	use.setAttribute('fill', color);
-	use.setAttribute('stroke', color);
-}
 
 Object.defineProperty(Node.prototype, 'opacity', {
 	set: function (o) {
@@ -432,6 +391,51 @@ Object.defineProperty(Node.prototype, 'opacity', {
 		return this.getAttribute('opacity');
 	}
 });
+Object.defineProperty(Node.prototype, 'color', {
+	set: function (color) {
+		let use = this.getElementsByTagName('use')[1];
+		use.setAttribute('fill', color);
+		use.setAttribute('stroke', color);
+	}
+});
+Object.defineProperty(Node.prototype, 'str', {
+	set: function (str) {
+		this.getElementsByTagName('text')[0].innerHTML = str;
+	}
+});
+
+var time = {
+	num: 0,
+	data: 2,
+	interval: null,
+	get str() {
+		return paddingLeft(Math.floor(this.num / 60), 2) + ':' + paddingLeft(this.num % 60, 2);
+	},
+	initial() {
+		this.num = this.data * 60;
+		timenum.str = this.str;
+	},
+	reset() {
+		this.num = this.data * 60;
+		timenum.str = this.str;
+	},
+	start() {
+		if (this.num != 0) {
+			this.interval = setInterval(() => {
+				time.num--;
+				timenum.str = this.str;
+				if (time.num == 0) {
+					time.stop();
+					action.timeup();
+				}
+			}, 1000);
+		}
+	},
+	stop() {
+		if (this.interval != null)
+			clearInterval(this.interval);
+	}
+};
 
 var sent = {
 	num: 0,
@@ -439,13 +443,13 @@ var sent = {
 	combo: 0,
 	interval: null,
 	initial() {
-		settext(sentnum, this.num);
+		sentnum.str = this.num;
 	},
 	reset() {
 		this.num = 0;
 		this.b2b = 0;
 		this.combo = 0;
-		settext(sentnum, this.num);
+		sentnum.str = this.num;
 		this.clear();
 	},
 	test(id, line, spinaction) {
@@ -497,7 +501,7 @@ var sent = {
 			s += ' ' + this.combo + ' Combo';
 
 			this.num += num;
-			settext(sentnum, this.num);
+			sentnum.str = this.num;
 			// console.log('sent:', num, s);
 			this.set(action2, line, b2b2);
 			this.combo++;
@@ -517,19 +521,19 @@ var sent = {
 			spinstr.opacity = 0;
 			linestr.opacity = 0;
 			linestr.setAttribute('y', 400);
-			settext(linestr, sentdata.line[line].name);
-			settextcolor(linestr, loadcolor(color.sent[line], proportion.text));
+			linestr.str = sentdata.line[line].name;
+			linestr.color = loadcolor(color.sent[line], proportion.text);
 			linestr.opacity = 1;
 		} else {
 			spinstr.opacity = 0;
-			settext(spinstr, minodata[id].name + '-spin');
-			settextcolor(spinstr, loadcolor(color.mino[id], proportion.text));
+			spinstr.str = minodata[id].name + '-spin';
+			spinstr.color = loadcolor(color.mino[id], proportion.text);
 			spinstr.opacity = 1;
 
 			linestr.opacity = 0;
 			linestr.setAttribute('y', 440);
-			settext(linestr, sentdata.line[line].name);
-			settextcolor(linestr, loadcolor(color.mino[id], proportion.text));
+			linestr.str = sentdata.line[line].name;
+			linestr.color = loadcolor(color.mino[id], proportion.text);
 			linestr.opacity = 1;
 		}
 		if (this.combo == 0) {
@@ -537,7 +541,7 @@ var sent = {
 			combostr.opacity = 0;
 		} else {
 			combonum.opacity = 0;
-			settext(combonum, this.combo);
+			combonum.str = this.combo;
 			combonum.opacity = 1;
 			combostr.opacity = 1;
 		}
