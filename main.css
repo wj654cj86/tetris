@@ -91,10 +91,6 @@ text {
 }
 
 #keyset text,
-#openghosttag text,
-#spinbonustag0 text,
-#spinbonustag1 text,
-#spinbonustag2 text,
-#spinbonustag3 text {
+.check text {
 	text-anchor: start;
 }

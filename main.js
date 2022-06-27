@@ -284,8 +284,8 @@ var sentdata = {
 };
 
 var delay = {
-	move: { start: 100, interval: 35 },
-	down: { start: 30, interval: 10 }
+	move: { start: { data: 100 }, interval: { data: 35 } },
+	down: { start: { data: 30 }, interval: { data: 10 } }
 };
 var delayname = {
 	move: 'Move',
@@ -293,7 +293,7 @@ var delayname = {
 	start: 'second',
 	interval: 'delay'
 };
-var openghost = 1;
+var ghost = { open: 1 };
 
 var time = {
 	num: 0,
@@ -417,19 +417,18 @@ function loadcolor(orgrgb, proportion) {
 	return rgbToHex(...hslToRgb(...hsl));
 }
 function settext(element, str = '') {
-	let tag = element.getElementsByTagName('text');
-	tag[0].innerHTML = str;
+	element.getElementsByTagName('text')[0].innerHTML = str;
 }
 function settextcolor(element, color) {
-	let tag = element.getElementsByTagName('use');
-	tag[1].setAttribute('fill', color);
-	tag[1].setAttribute('stroke', color);
+	let use = element.getElementsByTagName('use')[1];
+	use.setAttribute('fill', color);
+	use.setAttribute('stroke', color);
 }
 
 Object.defineProperty(Node.prototype, 'opacity', {
 	set: function (o) {
 		this.setAttribute('opacity', o);
-	}, get: function (params) {
+	}, get: function () {
 		return this.getAttribute('opacity');
 	}
 });
@@ -706,8 +705,8 @@ var game = {
 										clearInterval(key.left.interval);
 									}
 								});
-							}, delay.move.interval);
-						}, delay.move.start);
+							}, delay.move.interval.data);
+						}, delay.move.start.data);
 					}
 					break;
 				case key.right.use:
@@ -733,8 +732,8 @@ var game = {
 										clearInterval(key.right.interval);
 									}
 								});
-							}, delay.move.interval);
-						}, delay.move.start);
+							}, delay.move.interval.data);
+						}, delay.move.start.data);
 					}
 					break;
 				case key.soft.use:
@@ -746,8 +745,8 @@ var game = {
 							key.soft.timeout = null;
 							key.soft.interval = setInterval(() => {
 								now.movey(-1);
-							}, delay.down.interval);
-						}, delay.down.start);
+							}, delay.down.interval.data);
+						}, delay.down.start.data);
 					}
 					break;
 				case key.hard.use:
@@ -884,14 +883,14 @@ class mino {
 		}
 	}
 	show() {
-		if (openghost) {
+		if (ghost.open) {
 			this.showghost();
 		}
 		this.showmino();
 	}
 	clear() {
 		this.clearmino();
-		if (openghost) {
+		if (ghost.open) {
 			this.clearghost();
 		}
 	}
@@ -1251,19 +1250,99 @@ function createUseAndSetId(id) {
 	return nodetext2svgnode(`<use xlink:href="#${id}"/>`);
 }
 function createMino(bg, run, x, y, bgcolor) {
-	let use = nodetext2svgnode(`<use xlink:href="#basemino" x="${x}" y="${y}" fill="${bgcolor}"/>`);
-	bg.append(use);
-	use = nodetext2svgnode(`<use xlink:href="#basemino" x="${x}" y="${y}" fill="none"/>`);
-	run.append(use);
+	let rect = nodetext2svgnode(`<rect width="1" height="1" x="${x}" y="${y}" fill="${bgcolor}"/>`);
+	bg.append(rect);
+	rect = nodetext2svgnode(`<rect width="1" height="1" x="${x}" y="${y}" fill="none"/>`);
+	run.append(rect);
 	return {
 		cnt: 0, id: 0, set: 0,
 		get color() {
-			return use.getAttribute('fill');
+			return rect.getAttribute('fill');
 		},
 		set color(c) {
-			use.setAttribute('fill', c);
+			rect.setAttribute('fill', c);
 		}
 	};
+}
+
+function createValueSet(obj, name, x, y, low, high, unit, cb = () => { }) {
+	let g = nodetext2svgnode(`<g transform="translate(${x},${y})"></g>`);
+
+	let text = nodetext2svgnode(`<text x="140" y="22" fill="#222" stroke="#222" stroke-width="1">${name}</text>`);
+	g.append(text);
+
+	let vlrt = createUseAndSetId('vlrt');
+	g.append(vlrt);
+
+	let value = nodetext2svgnode(`<text x="140" y="53" fill="#fff" stroke="#fff" stroke-width="1"></text>`);
+	g.append(value);
+	let valuename = name.replace(/ /g, '_') + '_value';
+	let cv = getCookie(valuename);
+	if (cv == '' || isNaN(cv)) cv = obj.data;
+	obj.data = cv * 1;
+	value.innerHTML = obj.data + ' ' + unit;
+	cb();
+
+	let changevalue = (num) => {
+		obj.data += num;
+		if (obj.data < low) obj.data = low;
+		if (obj.data > high) obj.data = high;
+		value.innerHTML = obj.data + ' ' + unit;
+		setCookie(valuename, obj.data);
+		cb();
+	};
+
+	let subbt = createUseAndSetId('subbt');
+	g.append(subbt);
+	subbt.onclick = () => {
+		changevalue(-10);
+	};
+
+	let decbt = createUseAndSetId('decbt');
+	g.append(decbt);
+	decbt.onclick = () => {
+		changevalue(-1);
+	};
+
+	let incbt = createUseAndSetId('incbt');
+	g.append(incbt);
+	incbt.onclick = () => {
+		changevalue(1);
+	};
+
+	let addbt = createUseAndSetId('addbt');
+	g.append(addbt);
+	addbt.onclick = () => {
+		changevalue(10);
+	};
+
+	return g;
+}
+
+function createCheckBox(obj, name, cookie, x, y, cb = () => { }) {
+	let g = nodetext2svgnode(`<g class="check" transform="translate(${x},${y})"></g>`);
+	let rect = nodetext2svgnode(`<use xlink:href="#cbrect"/>`);
+	g.append(rect);
+	let path = nodetext2svgnode(`<use xlink:href="#cbpath"/>`);
+	g.append(path);
+	let text = nodetext2svgnode(`<text x="30" y="22" fill="#222" stroke="#222" stroke-width="1">${name}</text>`);
+	g.append(text);
+	let cv = getCookie(cookie);
+	if (cv == '' || isNaN(cv)) cv = obj.open;
+	obj.open = cv * 1;
+	path.opacity = obj.open;
+	cb();
+	g.onclick = () => {
+		if (obj.open) {
+			obj.open = 0;
+		} else {
+			obj.open = 1;
+		}
+		path.opacity = obj.open;
+		setCookie(cookie, obj.open);
+		cb();
+	};
+	return g;
 }
 
 window.onload = () => {
@@ -1380,156 +1459,19 @@ window.onload = () => {
 	i = 0;
 	for (let ii in delay) {
 		for (let jj in delay[ii]) {
-			let tag = nodetext2svgnode(`<g transform="translate(0,${i * 60})"></g>`);
-			gameset.append(tag);
-
-			let text = nodetext2svgnode(`<text x="140" y="22" fill="#222" stroke="#222" stroke-width="1">${delayname[ii]} ${delayname[jj]}</text>`);
-			tag.append(text);
-
-			let vlrt = createUseAndSetId('vlrt');
-			tag.append(vlrt);
-
-			let value = nodetext2svgnode(`<text x="140" y="53" fill="#fff" stroke="#fff" stroke-width="1"></text>`);
-			tag.append(value);
-			let valuename = delayname[ii] + '_' + delayname[jj] + '_value';
-			let cv = getCookie(valuename);
-			if (cv == '' || isNaN(cv)) cv = delay[ii][jj];
-			delay[ii][jj] = cv * 1;
-			value.innerHTML = delay[ii][jj] + ' ms';
-
-			let iii = ii;
-			let jjj = jj;
-
-			let changevalue = (num) => {
-				delay[iii][jjj] += num;
-				if (delay[iii][jjj] < 0) delay[iii][jjj] = 0;
-				if (delay[iii][jjj] > 1000) delay[iii][jjj] = 1000;
-				value.innerHTML = delay[iii][jjj] + ' ms';
-				setCookie(valuename, delay[iii][jjj]);
-			};
-
-			let subbt = createUseAndSetId('subbt');
-			tag.append(subbt);
-			subbt.onclick = () => {
-				changevalue(-10);
-			};
-
-			let decbt = createUseAndSetId('decbt');
-			tag.append(decbt);
-			decbt.onclick = () => {
-				changevalue(-1);
-			};
-
-			let incbt = createUseAndSetId('incbt');
-			tag.append(incbt);
-			incbt.onclick = () => {
-				changevalue(1);
-			};
-
-			let addbt = createUseAndSetId('addbt');
-			tag.append(addbt);
-			addbt.onclick = () => {
-				changevalue(10);
-			};
-
+			gameset.append(createValueSet(delay[ii][jj], delayname[ii] + ' ' + delayname[jj], 0, i * 60, 0, 1000, 'ms'));
 			i++;
 		}
 	}
-
-	openghosttag.setAttribute('transform', 'translate(70,' + 250 + ')');
-	let og = getCookie('openghost');
-	if (og == '' || isNaN(og)) og = openghost;
-	openghost = og * 1;
-	openghostcheck.opacity = openghost;
-	openghosttag.onclick = () => {
-		if (openghost) {
-			openghost = 0;
-		} else {
-			openghost = 1;
-		}
-		openghostcheck.opacity = openghost;
-		setCookie('openghost', openghost);
-	};
-
-	spinbonustext.setAttribute('x', 140);
-	spinbonustext.setAttribute('y', 310);
+	gameset.append(createValueSet(time, 'Game Time', 0, 360, 0, 60, 'min', () => time.reset()));
+	gameset.append(createCheckBox(ghost, 'Open Ghost', 'openghost', 70, 250));
 	for (let i = 0; i < 4; i++) {
-		let tag = window['spinbonustag' + i];
-		let check = window['spinbonuscheck' + i];
-		let bns = bonus[i];
-		let ckn = 'spinbonus' + i;
-		tag.setAttribute('transform', 'translate(' + (30 + i * 60) + ',' + 320 + ')');
-		let sb = getCookie(ckn);
-		if (sb == '' || isNaN(sb)) sb = bns.open;
-		bns.open = sb * 1;
-		for (let j = 0; j < bns.mino.length; j++) {
-			minodata[bns.mino[j]].bonus = bns.open;
-		}
-		check.opacity = bns.open;
-		tag.onclick = () => {
-			if (bns.open) {
-				bns.open = 0;
-			} else {
-				bns.open = 1;
+		gameset.append(createCheckBox(bonus[i], Array.from(bonus[i].mino, m => minodata[m].name).join(''), 'spinbonus' + i, 30 + i * 60, 320, () => {
+			for (let j = 0; j < bonus[i].mino.length; j++) {
+				minodata[bonus[i].mino[j]].bonus = bonus[i].open;
 			}
-			for (let j = 0; j < bns.mino.length; j++) {
-				minodata[bns.mino[j]].bonus = bns.open;
-			}
-			check.opacity = bns.open;
-			setCookie(ckn, bns.open);
-		};
+		}));
 	}
-
-	let tag = nodetext2svgnode(`<g transform="translate(0,360)"></g>`);
-	gameset.append(tag);
-
-	let text = nodetext2svgnode(`<text x="140" y="22" fill="#222" stroke="#222" stroke-width="1">Game Time</text>`);
-	tag.append(text);
-
-	let vlrt = createUseAndSetId('vlrt');
-	tag.append(vlrt);
-
-	let value = nodetext2svgnode(`<text x="140" y="53" fill="#fff" stroke="#fff" stroke-width="1"></text>`);
-	tag.append(value);
-	let valuename = 'Game_Time_value';
-	let cv = getCookie(valuename);
-	if (cv == '' || isNaN(cv)) cv = time.data;
-	time.data = cv * 1;
-	value.innerHTML = time.data + ' min';
-	time.reset();
-
-	let changevalue = (num) => {
-		time.data += num;
-		if (time.data < 0) time.data = 0;
-		if (time.data > 60) time.data = 60;
-		value.innerHTML = time.data + ' min';
-		time.reset();
-		setCookie(valuename, time.data);
-	};
-
-	let subbt = createUseAndSetId('subbt');
-	tag.append(subbt);
-	subbt.onclick = () => {
-		changevalue(-10);
-	};
-
-	let decbt = createUseAndSetId('decbt');
-	tag.append(decbt);
-	decbt.onclick = () => {
-		changevalue(-1);
-	};
-
-	let incbt = createUseAndSetId('incbt');
-	tag.append(incbt);
-	incbt.onclick = () => {
-		changevalue(1);
-	};
-
-	let addbt = createUseAndSetId('addbt');
-	tag.append(addbt);
-	addbt.onclick = () => {
-		changevalue(10);
-	};
 
 	document.body.style.opacity = 1;
 };
