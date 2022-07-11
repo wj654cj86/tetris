@@ -9,27 +9,27 @@ var slmin = 35;
 var nextlen = 5;
 var color = {
 	mino: [
-		[0, 0, 0],
-		[0, 255, 255],
-		[255, 255, 0],
-		[255, 0, 255],
-		[0, 0, 255],
-		[255, 127, 0],
-		[255, 0, 0],
-		[0, 255, 0],
-		[16, 16, 16],
-		[64, 64, 64],
-		[127, 127, 127]
+		'#000',
+		'#0ff',
+		'#ff0',
+		'#f0f',
+		'#00f',
+		'#f70',
+		'#f00',
+		'#0f0',
+		'#111',
+		'#444',
+		'#777'
 	],
 	sent: [
-		[255, 255, 255],
-		[0, 255, 0],
-		[0, 0, 255],
-		[255, 255, 0],
-		[0, 255, 255]
+		'#fff',
+		'#0f0',
+		'#00f',
+		'#ff0',
+		'#0ff',
 	]
 };
-var proportion = { move: [1, 0.5], set: [1, 0.4], ghost: [1, 0.7], text: [1, 0.5] };
+var proportion = { move: [0, 0], set: [0.2, 0], ghost: [0, 0.4], text: [0, 0] };
 var minodata = [
 	{
 		name: 'X', ofs: 0, srs: 0, bonus: -1, md: [[
@@ -374,14 +374,13 @@ function boardreset() {
 }
 
 function loadcolor(orgrgb, proportion) {
-	let hsl = rgbToHsl(...orgrgb);
-	hsl[1] *= proportion[0];
-	if (proportion[1] > 0.5) {
-		hsl[2] += (proportion[1] - 0.5) / 0.5 * (1 - hsl[2]);
-	} else if (proportion[1] < 0.5) {
-		hsl[2] *= (proportion[1]) / 0.5;
-	}
-	return rgbToHex(...hslToRgb(...hsl));
+	let min = Math.min(...proportion);
+	let max = Math.max(...proportion);
+	let d = max - min;
+	let c = 1 - max;
+	let p = proportion.indexOf(max);
+	let outrgb = hexToRgb(orgrgb).map(v => Math.round(v * c + [0, 255][p] * d + 127.5 * min));
+	return rgbToHex(...outrgb);
 }
 
 Object.defineProperty(Node.prototype, 'opacity', {
@@ -393,217 +392,632 @@ Object.defineProperty(Node.prototype, 'opacity', {
 });
 Object.defineProperty(Node.prototype, 'color', {
 	set: function (color) {
-		let use = this.getElementsByTagName('use')[1];
+		let use = this.querySelectorAll('use')[1];
 		use.setAttribute('fill', color);
 		use.setAttribute('stroke', color);
 	}
 });
 Object.defineProperty(Node.prototype, 'str', {
 	set: function (str) {
-		this.getElementsByTagName('text')[0].innerHTML = str;
+		this.querySelector('text').innerHTML = str;
 	}
 });
 
-var time = {
-	num: 0,
-	data: 2,
-	interval: null,
-	get str() {
-		return paddingLeft(Math.floor(this.num / 60), 2) + ':' + paddingLeft(this.num % 60, 2);
-	},
-	initial() {
-		this.num = this.data * 60;
-		timenum.str = this.str;
-	},
-	reset() {
-		this.num = this.data * 60;
-		timenum.str = this.str;
-	},
-	start() {
-		if (this.num != 0) {
-			this.interval = setInterval(() => {
-				time.num--;
-				timenum.str = this.str;
-				if (time.num == 0) {
-					time.stop();
+var time = (() => {
+	let num = 0,
+		data = 2,
+		interval = null;
+	function str() {
+		return paddingLeft(Math.floor(num / 60), 2) + ':' + paddingLeft(num % 60, 2);
+	}
+	function initial() {
+		num = data * 60;
+		timenum.str = str();
+	}
+	function reset() {
+		num = data * 60;
+		timenum.str = str();
+	}
+	function start() {
+		if (num != 0) {
+			interval = setInterval(() => {
+				num--;
+				timenum.str = str();
+				if (num == 0) {
+					stop();
 					action.timeup();
 				}
 			}, 1000);
 		}
-	},
-	stop() {
-		if (this.interval != null)
-			clearInterval(this.interval);
 	}
-};
-
-var sent = {
-	num: 0,
-	b2b: 0,
-	combo: 0,
-	interval: null,
-	initial() {
+	function stop() {
+		if (interval != null)
+			clearInterval(interval);
+	}
+	return {
+		initial,
+		reset,
+		start,
+		stop
+	};
+})();
+var sent = (() => {
+	let num = 0,
+		b2b = 0,
+		combo = 0,
+		interval = null;
+	function initial() {
 		sentnum.str = this.num;
-	},
-	reset() {
-		this.num = 0;
-		this.b2b = 0;
-		this.combo = 0;
-		sentnum.str = this.num;
-		this.clear();
-	},
-	test(id, line, spinaction) {
-		if (line > 0) {
-			let s = '';
-			let num = 0;
-			let action = '';
-			let action2 = 0;
-			let b2b = '';
-			let b2b2 = 0;
-			let ls = sentdata.line[line];
-
-			if (spinaction) {
-				action = 'spin';
-				action2 = id;
-				s += minodata[id].name + '-Spin ';
-			} else {
-				action = 'normal';
-				action2 = 0;
-			}
-
-			if (this.b2b) {
-				if (ls.sent[action].b2b) {
-					b2b = 'b2b';
-					b2b2 = 1;
-					s = 'Back to Back ' + s;
-					this.b2b = 1;
-				} else {
-					b2b = 'normal';
-					b2b2 = 0;
-					this.b2b = 0;
-				}
-			} else {
-				if (ls.sent[action].b2b) {
-					b2b = 'normal';
-					b2b2 = 0;
-					this.b2b = 1;
-				} else {
-					b2b = 'normal';
-					b2b2 = 0;
-					this.b2b = 0;
-				}
-			}
-
-			num += ls.sent[action][b2b];
-			s += ls.name;
-
-			num += sentdata.combo[this.combo];
-			s += ' ' + this.combo + ' Combo';
-
-			this.num += num;
-			sentnum.str = this.num;
-			// console.log('sent:', num, s);
-			this.set(action2, line, b2b2);
-			this.combo++;
-		} else {
-			this.combo = 0;
-		}
-	},
-	set(id, line, b2b) {
-		if (this.interval != null)
-			clearInterval(this.interval);
-		if (b2b) {
-			b2bstr.opacity = 1;
-		} else {
-			b2bstr.opacity = 0;
-		}
-		if (id == 0) {
-			spinstr.opacity = 0;
-			linestr.opacity = 0;
-			linestr.setAttribute('y', 400);
-			linestr.str = sentdata.line[line].name;
-			linestr.color = loadcolor(color.sent[line], proportion.text);
-			linestr.opacity = 1;
-		} else {
-			spinstr.opacity = 0;
-			spinstr.str = minodata[id].name + '-spin';
-			spinstr.color = loadcolor(color.mino[id], proportion.text);
-			spinstr.opacity = 1;
-
-			linestr.opacity = 0;
-			linestr.setAttribute('y', 440);
-			linestr.str = sentdata.line[line].name;
-			linestr.color = loadcolor(color.mino[id], proportion.text);
-			linestr.opacity = 1;
-		}
-		if (this.combo == 0) {
-			combonum.opacity = 0;
-			combostr.opacity = 0;
-		} else {
-			combonum.opacity = 0;
-			combonum.str = this.combo;
-			combonum.opacity = 1;
-			combostr.opacity = 1;
-		}
-		this.interval = setInterval(() => {
-			sent.clear();
-		}, 3000);
-	},
-	clear() {
-		if (this.interval != null)
-			clearInterval(this.interval);
+	}
+	function reset() {
+		num = 0;
+		b2b = 0;
+		combo = 0;
+		sentnum.str = num;
+		clear();
+	}
+	function clear() {
+		if (interval != null)
+			clearInterval(interval);
 		b2bstr.opacity = 0;
 		spinstr.opacity = 0;
 		linestr.opacity = 0;
 		combonum.opacity = 0;
 		combostr.opacity = 0;
 	}
-};
+	function test(id, line, spinaction) {
+		if (line > 0) {
+			let s = '',
+				_num = 0,
+				_id = 0,
+				_idstr = '',
+				_b2b = 0,
+				_b2bstr = '',
+				ls = sentdata.line[line];
 
-var now;
+			if (spinaction) {
+				_idstr = 'spin';
+				_id = id;
+				s += minodata[id].name + '-Spin ';
+			} else {
+				_idstr = 'normal';
+				_id = 0;
+			}
+			if (b2b) {
+				if (ls.sent[_idstr].b2b) {
+					_b2bstr = 'b2b';
+					_b2b = 1;
+					s = 'Back to Back ' + s;
+					b2b = 1;
+				} else {
+					_b2bstr = 'normal';
+					_b2b = 0;
+					b2b = 0;
+				}
+			} else {
+				if (ls.sent[_idstr].b2b) {
+					_b2bstr = 'normal';
+					_b2b = 0;
+					b2b = 1;
+				} else {
+					_b2bstr = 'normal';
+					_b2b = 0;
+					b2b = 0;
+				}
+			}
+			_num += ls.sent[_idstr][_b2bstr];
+			s += ls.name;
+
+			_num += sentdata.combo[combo];
+			s += ' ' + combo + ' Combo';
+
+			num += _num;
+			sentnum.str = num;
+			// console.log('sent:', _num, s);
+			if (interval != null)
+				clearInterval(interval);
+			if (_b2b) {
+				b2bstr.opacity = 1;
+			} else {
+				b2bstr.opacity = 0;
+			}
+			if (_id == 0) {
+				spinstr.opacity = 0;
+				linestr.opacity = 0;
+				linestr.setAttribute('y', 400);
+				linestr.str = sentdata.line[line].name;
+				linestr.color = loadcolor(color.sent[line], proportion.text);
+				linestr.opacity = 1;
+			} else {
+				spinstr.opacity = 0;
+				spinstr.str = minodata[_id].name + '-spin';
+				spinstr.color = loadcolor(color.mino[_id], proportion.text);
+				spinstr.opacity = 1;
+
+				linestr.opacity = 0;
+				linestr.setAttribute('y', 440);
+				linestr.str = sentdata.line[line].name;
+				linestr.color = loadcolor(color.mino[_id], proportion.text);
+				linestr.opacity = 1;
+			}
+			if (combo == 0) {
+				combonum.opacity = 0;
+				combostr.opacity = 0;
+			} else {
+				combonum.opacity = 0;
+				combonum.str = combo;
+				combonum.opacity = 1;
+				combostr.opacity = 1;
+			}
+			interval = setInterval(() => {
+				clear();
+			}, 3000);
+			combo++;
+		} else {
+			combo = 0;
+		}
+	}
+	return {
+		initial,
+		reset,
+		test,
+		clear
+	}
+})();
+
+var mino = (() => {
+	let cnt = 1,
+		next = [0],
+		nextcnt = 0,
+		_hold = 0,
+		holduse = 0,
+		spinaction = 0,
+		id, rotate, x, y;
+	function reset() {
+		cnt = 1;
+		next = [0];
+		nextcnt = 0;
+		_hold = 0;
+		holduse = 0;
+		spinaction = 0;
+		nextload();
+	}
+	function nextload() {
+		while (nextcnt * 7 - cnt < 14) {
+			let arr = [1, 2, 3, 4, 5, 6, 7];
+			for (let i = 0; i < 7; i++) {
+				let j = Math.floor(Math.random() * 7);
+				[arr[i], arr[j]] = [arr[j], arr[i]];
+			}
+			for (let i = 0; i < 7; i++) {
+				next.push(arr[i]);
+			}
+			nextcnt++;
+		}
+		id = next[cnt++];
+		rotate = 0;
+		x = 5;
+		y = 20;
+		for (let i = 0; i < nextlen; i++) {
+			showmin(nextarr[i], next[cnt + i]);
+		}
+	}
+	function nextreset() {
+		for (let i = 0; i < nextlen; i++) {
+			showmin(nextarr[i], 0);
+		}
+	}
+	function show() {
+		if (ghost.open) {
+			showghost();
+		}
+		showmino();
+	}
+	function clear() {
+		clearmino();
+		if (ghost.open) {
+			clearghost();
+		}
+	}
+	function test() {
+		return testmino();
+	}
+	function showmino() {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = x + j - 2;
+				let _y = y + i - 2 + md.ofs;
+				if (md.mr[rotate][i][j] == 1) {
+					let ba = boardarr[_y][_x];
+					ba.id = id;
+					ba.color = loadcolor(color.mino[id], proportion.move);
+				}
+			}
+		}
+	}
+	function clearmino() {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = x + j - 2;
+				let _y = y + i - 2 + md.ofs;
+				if (md.mr[rotate][i][j] == 1) {
+					let ba = boardarr[_y][_x];
+					ba.id = 0;
+					ba.color = 'none';
+				}
+			}
+		}
+	}
+	function testmino() {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = x + j - 2;
+				let _y = y + i - 2 + md.ofs;
+				if (md.mr[rotate][i][j] == 1) {
+					if (_x < 0 || _x >= w) {
+						return 0;
+					}
+					if (_y < 0 || _y >= hall) {
+						return 0;
+					}
+					let ba = boardarr[_y][_x];
+					if (ba.set == 1) {
+						return 0;
+					}
+				}
+			}
+		}
+		return 1;
+	}
+	function showghost() {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = x + j - 2;
+				let _y = ofsyghost() + i - 2 + md.ofs;
+				if (md.mr[rotate][i][j] == 1) {
+					let ba = boardarr[_y][_x];
+					ba.id = id;
+					ba.color = loadcolor(color.mino[id], proportion.ghost);
+				}
+			}
+		}
+	}
+	function clearghost() {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = x + j - 2;
+				let _y = ofsyghost() + i - 2 + md.ofs;
+				if (md.mr[rotate][i][j] == 1) {
+					let ba = boardarr[_y][_x];
+					ba.id = 0;
+					ba.color = 'none';
+				}
+			}
+		}
+	}
+	function testghost(yy) {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = x + j - 2;
+				let _y = yy + i - 2 + md.ofs;
+				if (md.mr[rotate][i][j] == 1) {
+					if (_x < 0 || _x >= w) {
+						return 0;
+					}
+					if (_y < 0 || _y >= hall) {
+						return 0;
+					}
+					let ba = boardarr[_y][_x];
+					if (ba.set == 1) {
+						return 0;
+					}
+				}
+			}
+		}
+		return 1;
+	}
+	function ofsyghost() {
+		for (let i = 1; i <= hall; i++) {
+			if (!testghost(y - i)) {
+				return y - i + 1;
+			}
+		}
+		return 0;
+	}
+	function _testspinclear(ofsx, ofsy) {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = x + ofsx + j - 2;
+				let _y = y + ofsy + i - 2 + md.ofs;
+				if (md.mr[rotate][i][j] == 1) {
+					if (_x < 0 || _x >= w) {
+						return 1;
+					}
+					if (_y < 0 || _y >= hall) {
+						return 1;
+					}
+					let ba = boardarr[_y][_x];
+					if (ba.set == 1) {
+						return 1;
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	function testspinclear() {
+		return (
+			_testspinclear(-1, 0) &&
+			_testspinclear(1, 0) &&
+			_testspinclear(0, -1) &&
+			_testspinclear(0, 1));
+	}
+	function testgameover() {
+		if (!test()) {
+			y = 21;
+			if (!test()) {
+				action.over();
+			}
+		}
+	}
+	function set() {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = x + j - 2;
+				let _y = y + i - 2 + md.ofs;
+				if (md.mr[rotate][i][j] == 1) {
+					let ba = boardarr[_y][_x];
+					ba.id = id;
+					ba.color = loadcolor(color.mino[id], proportion.set);
+					ba.cnt = cnt;
+					ba.set = 1;
+				}
+			}
+		}
+		clearline();
+		nextload();
+		testgameover();
+		spinaction = 0;
+		show();
+		holduse = 0;
+	}
+	function _spin(r) {
+		rotate += r;
+		if (rotate >= 4)
+			rotate -= 4;
+		if (rotate < 0)
+			rotate += 4;
+	}
+	function _movex(_x) {
+		x += _x;
+	}
+	function _movey(_y) {
+		y += _y;
+	}
+	function spin(r) {
+		let md = minodata[id];
+		let j = rotate;
+		clear();
+		_spin(r);
+		let k = rotate;
+		let s = srs[md.srs][j][k];
+		try {
+			for (let i = 0; i < 5; i++) {
+				x += s[i].x;
+				y += s[i].y;
+				if (test()) {
+					throw 'ok';
+				} else {
+					x -= s[i].x;
+					y -= s[i].y;
+				}
+			}
+			_spin(-r);
+		} catch (e) {
+			if (md.bonus == 1) {
+				spinaction = testspinclear();
+			}
+		}
+		show();
+		// testset();
+	}
+	function movex(x, cb = () => { }) {
+		clear();
+		_movex(x);
+		if (test()) {
+			spinaction = 0;
+		} else {
+			_movex(-x);
+			cb();
+		}
+		show();
+		// testset();
+	}
+	function movey(y, cb = () => { }) {
+		clear();
+		_movey(y);
+		if (test()) {
+			spinaction = 0;
+		} else {
+			_movey(-y);
+			cb();
+		}
+		show();
+		// testset();
+	}
+	function isfloor() {
+		let b = 0;
+		_movey(-1);
+		if (test()) {
+			b = 0;
+		} else {
+			b = 1;
+		}
+		_movey(1);
+		return b;
+	}
+	function testset() {
+		if (isfloor()) {
+			set();
+		}
+	}
+	function harddrop() {
+		clear();
+		do {
+			_movey(-1);
+		} while (test());
+		_movey(1);
+		show();
+		testset();
+	}
+	function showmin(minarr, id) {
+		let md = minodata[id];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				let _x = j;
+				let _y = i;
+				let ma = minarr[_y][_x];
+				if (md.mr[0][i][j] == 1) {
+					ma.id = id;
+					ma.color = loadcolor(color.mino[id], proportion.move);
+				} else {
+					ma.id = 0;
+					ma.color = 'none';
+				}
+			}
+		}
+	}
+	function hold() {
+		if (holduse == 1)
+			return;
+		holduse = 1;
+		clear();
+		if (_hold == 0) {
+			_hold = id;
+			showmin(holdarr, id);
+			nextload();
+			testgameover();
+			show();
+		} else {
+			[_hold, id] = [id, _hold];
+			showmin(holdarr, _hold);
+			rotate = 0;
+			x = 5;
+			y = 20;
+			testgameover();
+			show();
+		}
+	}
+	function holdreset() {
+		showmin(holdarr, 0);
+	}
+	function clearline() {
+		let linecnt = 0;
+		let lineclear = [];
+		let linenew = [];
+		for (let i = 0; i < hall; i++) {
+			lineclear[i] = 1;
+			for (let j = 0; j < w; j++) {
+				if (boardarr[i][j].set == 0) {
+					lineclear[i] = 0;
+					break;
+				}
+			}
+			if (lineclear[i] == 1) {
+				linecnt++;
+			}
+
+		}
+		let linecnt2 = 0;
+		for (let i = 0; i < hall; i++) {
+			while (typeof lineclear[i + linecnt2] != 'undefined' && lineclear[i + linecnt2] == 1) {
+				linecnt2++;
+			}
+			linenew[i] = i + linecnt2;
+		}
+		for (let i = 0; i < hall; i++) {
+			if (linenew[i] < hall) {
+				let k = linenew[i];
+				for (let j = 0; j < w; j++) {
+					boardarr[i][j].cnt = boardarr[k][j].cnt;
+					boardarr[i][j].id = boardarr[k][j].id;
+					boardarr[i][j].set = boardarr[k][j].set;
+					boardarr[i][j].color = boardarr[k][j].color;
+				}
+			} else {
+				for (let j = 0; j < w; j++) {
+					boardarr[i][j].cnt = 0;
+					boardarr[i][j].id = 0;
+					boardarr[i][j].set = 0;
+					boardarr[i][j].color = 'none';
+				}
+			}
+		}
+		sent.test(id, linecnt, spinaction);
+	}
+	return {
+		reset,
+		show,
+		holdreset,
+		nextreset,
+		spin,
+		movex,
+		movey,
+		harddrop,
+		hold,
+	};
+})();
 
 var action = {
 	play() {
 		mainboard.style.zIndex = -1;
-		now = new mino();
-		now.show();
-		now.holdreset();
+		mino.reset();
+		mino.show();
+		mino.holdreset();
 		time.start();
-		game.change('play');
+		game.mod = 'play';
 	},
 	over() {
-		game.change('pause');
+		game.mod = 'pause';
 		keyreset();
 		gameover.opacity = 1;
 		timeup.opacity = 0;
 		overboard.style.zIndex = 1;
 		time.stop();
-		game.change('over');
+		game.mod = 'over';
 	},
 	timeup() {
-		game.change('pause');
+		game.mod = 'pause';
 		keyreset();
 		gameover.opacity = 0;
 		timeup.opacity = 1;
 		overboard.style.zIndex = 1;
 		time.stop();
-		game.change('over');
+		game.mod = 'over';
 	},
 	tomain() {
-		now.holdreset();
-		now.nextreset();
+		mino.holdreset();
+		mino.nextreset();
 		keyreset();
 		sent.reset();
 		time.reset();
 		boardreset();
 		overboard.style.zIndex = -1;
 		mainboard.style.zIndex = 1;
-		game.change('load');
+		game.mod = 'load';
 	}
 };
 
 var game = {
-	change(name) {
+	set mod(name) {
 		window.onkeydown = (e) => {
 			// console.log(e.code);
 			game[name].down(e);
@@ -652,46 +1066,46 @@ var game = {
 			switch (e.code) {
 				case key.spinleft.use:
 					if (key.spinleft.lock == 0) {
-						now.spin(-1);
+						mino.spin(-1);
 						key.spinleft.lock = 1;
 					}
 					break;
 				case key.spinleft2.use:
 					if (key.spinleft2.lock == 0) {
-						now.spin(-1);
+						mino.spin(-1);
 						key.spinleft2.lock = 1;
 					}
 					break;
 				case key.spinright.use:
 					if (key.spinright.lock == 0) {
-						now.spin(1);
+						mino.spin(1);
 						key.spinright.lock = 1;
 					}
 					break;
 				case key.spinright2.use:
 					if (key.spinright2.lock == 0) {
-						now.spin(1);
+						mino.spin(1);
 						key.spinright2.lock = 1;
 					}
 					break;
 				case key.spinhalf.use:
 					if (key.spinhalf.lock == 0) {
-						now.spin(2);
+						mino.spin(2);
 						key.spinhalf.lock = 1;
 					}
 					break;
 				case key.spinhalf2.use:
 					if (key.spinhalf2.lock == 0) {
-						now.spin(2);
+						mino.spin(2);
 						key.spinhalf2.lock = 1;
 					}
 					break;
 				case key.left.use:
 					if (key.left.lock == 0) {
-						now.movex(-1);
+						mino.movex(-1);
 						key.left.lock = 1;
 						key.left.timeout = setTimeout(() => {
-							now.movex(-1, () => {
+							mino.movex(-1, () => {
 								if (key.left.timeout != null) {
 									clearTimeout(key.left.timeout);
 								}
@@ -701,7 +1115,7 @@ var game = {
 							});
 							key.left.timeout = null;
 							key.left.interval = setInterval(() => {
-								now.movex(-1, () => {
+								mino.movex(-1, () => {
 									if (key.left.timeout != null) {
 										clearTimeout(key.left.timeout);
 									}
@@ -715,10 +1129,10 @@ var game = {
 					break;
 				case key.right.use:
 					if (key.right.lock == 0) {
-						now.movex(1);
+						mino.movex(1);
 						key.right.lock = 1;
 						key.right.timeout = setTimeout(() => {
-							now.movex(1, () => {
+							mino.movex(1, () => {
 								if (key.right.timeout != null) {
 									clearTimeout(key.right.timeout);
 								}
@@ -728,7 +1142,7 @@ var game = {
 							});
 							key.right.timeout = null;
 							key.right.interval = setInterval(() => {
-								now.movex(1, () => {
+								mino.movex(1, () => {
 									if (key.right.timeout != null) {
 										clearTimeout(key.right.timeout);
 									}
@@ -742,32 +1156,32 @@ var game = {
 					break;
 				case key.soft.use:
 					if (key.soft.lock == 0) {
-						now.movey(-1);
+						mino.movey(-1);
 						key.soft.lock = 1;
 						key.soft.timeout = setTimeout(() => {
-							now.movey(-1);
+							mino.movey(-1);
 							key.soft.timeout = null;
 							key.soft.interval = setInterval(() => {
-								now.movey(-1);
+								mino.movey(-1);
 							}, delay.down.interval.data);
 						}, delay.down.start.data);
 					}
 					break;
 				case key.hard.use:
 					if (key.hard.lock == 0) {
-						now.harddrop();
+						mino.harddrop();
 						key.hard.lock = 1;
 					}
 					break;
 				case key.hold.use:
 					if (key.hold.lock == 0) {
-						now.hold();
+						mino.hold();
 						key.hold.lock = 1;
 					}
 					break;
 				case key.hold2.use:
 					if (key.hold2.lock == 0) {
-						now.hold();
+						mino.hold();
 						key.hold2.lock = 1;
 					}
 					break;
@@ -842,421 +1256,20 @@ var game = {
 			keytmp.obj.color = '#444';
 			keytmp.obj.show = keytmp.obj.use;
 			setCookie(keytmp.ckn, keytmp.obj.use);
-			game.change('pause');
+			game.mod = 'pause';
 		},
 		up(e) {
 		}
 	}
 };
 
-class mino {
-	constructor() {
-		this.cnt = 1;
-		this.next = [0];
-		this.nextcnt = 0;
-		this._hold = 0;
-		this.holduse = 0;
-		this.spinaction = 0;
-		this.nextload();
-	}
-	nextload() {
-		while (this.nextcnt * 7 - this.cnt < 14) {
-			let arr = [1, 2, 3, 4, 5, 6, 7];
-			for (let i = 0; i < 7; i++) {
-				let j = Math.floor(Math.random() * 7);
-				let t = arr[i];
-				arr[i] = arr[j];
-				arr[j] = t;
-			}
-			for (let i = 0; i < 7; i++) {
-				this.next.push(arr[i]);
-			}
-			this.nextcnt++;
-		}
-		this.id = this.next[this.cnt++];
-		this.rotate = 0;
-		this.x = 5;
-		this.y = 20;
-		for (let i = 0; i < nextlen; i++) {
-			this.showmin(nextarr[i], this.next[this.cnt + i]);
-		}
-	}
-	nextreset() {
-		for (let i = 0; i < nextlen; i++) {
-			this.showmin(nextarr[i], 0);
-		}
-	}
-	show() {
-		if (ghost.open) {
-			this.showghost();
-		}
-		this.showmino();
-	}
-	clear() {
-		this.clearmino();
-		if (ghost.open) {
-			this.clearghost();
-		}
-	}
-	test() {
-		return this.testmino();
-	}
-	showmino() {
-		let md = minodata[this.id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = this.x + j - 2;
-				let y = this.y + i - 2 + md.ofs;
-				if (md.mr[this.rotate][i][j] == 1) {
-					let ba = boardarr[y][x];
-					ba.id = this.id;
-					ba.color = loadcolor(color.mino[this.id], proportion.move);
-				}
-			}
-		}
-	}
-	clearmino() {
-		let md = minodata[this.id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = this.x + j - 2;
-				let y = this.y + i - 2 + md.ofs;
-				if (md.mr[this.rotate][i][j] == 1) {
-					let ba = boardarr[y][x];
-					ba.id = 0;
-					ba.color = 'none';
-				}
-			}
-		}
-	}
-	testmino() {
-		let md = minodata[this.id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = this.x + j - 2;
-				let y = this.y + i - 2 + md.ofs;
-				if (md.mr[this.rotate][i][j] == 1) {
-					if (x < 0 || x >= w) {
-						return 0;
-					}
-					if (y < 0 || y >= hall) {
-						return 0;
-					}
-					let ba = boardarr[y][x];
-					if (ba.set == 1) {
-						return 0;
-					}
-				}
-			}
-		}
-		return 1;
-	}
-	showghost() {
-		let md = minodata[this.id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = this.x + j - 2;
-				let y = this.ofsyghost() + i - 2 + md.ofs;
-				if (md.mr[this.rotate][i][j] == 1) {
-					let ba = boardarr[y][x];
-					ba.id = this.id;
-					ba.color = loadcolor(color.mino[this.id], proportion.ghost);
-				}
-			}
-		}
-	}
-	clearghost() {
-		let md = minodata[this.id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = this.x + j - 2;
-				let y = this.ofsyghost() + i - 2 + md.ofs;
-				if (md.mr[this.rotate][i][j] == 1) {
-					let ba = boardarr[y][x];
-					ba.id = 0;
-					ba.color = 'none';
-				}
-			}
-		}
-	}
-	testghost(yy) {
-		let md = minodata[this.id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = this.x + j - 2;
-				let y = yy + i - 2 + md.ofs;
-				if (md.mr[this.rotate][i][j] == 1) {
-					if (x < 0 || x >= w) {
-						return 0;
-					}
-					if (y < 0 || y >= hall) {
-						return 0;
-					}
-					let ba = boardarr[y][x];
-					if (ba.set == 1) {
-						return 0;
-					}
-				}
-			}
-		}
-		return 1;
-	}
-	ofsyghost() {
-		for (let i = 1; i <= hall; i++) {
-			if (!this.testghost(this.y - i)) {
-				return this.y - i + 1;
-			}
-		}
-		return 0;
-	}
-	_testspinclear(ofsx, ofsy) {
-		let md = minodata[this.id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = this.x + ofsx + j - 2;
-				let y = this.y + ofsy + i - 2 + md.ofs;
-				if (md.mr[this.rotate][i][j] == 1) {
-					if (x < 0 || x >= w) {
-						return 1;
-					}
-					if (y < 0 || y >= hall) {
-						return 1;
-					}
-					let ba = boardarr[y][x];
-					if (ba.set == 1) {
-						return 1;
-					}
-				}
-			}
-		}
-		return 0;
-	}
-	testspinclear() {
-		return (
-			this._testspinclear(-1, 0) &&
-			this._testspinclear(1, 0) &&
-			this._testspinclear(0, -1) &&
-			this._testspinclear(0, 1));
-	}
-	testgameover() {
-		if (this.test()) {
-		} else {
-			this.y = 21;
-			if (this.test()) {
-			} else {
-				action.over();
-			}
-		}
-	}
-	set() {
-		let md = minodata[this.id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = this.x + j - 2;
-				let y = this.y + i - 2 + md.ofs;
-				if (md.mr[this.rotate][i][j] == 1) {
-					let ba = boardarr[y][x];
-					ba.id = this.id;
-					ba.color = loadcolor(color.mino[this.id], proportion.set);
-					ba.cnt = this.cnt;
-					ba.set = 1;
-				}
-			}
-		}
-		this.clearline();
-		this.nextload();
-		this.testgameover();
-		this.spinaction = 0;
-		this.show();
-		this.holduse = 0;
-	}
-	_spin(r) {
-		this.rotate += r;
-		if (this.rotate >= 4)
-			this.rotate -= 4;
-		if (this.rotate < 0)
-			this.rotate += 4;
-	}
-	_movex(x) {
-		this.x += x;
-	}
-	_movey(y) {
-		this.y += y;
-	}
-	spin(r) {
-		let md = minodata[this.id];
-		let j = this.rotate;
-		this.clear();
-		this._spin(r);
-		let k = this.rotate;
-		let s = srs[md.srs][j][k];
-		let b = 0;
-		for (let i = 0; i < 5; i++) {
-			this.x += s[i].x;
-			this.y += s[i].y;
-			if (this.test()) {
-				b = 1;
-				break;
-			} else {
-				this.x -= s[i].x;
-				this.y -= s[i].y;
-			}
-		}
-		if (b == 1) {
-			if (md.bonus == 1) {
-				this.spinaction = this.testspinclear();
-			}
-		} else {
-			this._spin(-r);
-		}
-		this.show();
-		// this.testset();
-	}
-	movex(x, cb = () => { }) {
-		this.clear();
-		this._movex(x);
-		if (this.test()) {
-			this.spinaction = 0;
-		} else {
-			this._movex(-x);
-			cb();
-		}
-		this.show();
-		// this.testset();
-	}
-	movey(y, cb = () => { }) {
-		this.clear();
-		this._movey(y);
-		if (this.test()) {
-			this.spinaction = 0;
-		} else {
-			this._movey(-y);
-			cb();
-		}
-		this.show();
-		// this.testset();
-	}
-	isfloor() {
-		let b = 0;
-		this._movey(-1);
-		if (this.test()) {
-			b = 0;
-		} else {
-			b = 1;
-		}
-		this._movey(1);
-		return b;
-	}
-	testset() {
-		if (this.isfloor()) {
-			this.set();
-		}
-	}
-	harddrop() {
-		this.clear();
-		do {
-			this._movey(-1);
-		} while (this.test());
-		this._movey(1);
-		this.show();
-		this.testset();
-	}
-	showmin(minarr, id) {
-		let md = minodata[id];
-		for (let i = 0; i < 4; i++) {
-			for (let j = 0; j < 4; j++) {
-				let x = j;
-				let y = i;
-				let ma = minarr[y][x];
-				if (md.mr[0][i][j] == 1) {
-					ma.id = id;
-					ma.color = loadcolor(color.mino[id], proportion.move);
-				} else {
-					ma.id = 0;
-					ma.color = 'none';
-				}
-			}
-		}
-	}
-	hold() {
-		if (this.holduse == 1)
-			return;
-		this.holduse = 1;
-		this.clear();
-		if (this._hold == 0) {
-			this._hold = this.id;
-			this.showmin(holdarr, this.id);
-			this.nextload();
-			this.testgameover();
-			this.show();
-		} else {
-			let tmp = this._hold;
-			this._hold = this.id;
-			this.showmin(holdarr, this.id);
-			this.id = tmp;
-			this.rotate = 0;
-			this.x = 5;
-			this.y = 20;
-			this.testgameover();
-			this.show();
-		}
-	}
-	holdreset() {
-		this.showmin(holdarr, 0);
-	}
-	clearline() {
-		let linecnt = 0;
-		let lineclear = [];
-		let linenew = [];
-		for (let i = 0; i < hall; i++) {
-			lineclear[i] = 1;
-			for (let j = 0; j < w; j++) {
-				if (boardarr[i][j].set == 0) {
-					lineclear[i] = 0;
-					break;
-				}
-			}
-			if (lineclear[i] == 1) {
-				linecnt++;
-			}
-
-		}
-		let linecnt2 = 0;
-		for (let i = 0; i < hall; i++) {
-			while (typeof lineclear[i + linecnt2] != 'undefined' && lineclear[i + linecnt2] == 1) {
-				linecnt2++;
-			}
-			linenew[i] = i + linecnt2;
-		}
-		for (let i = 0; i < hall; i++) {
-			if (linenew[i] < hall) {
-				let k = linenew[i];
-				for (let j = 0; j < w; j++) {
-					boardarr[i][j].cnt = boardarr[k][j].cnt;
-					boardarr[i][j].id = boardarr[k][j].id;
-					boardarr[i][j].set = boardarr[k][j].set;
-					boardarr[i][j].color = boardarr[k][j].color;
-				}
-			} else {
-				for (let j = 0; j < w; j++) {
-					boardarr[i][j].cnt = 0;
-					boardarr[i][j].id = 0;
-					boardarr[i][j].set = 0;
-					boardarr[i][j].color = 'none';
-				}
-			}
-		}
-		sent.test(this.id, linecnt, this.spinaction);
-	}
-}
-
 function createUseAndSetId(id) {
-	return nodetext2svgnode(`<use xlink:href="#${id}"/>`);
+	return text2svg(`<use xlink:href="#${id}"/>`);
 }
 function createMino(bg, run, x, y, bgcolor) {
-	let rect = nodetext2svgnode(`<rect width="1" height="1" x="${x}" y="${y}" fill="${bgcolor}"/>`);
+	let rect = text2svg(`<rect width="1" height="1" x="${x}" y="${y}" fill="${bgcolor}"/>`);
 	bg.append(rect);
-	rect = nodetext2svgnode(`<rect width="1" height="1" x="${x}" y="${y}" fill="none"/>`);
+	rect = text2svg(`<rect width="1" height="1" x="${x}" y="${y}" fill="none"/>`);
 	run.append(rect);
 	return {
 		cnt: 0, id: 0, set: 0,
@@ -1270,15 +1283,15 @@ function createMino(bg, run, x, y, bgcolor) {
 }
 
 function createValueSet(obj, name, x, y, low, high, unit, cb = () => { }) {
-	let g = nodetext2svgnode(`<g transform="translate(${x},${y})"></g>`);
+	let g = text2svg(`<g transform="translate(${x},${y})"></g>`);
 
-	let text = nodetext2svgnode(`<text x="140" y="22" fill="#222" stroke="#222" stroke-width="1">${name}</text>`);
+	let text = text2svg(`<text x="140" y="22" fill="#222" stroke="#222" stroke-width="1">${name}</text>`);
 	g.append(text);
 
 	let vlrt = createUseAndSetId('vlrt');
 	g.append(vlrt);
 
-	let value = nodetext2svgnode(`<text x="140" y="53" fill="#fff" stroke="#fff" stroke-width="1"></text>`);
+	let value = text2svg(`<text x="140" y="53" fill="#fff" stroke="#fff" stroke-width="1"></text>`);
 	g.append(value);
 	let valuename = name.replace(/ /g, '_') + '_value';
 	let cv = getCookie(valuename);
@@ -1324,12 +1337,12 @@ function createValueSet(obj, name, x, y, low, high, unit, cb = () => { }) {
 }
 
 function createCheckBox(obj, name, cookie, x, y, cb = () => { }) {
-	let g = nodetext2svgnode(`<g class="check" transform="translate(${x},${y})"></g>`);
-	let rect = nodetext2svgnode(`<use xlink:href="#cbrect"/>`);
+	let g = text2svg(`<g class="check" transform="translate(${x},${y})"></g>`);
+	let rect = text2svg(`<use xlink:href="#cbrect"/>`);
 	g.append(rect);
-	let path = nodetext2svgnode(`<use xlink:href="#cbpath"/>`);
+	let path = text2svg(`<use xlink:href="#cbpath"/>`);
 	g.append(path);
-	let text = nodetext2svgnode(`<text x="30" y="22" fill="#222" stroke="#222" stroke-width="1">${name}</text>`);
+	let text = text2svg(`<text x="30" y="22" fill="#222" stroke="#222" stroke-width="1">${name}</text>`);
 	g.append(text);
 	let cv = getCookie(cookie);
 	if (cv == '' || isNaN(cv)) cv = obj.open;
@@ -1370,10 +1383,10 @@ window.onload = () => {
 	next.style.setProperty('--nextlen', nextlen);
 	for (let k = 0; k < nextlen; k++) {
 		nextarr[k] = [];
-		let nextsvg = nodetext2svgnode(`<svg viewBox="0 0 4 4" class="next" style="--n:${k};"></svg>`);
+		let nextsvg = text2svg(`<svg viewBox="0 0 4 4" class="next" style="--n:${k};"></svg>`);
 		next.append(nextsvg);
-		let nextbg = nodetext2svgnode(`<g></g>`);
-		let nextrun = nodetext2svgnode(`<g></g>`);
+		let nextbg = text2svg(`<g></g>`);
+		let nextrun = text2svg(`<g></g>`);
 		nextsvg.append(nextbg, nextrun);
 		for (let i = 0; i < 4; i++) {
 			nextarr[k][i] = [];
@@ -1382,7 +1395,7 @@ window.onload = () => {
 			}
 		}
 	}
-	game.change('load');
+	game.mod = 'load';
 
 	sent.initial();
 	time.initial();
@@ -1393,12 +1406,12 @@ window.onload = () => {
 
 	keybtn.onclick = () => {
 		keysetboard.style.zIndex = 1;
-		game.change('pause');
+		game.mod = 'pause';
 	};
 
 	otherbtn.onclick = () => {
 		otherboard.style.zIndex = 1;
-		game.change('pause');
+		game.mod = 'pause';
 	};
 
 	overok.onclick = () => {
@@ -1410,24 +1423,24 @@ window.onload = () => {
 			key[ii].color = '#444';
 		}
 		keysetboard.style.zIndex = -1;
-		game.change('load');
+		game.mod = 'load';
 	};
 
 	otherok.onclick = () => {
 		otherboard.style.zIndex = -1;
-		game.change('load');
+		game.mod = 'load';
 	};
 
 	let i = 0;
 	for (let ii in key) {
 		let nowkey = key[ii];
-		let g = nodetext2svgnode(`<g transform="translate(13,${i * 38 + 10})"></g>`);
+		let g = text2svg(`<g transform="translate(13,${i * 38 + 10})"></g>`);
 		keyset.append(g);
 
-		let text = nodetext2svgnode(`<text y="22" fill="#222" stroke="#222" stroke-width="1">${nowkey.name}</text>`);
+		let text = text2svg(`<text y="22" fill="#222" stroke="#222" stroke-width="1">${nowkey.name}</text>`);
 		g.append(text);
 
-		let rect = nodetext2svgnode(`<rect x="115" y="8" rx="5" ry="5" width="140" height="25" fill="#444"/>`);
+		let rect = text2svg(`<rect x="115" y="8" rx="5" ry="5" width="140" height="25" fill="#444"/>`);
 		g.append(rect);
 		Object.defineProperty(nowkey, 'color', {
 			set: function (c) {
@@ -1438,7 +1451,7 @@ window.onload = () => {
 		let ck = getCookie('key_' + ii);
 		if (ck == '') ck = nowkey.use;
 		nowkey.use = ck;
-		let show = nodetext2svgnode(`<text x="125" y="22" fill="#fff" stroke="#fff" stroke-width="1">${nowkey.use}</text>`);
+		let show = text2svg(`<text x="125" y="22" fill="#fff" stroke="#fff" stroke-width="1">${nowkey.use}</text>`);
 		g.append(show);
 		Object.defineProperty(nowkey, 'show', {
 			set: function (k) {
@@ -1455,7 +1468,7 @@ window.onload = () => {
 			nowkey.color = '#066';
 			keytmp.ckn = ckn;
 			keytmp.obj = key[iii];
-			game.change('keyset');
+			game.mod = 'keyset';
 		};
 		i++;
 	}
