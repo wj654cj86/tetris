@@ -447,7 +447,7 @@ var sent = (() => {
 		combo = 0,
 		interval = null;
 	function initial() {
-		sentnum.str = this.num;
+		sentnum.str = num;
 	}
 	function reset() {
 		num = 0;
