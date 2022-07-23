@@ -408,7 +408,7 @@ var time = (() => {
 		data = 2,
 		interval = null;
 	function str() {
-		return paddingLeft(Math.floor(num / 60), 2) + ':' + paddingLeft(num % 60, 2);
+		return Math.floor(num / 60).padStart(2, 0) + ':' + (num % 60).padStart(2, 0);
 	}
 	function initial() {
 		num = data * 60;
@@ -438,7 +438,9 @@ var time = (() => {
 		initial,
 		reset,
 		start,
-		stop
+		stop,
+		get data() { return data; },
+		set data(d) { data = d; }
 	};
 })();
 var sent = (() => {
