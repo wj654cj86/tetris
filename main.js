@@ -1,13 +1,14 @@
-var hall = 100;
-var h = 20.2;
-var w = 10;
-var boardarr = [];
-var sl = 40;
-var holdarr = [];
-var nextarr = [];
-var slmin = 35;
-var nextlen = 5;
-var color = {
+import cc from "./colorconvert.js";
+let hall = 100;
+let h = 20.2;
+let w = 10;
+let boardarr = [];
+let sl = 40;
+let holdarr = [];
+let nextarr = [];
+let slmin = 35;
+let nextlen = 5;
+let color = {
 	mino: [
 		'#000',
 		'#0ff',
@@ -29,8 +30,8 @@ var color = {
 		'#0ff',
 	]
 };
-var proportion = { move: [0, 0], set: [0.2, 0], ghost: [0, 0.4], text: [0, 0] };
-var minodata = [
+let proportion = { move: [0, 0], set: [0.2, 0], ghost: [0, 0.4], text: [0, 0] };
+let minodata = [
 	{
 		name: 'X', ofs: 0, srs: 0, bonus: -1, md: [[
 			[0, 0, 0, 0],
@@ -218,14 +219,14 @@ for (let i = 0; i <= 7; i++) {
 		}
 	}
 }
-var bonus = [
+let bonus = [
 	{ open: 0, mino: [1] },
 	{ open: 1, mino: [3] },
 	{ open: 0, mino: [4, 5] },
 	{ open: 0, mino: [6, 7] }
 ];
 
-var srs = {
+let srs = {
 	3: {
 		0: {
 			1: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: -1, y: 1 }, { x: 0, y: -2 }, { x: -1, y: -2 }],
@@ -272,7 +273,7 @@ var srs = {
 	}
 }
 
-var sentdata = {
+let sentdata = {
 	line: [
 		{ name: '      ', sent: { normal: { normal: 0, b2b: 0 }, spin: { normal: 0, b2b: 0 } } },
 		{ name: 'Single', sent: { normal: { normal: 0, b2b: 0 }, spin: { normal: 2, b2b: 3 } } },
@@ -283,18 +284,18 @@ var sentdata = {
 	combo: [0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5]
 };
 
-var delay = {
+let delay = {
 	move: { start: { data: 100 }, interval: { data: 35 } },
 	down: { start: { data: 30 }, interval: { data: 10 } }
 };
-var delayname = {
+let delayname = {
 	move: 'Move',
 	down: 'Down',
 	start: 'second',
 	interval: 'delay'
 };
-var ghost = { open: 1 };
-var key = {
+let ghost = { open: 1 };
+let key = {
 	newgame: {
 		name: 'Determine', use: 'Enter',
 		lock: 0, timeout: null, interval: null
@@ -348,7 +349,7 @@ var key = {
 		lock: 0, timeout: null, interval: null
 	}
 };
-var keytmp = { ckn: '', obj: null };
+let keytmp = { ckn: '', obj: null };
 
 function keyreset() {
 	for (let name in key) {
@@ -379,8 +380,8 @@ function loadcolor(orgrgb, proportion) {
 	let d = max - min;
 	let c = 1 - max;
 	let p = proportion.indexOf(max);
-	let outrgb = hexToRgb(orgrgb).map(v => Math.round(v * c + [0, 255][p] * d + 127.5 * min));
-	return rgbToHex(...outrgb);
+	let outrgb = cc.hex.rgb(orgrgb).map(v => Math.round(v * c + [0, 255][p] * d + 127.5 * min));
+	return cc.rgb.hex(...outrgb);
 }
 
 Object.defineProperty(Node.prototype, 'opacity', {
@@ -403,7 +404,7 @@ Object.defineProperty(Node.prototype, 'str', {
 	}
 });
 
-var time = (() => {
+let time = (() => {
 	let num = 0,
 		data = 2,
 		interval = null;
@@ -443,7 +444,7 @@ var time = (() => {
 		set data(d) { data = d; }
 	};
 })();
-var sent = (() => {
+let sent = (() => {
 	let num = 0,
 		b2b = 0,
 		combo = 0,
@@ -567,7 +568,7 @@ var sent = (() => {
 	}
 })();
 
-var mino = (() => {
+let mino = (() => {
 	let cnt = 1,
 		next = [0],
 		nextcnt = 0,
@@ -978,7 +979,7 @@ var mino = (() => {
 	};
 })();
 
-var action = {
+let action = {
 	play() {
 		mainboard.style.zIndex = -1;
 		mino.reset();
@@ -1018,7 +1019,7 @@ var action = {
 	}
 };
 
-var game = {
+let game = {
 	set mod(name) {
 		window.onkeydown = (e) => {
 			// console.log(e.code);
@@ -1364,133 +1365,132 @@ function createCheckBox(obj, name, cookie, x, y, cb = () => { }) {
 	return g;
 }
 
-window.onload = () => {
-	document.body.style.setProperty('--w', w);
-	document.body.style.setProperty('--h', h);
-	document.body.style.setProperty('--sl', sl + 'px');
-	board.setAttribute('viewBox', [0, 0, w, h].join(' '));
-	for (let i = 0; i < hall; i++) {
-		boardarr[i] = [];
-		for (let j = 0; j < w; j++) {
-			boardarr[i][j] = createMino(boardbg, boardrun, j, h - 1 - i, (i + j) % 2 == 1 ? '#fff' : '#eee');
-		}
+
+document.body.style.setProperty('--w', w);
+document.body.style.setProperty('--h', h);
+document.body.style.setProperty('--sl', sl + 'px');
+board.setAttribute('viewBox', [0, 0, w, h].join(' '));
+for (let i = 0; i < hall; i++) {
+	boardarr[i] = [];
+	for (let j = 0; j < w; j++) {
+		boardarr[i][j] = createMino(boardbg, boardrun, j, h - 1 - i, (i + j) % 2 == 1 ? '#fff' : '#eee');
 	}
-	document.body.style.setProperty('--slmin', slmin + 'px');
+}
+document.body.style.setProperty('--slmin', slmin + 'px');
+for (let i = 0; i < 4; i++) {
+	holdarr[i] = [];
+	for (let j = 0; j < 4; j++) {
+		holdarr[i][j] = createMino(holdbg, holdrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
+	}
+}
+next.style.setProperty('--nextlen', nextlen);
+for (let k = 0; k < nextlen; k++) {
+	nextarr[k] = [];
+	let nextsvg = text2svg(`<svg viewBox="0 0 4 4" class="next" style="--n:${k};"></svg>`);
+	next.append(nextsvg);
+	let nextbg = text2svg(`<g></g>`);
+	let nextrun = text2svg(`<g></g>`);
+	nextsvg.append(nextbg, nextrun);
 	for (let i = 0; i < 4; i++) {
-		holdarr[i] = [];
+		nextarr[k][i] = [];
 		for (let j = 0; j < 4; j++) {
-			holdarr[i][j] = createMino(holdbg, holdrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
+			nextarr[k][i][j] = createMino(nextbg, nextrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
 		}
 	}
-	next.style.setProperty('--nextlen', nextlen);
-	for (let k = 0; k < nextlen; k++) {
-		nextarr[k] = [];
-		let nextsvg = text2svg(`<svg viewBox="0 0 4 4" class="next" style="--n:${k};"></svg>`);
-		next.append(nextsvg);
-		let nextbg = text2svg(`<g></g>`);
-		let nextrun = text2svg(`<g></g>`);
-		nextsvg.append(nextbg, nextrun);
-		for (let i = 0; i < 4; i++) {
-			nextarr[k][i] = [];
-			for (let j = 0; j < 4; j++) {
-				nextarr[k][i][j] = createMino(nextbg, nextrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
-			}
-		}
+}
+game.mod = 'load';
+
+sent.initial();
+time.initial();
+
+playbtn.onclick = () => {
+	action.play();
+};
+
+keybtn.onclick = () => {
+	keysetboard.style.zIndex = 1;
+	game.mod = 'pause';
+};
+
+otherbtn.onclick = () => {
+	otherboard.style.zIndex = 1;
+	game.mod = 'pause';
+};
+
+overok.onclick = () => {
+	action.tomain();
+};
+
+keysetok.onclick = () => {
+	for (let ii in key) {
+		key[ii].color = '#444';
 	}
+	keysetboard.style.zIndex = -1;
 	game.mod = 'load';
+};
 
-	sent.initial();
-	time.initial();
+otherok.onclick = () => {
+	otherboard.style.zIndex = -1;
+	game.mod = 'load';
+};
 
-	playbtn.onclick = () => {
-		action.play();
-	};
+let i = 0;
+for (let ii in key) {
+	let nowkey = key[ii];
+	let g = text2svg(`<g transform="translate(13,${i * 38 + 10})"></g>`);
+	keyset.append(g);
 
-	keybtn.onclick = () => {
-		keysetboard.style.zIndex = 1;
-		game.mod = 'pause';
-	};
+	let text = text2svg(`<text y="22" fill="#222" stroke="#222" stroke-width="1">${nowkey.name}</text>`);
+	g.append(text);
 
-	otherbtn.onclick = () => {
-		otherboard.style.zIndex = 1;
-		game.mod = 'pause';
-	};
+	let rect = text2svg(`<rect x="115" y="8" rx="5" ry="5" width="140" height="25" fill="#444"/>`);
+	g.append(rect);
+	Object.defineProperty(nowkey, 'color', {
+		set: function (c) {
+			rect.setAttribute('fill', c);
+		}
+	});
 
-	overok.onclick = () => {
-		action.tomain();
-	};
+	let ck = getCookie('key_' + ii);
+	if (ck == '') ck = nowkey.use;
+	nowkey.use = ck;
+	let show = text2svg(`<text x="125" y="22" fill="#fff" stroke="#fff" stroke-width="1">${nowkey.use}</text>`);
+	g.append(show);
+	Object.defineProperty(nowkey, 'show', {
+		set: function (k) {
+			show.innerHTML = k;
+		}
+	});
 
-	keysetok.onclick = () => {
+	let ckn = 'key_' + ii;
+	let iii = ii;
+	g.onclick = () => {
 		for (let ii in key) {
 			key[ii].color = '#444';
 		}
-		keysetboard.style.zIndex = -1;
-		game.mod = 'load';
+		nowkey.color = '#066';
+		keytmp.ckn = ckn;
+		keytmp.obj = key[iii];
+		game.mod = 'keyset';
 	};
+	i++;
+}
 
-	otherok.onclick = () => {
-		otherboard.style.zIndex = -1;
-		game.mod = 'load';
-	};
-
-	let i = 0;
-	for (let ii in key) {
-		let nowkey = key[ii];
-		let g = text2svg(`<g transform="translate(13,${i * 38 + 10})"></g>`);
-		keyset.append(g);
-
-		let text = text2svg(`<text y="22" fill="#222" stroke="#222" stroke-width="1">${nowkey.name}</text>`);
-		g.append(text);
-
-		let rect = text2svg(`<rect x="115" y="8" rx="5" ry="5" width="140" height="25" fill="#444"/>`);
-		g.append(rect);
-		Object.defineProperty(nowkey, 'color', {
-			set: function (c) {
-				rect.setAttribute('fill', c);
-			}
-		});
-
-		let ck = getCookie('key_' + ii);
-		if (ck == '') ck = nowkey.use;
-		nowkey.use = ck;
-		let show = text2svg(`<text x="125" y="22" fill="#fff" stroke="#fff" stroke-width="1">${nowkey.use}</text>`);
-		g.append(show);
-		Object.defineProperty(nowkey, 'show', {
-			set: function (k) {
-				show.innerHTML = k;
-			}
-		});
-
-		let ckn = 'key_' + ii;
-		let iii = ii;
-		g.onclick = () => {
-			for (let ii in key) {
-				key[ii].color = '#444';
-			}
-			nowkey.color = '#066';
-			keytmp.ckn = ckn;
-			keytmp.obj = key[iii];
-			game.mod = 'keyset';
-		};
+i = 0;
+for (let ii in delay) {
+	for (let jj in delay[ii]) {
+		gameset.append(createValueSet(delay[ii][jj], delayname[ii] + ' ' + delayname[jj], 0, i * 60, 0, 1000, 'ms'));
 		i++;
 	}
-
-	i = 0;
-	for (let ii in delay) {
-		for (let jj in delay[ii]) {
-			gameset.append(createValueSet(delay[ii][jj], delayname[ii] + ' ' + delayname[jj], 0, i * 60, 0, 1000, 'ms'));
-			i++;
+}
+gameset.append(createValueSet(time, 'Game Time', 0, 360, 0, 60, 'min', () => time.reset()));
+gameset.append(createCheckBox(ghost, 'Open Ghost', 'openghost', 70, 250));
+for (let i = 0; i < 4; i++) {
+	gameset.append(createCheckBox(bonus[i], Array.from(bonus[i].mino, m => minodata[m].name).join(''), 'spinbonus' + i, 30 + i * 60, 320, () => {
+		for (let j = 0; j < bonus[i].mino.length; j++) {
+			minodata[bonus[i].mino[j]].bonus = bonus[i].open;
 		}
-	}
-	gameset.append(createValueSet(time, 'Game Time', 0, 360, 0, 60, 'min', () => time.reset()));
-	gameset.append(createCheckBox(ghost, 'Open Ghost', 'openghost', 70, 250));
-	for (let i = 0; i < 4; i++) {
-		gameset.append(createCheckBox(bonus[i], Array.from(bonus[i].mino, m => minodata[m].name).join(''), 'spinbonus' + i, 30 + i * 60, 320, () => {
-			for (let j = 0; j < bonus[i].mino.length; j++) {
-				minodata[bonus[i].mino[j]].bonus = bonus[i].open;
-			}
-		}));
-	}
+	}));
+}
 
-	document.body.style.opacity = 1;
-};
+document.body.style.opacity = 1;

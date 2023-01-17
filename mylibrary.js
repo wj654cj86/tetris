@@ -32,7 +32,7 @@ let promise = (cb, ...args) => new Promise(r => cb(...args, r));
 let sleep = ms => new Promise(r => setTimeout(r, ms));
 
 let loadfile = (type, url) => fetch(url).then(r => r[type]());
-let loadsound = url => loadfile('blob', url).then(blob => URL.createObjectURL(blob));
+let loadsound = url => loadfile('blob', url).then(blob => new Audio(URL.createObjectURL(blob)));
 let sentpost = (url, obj) => fetch(url, {
 	body: JSON.stringify(obj),
 	headers: { 'content-type': 'application/json' },
@@ -93,21 +93,9 @@ let pngtobase64 = src => loadimg(src).then(img => {
 	return canvas.toDataURL();
 });
 
-let startDownload = (url, name) => text2html(`<a href="${url}" download="${name}"></a>`).click();
-
-let componentToHex = c => Math.floor(c * 1).toString(16).padStart(2, '0');
-let rgbToHex = (r, g, b) => "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-
-function hexToRgb(h) {
-	let r, g, b;
-	if (h.length == 4) {
-		r = 0x11 * ('0x' + h[1]);
-		g = 0x11 * ('0x' + h[2]);
-		b = 0x11 * ('0x' + h[3]);
-	} else {
-		r = 1 * ('0x' + h[1] + h[2]);
-		g = 1 * ('0x' + h[3] + h[4]);
-		b = 1 * ('0x' + h[5] + h[6]);
-	}
-	return [r, g, b];
+function startDownload(url, name) {
+	let a = document.createElement('a');
+	a.href = url;
+	a.download = name;
+	a.click();
 }
