@@ -1,5 +1,5 @@
 body {
-	opacity            : 0;
+	display            : none;
 	user-select        : none;
 	-moz-user-select   : none;
 	-webkit-user-select: none;
@@ -51,20 +51,16 @@ body {
 	top : 160px;
 }
 
-#mainboard {
-	z-index: 1;
-}
-
 #overboard {
-	z-index: -1;
+	display: none;
 }
 
 #keysetboard {
-	z-index: -1;
+	display: none;
 }
 
 #otherboard {
-	z-index: -1;
+	display: none;
 }
 
 #mainboard,
