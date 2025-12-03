@@ -352,7 +352,7 @@ let key = {
 let keytmp = { ckn: '', obj: null };
 
 function keyreset() {
-	key.forEach(k => {
+	Object.entries(key).forEach(([, k]) => {
 		k.lock = 0;
 		if (k.timeout != null) clearTimeout(k.timeout);
 		if (k.interval != null) clearInterval(k.interval);
@@ -1344,7 +1344,7 @@ otherbtn.onclick = () => {
 overok.onclick = () => action.tomain();
 
 keysetok.onclick = () => {
-	key.forEach(k => k.color = '#444');
+	Object.entries(key).forEach(([, k]) => k.color = '#444');
 	keysetboard.display = false;
 	game.mod = 'load';
 };
@@ -1354,7 +1354,7 @@ otherok.onclick = () => {
 	game.mod = 'load';
 };
 
-key.forEach((k, n, i) => {
+Object.entries(key).forEach(([n, k], i) => {
 	let g = text2svg(`<g transform="translate(13,${i * 38 + 10})"></g>`);
 	keyset.append(g);
 
@@ -1374,14 +1374,14 @@ key.forEach((k, n, i) => {
 	Object.defineProperty(k, 'show', { set: kk => show.innerHTML = kk });
 
 	g.onclick = () => {
-		key.forEach(k => k.color = '#444');
+		Object.entries(key).forEach(([, k]) => k.color = '#444');
 		k.color = '#066';
 		keytmp.ckn = ckn;
 		keytmp.obj = k;
 		game.mod = 'keyset';
 	};
 });
-delay.forEach((d, n, i) => d.forEach((dd, nn, j) => gameset.append(createValueSet(dd, delayname[n] + ' ' + delayname[nn], 0, (i * 2 + j) * 60, 0, 1000, 'ms'))));
+Object.entries(delay).forEach(([n, d], i) => Object.entries(d).forEach(([nn, dd], j) => gameset.append(createValueSet(dd, delayname[n] + ' ' + delayname[nn], 0, (i * 2 + j) * 60, 0, 1000, 'ms'))));
 gameset.append(createValueSet(time, 'Game Time', 0, 360, 0, 60, 'min', () => time.reset()));
 gameset.append(createCheckBox(ghost, 'Open Ghost', 'openghost', 70, 250));
 for (let i = 0; i < 4; i++) {
