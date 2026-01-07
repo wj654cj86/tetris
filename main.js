@@ -1,6 +1,5 @@
-import cc from "./colorconvert.js";
 let hall = 100;
-let h = 20.2;
+let h = 20;
 let w = 10;
 let boardarr = [];
 let sl = 40;
@@ -30,7 +29,6 @@ let color = {
 		'#0ff',
 	]
 };
-let proportion = { move: [0, 0], set: [0.2, 0], ghost: [0, 0.4], text: [0, 0] };
 let minodata = [
 	{
 		name: 'X', ofs: 0, srs: 0, bonus: -1, md: [[
@@ -370,16 +368,6 @@ function boardreset() {
 	}
 }
 
-function loadcolor(orgrgb, proportion) {
-	let min = Math.min(...proportion);
-	let max = Math.max(...proportion);
-	let d = max - min;
-	let c = 1 - max;
-	let p = proportion.indexOf(max);
-	let outrgb = cc.hex.rgb(orgrgb).map(v => Math.round(v * c + [0, 255][p] * d + 127.5 * min));
-	return cc.rgb.hex(...outrgb);
-}
-
 Object.defineProperty(Node.prototype, 'opacity', {
 	set: function (o) { this.setAttribute('opacity', o); },
 	get: function () { return this.getAttribute('opacity'); }
@@ -515,18 +503,18 @@ let sent = (() => {
 				linestr.opacity = 0;
 				linestr.setAttribute('y', 400);
 				linestr.str = sentdata.line[line].name;
-				linestr.color = loadcolor(color.sent[line], proportion.text);
+				linestr.color = color.sent[line];
 				linestr.opacity = 1;
 			} else {
 				spinstr.opacity = 0;
 				spinstr.str = minodata[_id].name + '-spin';
-				spinstr.color = loadcolor(color.mino[_id], proportion.text);
+				spinstr.color = color.mino[_id];
 				spinstr.opacity = 1;
 
 				linestr.opacity = 0;
 				linestr.setAttribute('y', 440);
 				linestr.str = sentdata.line[line].name;
-				linestr.color = loadcolor(color.mino[_id], proportion.text);
+				linestr.color = color.mino[_id];
 				linestr.opacity = 1;
 			}
 			if (combo == 0) {
@@ -616,7 +604,7 @@ let mino = (() => {
 				if (md.mr[rotate][i][j] == 1) {
 					let ba = boardarr[_y][_x];
 					ba.id = id;
-					ba.color = loadcolor(color.mino[id], proportion.move);
+					ba.color = color.mino[id];
 				}
 			}
 		}
@@ -660,7 +648,7 @@ let mino = (() => {
 				if (md.mr[rotate][i][j] == 1) {
 					let ba = boardarr[_y][_x];
 					ba.id = id;
-					ba.color = loadcolor(color.mino[id], proportion.ghost);
+					ba.color = `color-mix(in srgb, ${color.mino[id]}, transparent 50%)`;
 				}
 			}
 		}
@@ -739,7 +727,7 @@ let mino = (() => {
 				if (md.mr[rotate][i][j] == 1) {
 					let ba = boardarr[_y][_x];
 					ba.id = id;
-					ba.color = loadcolor(color.mino[id], proportion.set);
+					ba.color = `color-mix(in srgb, ${color.mino[id]}, black 15%)`;
 					ba.cnt = cnt;
 					ba.set = 1;
 				}
@@ -838,7 +826,7 @@ let mino = (() => {
 				let ma = minarr[_y][_x];
 				if (md.mr[0][i][j] == 1) {
 					ma.id = id;
-					ma.color = loadcolor(color.mino[id], proportion.move);
+					ma.color = color.mino[id];
 				} else {
 					ma.id = 0;
 					ma.color = 'none';
@@ -1211,15 +1199,30 @@ let game = {
 };
 
 let createUseAndSetId = id => text2svg(`<use xlink:href="#${id}"/>`);
-function createMino(bg, run, x, y, bgcolor) {
-	let rect = text2svg(`<rect width="1" height="1" x="${x}" y="${y}" fill="${bgcolor}"/>`);
-	bg.append(rect);
-	rect = text2svg(`<rect width="1" height="1" x="${x}" y="${y}" fill="none"/>`);
+
+function createBoard(board, w, h, xyfunc) {
+	let run = text2svg(`<g class="run"></g>`);
+	let bg = text2svg(`<g class="bg"></g>`);
+	board.append(bg, run);
+	let arr = [];
+	for (let i = 0; i < h; i++) {
+		arr[i] = [];
+		for (let j = 0; j < w; j++) {
+			let [x, y] = xyfunc(i, j);
+			bg.append(text2svg(`<rect x="${x}" y="${y}" class="${((i + j) % 2) ? 'grey' : 'white'}"/>`));
+			arr[i][j] = createMino(run, x, y);
+		}
+	}
+	return arr;
+}
+
+function createMino(run, x, y) {
+	let rect = text2svg(`<rect x="${x}" y="${y}"/>`);
 	run.append(rect);
 	return {
 		cnt: 0, id: 0, set: 0,
-		get color() { return rect.getAttribute('fill'); },
-		set color(c) { rect.setAttribute('fill', c); }
+		get color() { return rect.style.fill; },
+		set color(c) { rect.style.fill = c; }
 	};
 }
 
@@ -1293,36 +1296,19 @@ function createCheckBox(obj, name, cookie, x, y, cb = () => { }) {
 
 
 document.body.style.setProperty('--w', w);
-document.body.style.setProperty('--h', h);
+document.body.style.setProperty('--h', h + 0.2);
 document.body.style.setProperty('--sl', sl + 'px');
-board.setAttribute('viewBox', [0, 0, w, h].join(' '));
-for (let i = 0; i < hall; i++) {
-	boardarr[i] = [];
-	for (let j = 0; j < w; j++) {
-		boardarr[i][j] = createMino(boardbg, boardrun, j, h - 1 - i, (i + j) % 2 == 1 ? '#fff' : '#eee');
-	}
-}
+board.setAttribute('viewBox', [0, -0.2, w, h + 0.2].join(' '));
+boardarr = createBoard(board, w, hall, (i, j) => ([j, h - 1 - i]));
+
 document.body.style.setProperty('--slmin', slmin + 'px');
-for (let i = 0; i < 4; i++) {
-	holdarr[i] = [];
-	for (let j = 0; j < 4; j++) {
-		holdarr[i][j] = createMino(holdbg, holdrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
-	}
-}
+holdarr = createBoard(hold, 4, 4, (i, j) => ([j, 4 - 2 - i + 1]));
+
 next.style.setProperty('--nextlen', nextlen);
 for (let k = 0; k < nextlen; k++) {
-	nextarr[k] = [];
 	let nextsvg = text2svg(`<svg viewBox="0 0 4 4" class="next" style="--n:${k};"></svg>`);
 	next.append(nextsvg);
-	let nextbg = text2svg(`<g></g>`);
-	let nextrun = text2svg(`<g></g>`);
-	nextsvg.append(nextbg, nextrun);
-	for (let i = 0; i < 4; i++) {
-		nextarr[k][i] = [];
-		for (let j = 0; j < 4; j++) {
-			nextarr[k][i][j] = createMino(nextbg, nextrun, j, 4 - 2 - i + 1, (i + j) % 2 == 1 ? '#fff' : '#eee');
-		}
-	}
+	nextarr[k] = createBoard(nextsvg, 4, 4, (i, j) => ([j, 4 - 2 - i + 1]));
 }
 game.mod = 'load';
 

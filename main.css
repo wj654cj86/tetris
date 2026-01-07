@@ -1,54 +1,72 @@
 body {
-	display            : none;
-	user-select        : none;
-	-moz-user-select   : none;
+	display: none;
+	user-select: none;
+	-moz-user-select: none;
 	-webkit-user-select: none;
-	-ms-user-select    : none;
+	-ms-user-select: none;
 }
 
 #hold {
-	left  : 20px;
-	top   : 20px;
-	width : calc(var(--slmin) * 4);
+	left: 20px;
+	top: 20px;
+	width: calc(var(--slmin) * 4);
 	height: calc(var(--slmin) * 4);
 }
 
 #board {
-	left  : 180px;
-	top   : 20px;
-	width : calc(var(--sl) * var(--w));
+	left: 180px;
+	top: 20px;
+	width: calc(var(--sl) * var(--w));
 	height: calc(var(--sl) * var(--h));
 }
 
 #next {
 	position: absolute;
-	left    : 600px;
-	top     : 20px;
-	width   : calc(var(--slmin) * 4 + 2px);
-	height  : calc(var(--nextlen) * (var(--slmin) * 4 + 20px) - 20px + 2px);
+	left: 600px;
+	top: 20px;
+	width: calc(var(--slmin) * 4 + 2px);
+	height: calc(var(--nextlen) * (var(--slmin) * 4 + 20px) - 20px + 2px);
 }
 
 #next .next {
-	left  : 0px;
-	top   : calc(var(--n) * (var(--slmin) * 4 + 20px));
-	width : calc(var(--slmin) * 4);
+	left: 0px;
+	top: calc(var(--n) * (var(--slmin) * 4 + 20px));
+	width: calc(var(--slmin) * 4);
 	height: calc(var(--slmin) * 4);
 }
 
 #hold,
 #board,
 #next .next {
-	position        : absolute;
-	overflow        : hidden;
+	position: absolute;
+	overflow: hidden;
 	background-color: #fff;
-	border-style    : solid;
-	border-width    : 1px;
-	border-color    : #aaa;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #aaa;
+}
+
+.run rect,
+.bg rect {
+	width: 1px;
+	height: 1px;
+}
+
+.run rect{
+	fill: none;
+}
+
+.bg .white {
+	fill: #fff;
+}
+
+.bg .grey {
+	fill: #eee;
 }
 
 #textboard {
 	left: 15px;
-	top : 160px;
+	top: 160px;
 }
 
 #overboard {
@@ -68,10 +86,10 @@ body {
 #keysetboard,
 #otherboard {
 	position: absolute;
-	left    : 180px;
-	top     : 20px;
-	width   : calc(var(--sl) * var(--w) + 2px);
-	height  : calc(var(--sl) * var(--h) + 2px);
+	left: 180px;
+	top: 20px;
+	width: calc(var(--sl) * var(--w) + 2px);
+	height: calc(var(--sl) * var(--h) + 2px);
 }
 
 svg {
@@ -79,10 +97,10 @@ svg {
 }
 
 text {
-	stroke-linejoin  : round;
-	font-size        : 20px;
-	font-family      : Microsoft JhengHei;
-	text-anchor      : middle;
+	stroke-linejoin: round;
+	font-size: 20px;
+	font-family: Microsoft JhengHei;
+	text-anchor: middle;
 	dominant-baseline: middle;
 }
 
