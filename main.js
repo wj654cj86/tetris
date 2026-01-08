@@ -1,4 +1,4 @@
-let hall = 100;
+let hall = 80;
 let h = 20;
 let w = 10;
 let boardarr = [];
@@ -1210,20 +1210,16 @@ function createBoard(board, w, h, xyfunc) {
 		for (let j = 0; j < w; j++) {
 			let [x, y] = xyfunc(i, j);
 			bg.append(text2svg(`<rect x="${x}" y="${y}" class="${((i + j) % 2) ? 'grey' : 'white'}"/>`));
-			arr[i][j] = createMino(run, x, y);
+			let rect = text2svg(`<rect x="${x}" y="${y}"/>`);
+			run.append(rect);
+			arr[i][j] = {
+				cnt: 0, id: 0, set: 0,
+				get color() { return rect.style.fill; },
+				set color(c) { rect.style.fill = c; }
+			};
 		}
 	}
 	return arr;
-}
-
-function createMino(run, x, y) {
-	let rect = text2svg(`<rect x="${x}" y="${y}"/>`);
-	run.append(rect);
-	return {
-		cnt: 0, id: 0, set: 0,
-		get color() { return rect.style.fill; },
-		set color(c) { rect.style.fill = c; }
-	};
 }
 
 function createValueSet(obj, name, x, y, low, high, unit, cb = () => { }) {
@@ -1302,13 +1298,13 @@ board.setAttribute('viewBox', [0, -0.2, w, h + 0.2].join(' '));
 boardarr = createBoard(board, w, hall, (i, j) => ([j, h - 1 - i]));
 
 document.body.style.setProperty('--slmin', slmin + 'px');
-holdarr = createBoard(hold, 4, 4, (i, j) => ([j, 4 - 2 - i + 1]));
+holdarr = createBoard(hold, 4, 4, (i, j) => ([j, 4 - 1 - i]));
 
 next.style.setProperty('--nextlen', nextlen);
 for (let k = 0; k < nextlen; k++) {
 	let nextsvg = text2svg(`<svg viewBox="0 0 4 4" class="next" style="--n:${k};"></svg>`);
 	next.append(nextsvg);
-	nextarr[k] = createBoard(nextsvg, 4, 4, (i, j) => ([j, 4 - 2 - i + 1]));
+	nextarr[k] = createBoard(nextsvg, 4, 4, (i, j) => ([j, 4 - 1 - i]));
 }
 game.mod = 'load';
 
